@@ -12,6 +12,15 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
 
 ## [Sin publicar]
 
+### Añadido
+
+- `docs/roadmap.md`: definición clara de la primera versión de la web
+  (qué podrá hacer la clienta, qué el panel admin y qué queda fuera) y
+  explicación del enfoque técnico de cada fase.
+- `AGENTS.md`: nuevas reglas — los agentes deben explicar el plan antes de
+  implementar (usuario junior) y crear la rama de trabajo antes de escribir
+  código, avisando al usuario.
+
 ## [0.1.0] - 2026-10-11
 
 ### Añadido

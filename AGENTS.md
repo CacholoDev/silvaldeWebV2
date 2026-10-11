@@ -23,6 +23,15 @@ añadas estructura por adelantado.
 
 - Inspecciona el código existente antes de crear archivos o abstracciones.
 - Haz cambios pequeños, explícitos y coherentes con Rails.
+- **Explica el plan antes de implementar**: al empezar una feature o fix,
+  resume al usuario en lenguaje sencillo qué vas a crear, qué herramientas de
+  Rails usarás (generadores, migraciones, gemas…) y por qué. El usuario es
+  junior y está aprendiendo: las explicaciones forman parte del trabajo.
+- **Crea la rama antes de codificar**: al iniciar cualquier tarea de código,
+  comprueba la rama actual (`git branch --show-current`). Si es `main`, crea
+  primero la rama `feature/…`, `fix/…`, `chore/…` o `docs/…` que corresponda
+  y avisa al usuario de la rama creada. Nunca empieces una feature o fix en
+  `main` (ver «Git, ramas y versiones»).
 - No modifiques ni elimines tests existentes para ocultar un fallo; corrige el
   código de producción o añade cobertura cuando corresponda.
 - No añadas gemas, servicios externos o patrones nuevos sin justificar su
