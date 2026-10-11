@@ -36,6 +36,6 @@ lanzamiento público de la tienda.
    git push origin main --follow-tags
    ```
 
-No se sube la versión dentro de una rama `feature/*`: la versión se asigna al
+No se sube la versión dentro de una rama `feat/*`: la versión se asigna al
 integrar en `main`. Los agentes no hacen commits, merges, push ni tags sin
 confirmación explícita del usuario.

@@ -49,7 +49,7 @@ Sin una especificación aprobada aparte (regla de `AGENTS.full.md`):
 Estructura Rails 8.1, documentación del proyecto y de agentes, versionado y
 flujo de trabajo con git. Publicada el 2026-10-11 con el tag `v0.1.0`.
 
-### 🚧 v0.2.0 — Autenticación y usuarios *(rama `feature/autenticacion`)*
+### 🚧 v0.2.0 — Autenticación y usuarios *(rama `feat/authentication`)*
 
 **Qué se hace:** registro, inicio/cierre de sesión y recuperación de contraseña;
 roles `customer`/`admin`; perfil de cliente; consentimiento de comunicaciones.
@@ -116,7 +116,7 @@ propia especificación antes de implementarse.
 
 ## Cómo se trabaja cada fase (resumen del flujo)
 
-1. Crear la rama desde `main`: `git switch -c feature/<nombre>`.
+1. Crear la rama desde `main`: `git switch -c feat/<name>`.
 2. El agente explica el plan antes de tocar código (qué se crea y por qué).
 3. Implementar en commits pequeños con Conventional Commits.
 4. Validar con `bin/ci` (tests + rubocop + brakeman + audits).

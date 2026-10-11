@@ -3,6 +3,19 @@
 Este documento amplía [`AGENTS.md`](./AGENTS.md). No lo sustituye: las reglas
 breves son el contrato mínimo que todo agente debe seguir.
 
+## Idioma de código y documentación
+
+- **En inglés**: nombres de ramas (`feat/`, `fix/`, `chore/`, `docs/`),
+  identificadores de código (clases, módulos, métodos, variables, columnas),
+  nombres de migraciones, mensajes de commit (type, scope y resumen),
+  contenido de PRs, fixtures y seeds por convención.
+- **En español**: documentación (`AGENTS.md`, `AGENTS.full.md`, `README.md`,
+  `docs/`, `CHANGELOG.md` para el texto narrativo), comentarios extensos
+  cuando aportan contexto al equipo, y las conversaciones con el usuario
+  (sigue siendo junior y aprende mejor en su idioma).
+- Esta regla es compatible con i18n de la UI: los textos visibles para la
+  clienta (`es.yml`, etc.) se traducen aparte y no se ven afectados.
+
 ## Producto y límites funcionales
 
 Silvalde Web es una tienda online de decoración. El producto debe priorizar

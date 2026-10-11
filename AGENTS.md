@@ -29,9 +29,15 @@ añadas estructura por adelantado.
   junior y está aprendiendo: las explicaciones forman parte del trabajo.
 - **Crea la rama antes de codificar**: al iniciar cualquier tarea de código,
   comprueba la rama actual (`git branch --show-current`). Si es `main`, crea
-  primero la rama `feature/…`, `fix/…`, `chore/…` o `docs/…` que corresponda
+  primero la rama `feat/…`, `fix/…`, `chore/…` o `docs/…` que corresponda
   y avisa al usuario de la rama creada. Nunca empieces una feature o fix en
-  `main` (ver «Git, ramas y versiones»).
+  `main` (ver «Git, ramas y versiones»). El nombre de la rama va en inglés.
+- **Código y ramas en inglés**: los nombres de ramas, los identificadores de
+  código (clases, métodos, variables), los mensajes de commit (type, scope y
+  resumen) y el contenido de los PRs se escriben **en inglés**. La
+  documentación, los comentarios extensos, los mensajes al usuario y los
+  commits narrativos en español se mantienen en español. Mantén el español
+  para explicar al usuario junior, no para el código.
 - No modifiques ni elimines tests existentes para ocultar un fallo; corrige el
   código de producción o añade cobertura cuando corresponda.
 - No añadas gemas, servicios externos o patrones nuevos sin justificar su
@@ -112,12 +118,13 @@ transiciones válidas y cómo se muestran al usuario.
 ## Git, ramas y versiones
 
 - `main` es la rama estable: siempre debe arrancar y pasar las validaciones.
-  El trabajo se hace en ramas (`feature/<nombre>`, `fix/<nombre>`,
-  `chore/<nombre>`, `docs/<nombre>`; minúsculas, guiones, en español) que se
-  integran en `main` con `bin/ci` en verde. Una rama = una responsabilidad.
-  Flujo completo: [`docs/git-workflow.md`](./docs/git-workflow.md).
-- Los commits siguen Conventional Commits en español e imperativo
-  (`feat:`, `fix:`, `docs:`, `test:`, `refactor:`, `chore:`).
+  El trabajo se hace en ramas (`feat/<name>`, `fix/<name>`, `chore/<name>`,
+  `docs/<name>`; minúsculas, guiones, **en inglés**) que se integran en
+  `main` con `bin/ci` en verde. Una rama = una responsabilidad. Flujo
+  completo: [`docs/git-workflow.md`](./docs/git-workflow.md).
+- Los commits siguen Conventional Commits con `type` y `scope` en inglés
+  (resumen en imperativo, en inglés): `feat:`, `fix:`, `docs:`, `test:`,
+  `refactor:`, `chore:`.
 - La versión vigente vive en el archivo [`VERSION`](./VERSION) (fuente única
   de verdad; la app la expone como `SilvaldeWebV2::APP_VERSION`) y su
   historial en [`CHANGELOG.md`](./CHANGELOG.md). SemVer: estamos en `0.x.y`
@@ -139,3 +146,11 @@ para que sean visibles en la primera carga del agente.
 `AGENTS.md`, `AGENTS.full.md`, `README.md`, `CHANGELOG.md` y `docs/` están
 versionados en git junto al código: la documentación es parte del producto y
 debe actualizarse en la misma rama que el cambio que la motiva.
+
+## Skills locales
+
+El proyecto puede definir skills propias en `.agents/skills/` (gestionado por
+`skills-lock.json`). Antes de empezar una tarea, los agentes deben **revisar
+las skills disponibles** y cargar las que apliquen al trabajo (frontend,
+accesibilidad, SEO, etc.). Las skills globales del agente siguen disponibles;
+esta regla añade una capa local al proyecto.
