@@ -49,6 +49,15 @@ añadas estructura por adelantado.
   Usa JavaScript adicional solo cuando sea necesario.
 - Minitest (con Capybara/Selenium para system tests). Usa el estilo ya
   presente antes de introducir otra herramienta.
+- Autenticación nativa de Rails 8 y sesiones con cookie firmada (no Devise ni
+  JWT). Solid Queue/Cache sobre MySQL (no Redis ni Sidekiq); jobs vía
+  `Active Job`.
+- Web HTML con Hotwire: no hay API pública, así que nada de Grape, Swagger ni
+  JWT. Si aparece la necesidad de una API, se especifica aparte.
+- Nunca `rails generate scaffold`. Generadores pequeños (`model`,
+  `migration`) como punto de partida; controllers, servicios, decorators y
+  vistas se escriben a mano. Detalle y excepciones en `AGENTS.full.md`,
+  sección «Decisiones de stack».
 
 ## Comandos
 

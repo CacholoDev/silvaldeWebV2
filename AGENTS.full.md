@@ -20,6 +20,46 @@ usuarios, catálogo, pedidos, facturas y métricas según la necesidad operativa
 Nunca expongas datos administrativos en respuestas públicas ni confíes en
 ocultar botones como mecanismo de autorización.
 
+## Decisiones de stack (2026-10-11)
+
+Decisiones tomadas con el usuario antes de la v0.2.0. No las cambies sin
+consultar al usuario y actualizar esta sección y el changelog.
+
+**Lo que usamos:**
+
+- **Autenticación nativa de Rails 8** (generador oficial
+  `bin/rails generate authentication`, con `has_secure_password`/bcrypt).
+  No Devise: la auth integrada es suficiente, la mantiene el core de Rails y
+  reduce dependencias y «magia».
+- **Sesiones con cookie firmada** (tabla `sessions`). No JWT: JWT es para
+  APIs stateless; en una web HTML las sesiones son más seguras y revocables.
+- **Solid Queue y Solid Cache** sobre MySQL (ya configurados en el scaffold).
+  No Redis ni Sidekiq: suficiente para la escala del proyecto y sin servicios
+  extra que mantener. El código usa `Active Job`, así que migrar a Sidekiq en
+  el futuro sería barato si hiciera falta.
+- **Minitest + fixtures**: infraestructura ya configurada y es la que corre el
+  CI. No RSpec ni FactoryBot.
+- **Web HTML con Hotwire**: no hay API pública; por tanto nada de Grape,
+  Swagger ni JWT. Si algún día se necesita una API, se especifica aparte
+  (sección «Cambios y documentación»).
+
+**Política de generadores:**
+
+- Nunca `rails generate scaffold`: crea código que no encaja con la
+  arquitectura de servicios y decorators.
+- Generadores pequeños (`model`, `migration`) están permitidos como punto de
+  partida; controllers, servicios, decorators y vistas se escriben a mano.
+- Excepción justificada: el generador oficial de autenticación, por seguridad
+  (lo escribe el core team de Rails). Al usarlo, se revisa archivo a archivo
+  con el usuario.
+
+**Candidatos futuros (decidir cuando toque, no instalar ahora):**
+
+- **Pundit** (autorización por policies): candidato en v0.6.0 (panel admin) si
+  los permisos crecen más allá del check de rol en `before_action`.
+- **Grape/Swagger, Redis/Sidekiq, RSpec**: solo si aparece una necesidad real
+  documentada (API pública, volumen de jobs alto, etc.).
+
 ## Patrones de Rails
 
 ### Controllers

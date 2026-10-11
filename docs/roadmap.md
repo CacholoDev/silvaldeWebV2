@@ -57,8 +57,12 @@ roles `customer`/`admin`; perfil de cliente; consentimiento de comunicaciones.
 **Cómo se hará:** Rails 8 incluye un generador oficial
 (`bin/rails generate authentication`) que crea el modelo `User` con contraseña
 segura (bcrypt), el modelo `Session` con sus cookies, y los controladores,
-vistas y mailers de sesión y recuperación. Encima de esa base añadimos una
-migración con la columna `role` (enum), el consentimiento y los tests.
+vistas y mailers de sesión y recuperación *(decisión confirmada: es la
+excepción justificada a la política de generadores, ver `AGENTS.full.md`,
+«Decisiones de stack»)*. Encima de esa base añadimos una migración con la
+columna `role` (enum `customer`/`admin`, por defecto `customer`), el registro
+(sign-up, que el generador no trae), el consentimiento de comunicaciones y los
+tests.
 
 ### ⬜ v0.3.0 — Catálogo
 
@@ -98,8 +102,9 @@ usuarios, productos, pedidos y facturas; métricas básicas y versión de la app
 visible en el footer del admin (`SilvaldeWebV2::APP_VERSION`).
 
 **Cómo se hará:** rutas bajo el namespace `/admin`; un `before_action` que
-exige rol `admin` en servidor (nunca basta con ocultar botones); CRUDs con las
-mismas vistas parciales y formato del storefront para coherencia.
+exige rol `admin` en servidor (nunca basta con ocultar botones); Pundit como
+candidato si los permisos se vuelven más finos (decidir en esta fase); CRUDs
+con las mismas vistas parciales y formato del storefront para coherencia.
 
 ### ⬜ v1.0.0 — Lanzamiento público
 

@@ -14,6 +14,12 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
 
 ### Añadido
 
+- Decisiones de stack documentadas en `AGENTS.full.md`: autenticación nativa
+  de Rails 8 (no Devise), sesiones con cookie (no JWT), Solid Queue/Cache (no
+  Redis/Sidekiq), Minitest + fixtures (no RSpec), web HTML sin API pública
+  (no Grape/Swagger), política de generadores (sin `scaffold`) y Pundit como
+  candidato futuro para el panel admin.
+
 - `docs/roadmap.md`: definición clara de la primera versión de la web
   (qué podrá hacer la clienta, qué el panel admin y qué queda fuera) y
   explicación del enfoque técnico de cada fase.
