@@ -1,0 +1,156 @@
+# Directrices ampliadas para Silvalde Web
+
+Este documento amplía [`AGENTS.md`](./AGENTS.md). No lo sustituye: las reglas
+breves son el contrato mínimo que todo agente debe seguir.
+
+## Producto y límites funcionales
+
+Silvalde Web es una tienda online de decoración. El producto debe priorizar
+confianza, claridad y mantenimiento sencillo. El catálogo, el carrito, los
+pedidos, el registro de clientes y el panel administrativo son dominios
+relacionados, pero deben mantener límites claros.
+
+El registro de clientes existe para compras y para futuras ofertas o rebajas.
+La comunicación comercial debe ser consentida, trazable y revocable. No
+implementes campañas, pagos reales, facturación fiscal o integraciones externas
+sin una especificación aprobada para esa tarea.
+
+El panel administrativo debe aplicar autorización por rol y limitar el acceso a
+usuarios, catálogo, pedidos, facturas y métricas según la necesidad operativa.
+Nunca expongas datos administrativos en respuestas públicas ni confíes en
+ocultar botones como mecanismo de autorización.
+
+## Patrones de Rails
+
+### Controllers
+
+- Una acción debe recibir parámetros, autorizar, invocar un servicio y responder.
+- Usa strong parameters y validaciones apropiadas para cada flujo.
+- Evita `Model.find`, `Model.all` y consultas complejas directamente en el
+  controller; encapsúlalas en servicios de búsqueda o en un objeto de consulta
+  bien delimitado.
+- No uses callbacks de controller para esconder reglas de negocio.
+- Devuelve estados HTTP correctos y errores de validación comprensibles.
+
+### Services
+
+- Un servicio representa un caso de uso, no una colección arbitraria de helpers.
+- Usa transacciones cuando una operación modifique varias tablas.
+- Usa métodos bang para invariantes que no deberían fallar silenciosamente
+  (`create!`, `update!`, `save!`), y métodos no bang únicamente cuando se esperan
+  errores de validación que el usuario pueda corregir.
+- No captures excepciones genéricas. Captura solo errores conocidos y decide de
+  forma explícita cómo se comunican.
+- Devuelve resultados consistentes y documenta cualquier resultado distinto de
+  una entidad o colección esperada.
+
+### Models
+
+- Mantén en el modelo asociaciones, validaciones, constraints de dominio y
+  comportamiento pequeño propio de la entidad.
+- Añade índices y restricciones de base de datos para unicidad e integridad; una
+  validación Ruby por sí sola no evita carreras.
+- Evita `default_scope` y scopes personalizados salvo que una decisión de dominio
+  documentada los haga imprescindibles.
+- Para eliminaciones o archivado, decide explícitamente si se necesita borrado
+  lógico; no lo añadas automáticamente a todos los modelos.
+
+### Decorators y presentación
+
+- Un decorator puede formatear nombres, precios, estados y etiquetas para la UI.
+- No debe mutar persistencia ni hacer llamadas de red.
+- No dupliques reglas de negocio en vistas o decorators: expón un resultado del
+  servicio o del modelo.
+- Centraliza formatos de moneda, fechas y estados para que storefront y admin
+  sean coherentes.
+
+## Frontend
+
+- Usa Tailwind siguiendo los patrones existentes y evita estilos inline salvo una
+  necesidad técnica justificada.
+- Prefiere HTML semántico, navegación por teclado, labels asociados y mensajes
+  de error accesibles.
+- Usa Turbo Frames/Streams y Stimulus para interacciones incrementales.
+- Evita añadir JavaScript global o una SPA si una interacción local resuelve el
+  problema.
+- Las imágenes de producto deben contemplar texto alternativo, dimensiones y
+  tratamiento de errores.
+- No uses colores, tamaños o componentes nuevos sin comprobar la coherencia con
+  la interfaz existente.
+
+## Datos, seguridad y privacidad
+
+- Las credenciales locales viven en `.env`; usa `.env.example` como contrato de
+  variables sin secretos.
+- Usa consultas parametrizadas y las APIs de Active Record; nunca interpolar
+  entrada del usuario en SQL.
+- Autoriza cada operación administrativa en servidor.
+- Protege sesiones, contraseñas, tokens y datos de pedidos. No registres
+  contraseñas, tokens ni datos de pago.
+- Minimiza los datos personales almacenados y ofrece una estrategia clara para
+  consentimiento y baja de comunicaciones comerciales.
+- Valida cargas de archivos, limita tipos/tamaños y utiliza Active Storage de
+  forma segura.
+
+## Base de datos y migraciones
+
+- Una migración debe ser reversible cuando sea posible y segura para datos
+  existentes.
+- Añade índices para claves foráneas, búsquedas frecuentes y unicidad.
+- No borres ni renombres columnas con datos sin un plan de migración en fases.
+- Usa nombres de tablas y columnas consistentes con Rails.
+- Los cambios de esquema deben incluir pruebas o una verificación reproducible.
+
+## Pruebas y calidad
+
+- Usa Minitest y las convenciones ya creadas en `test/`.
+- Cubre casos de éxito, validación, autorización y límites relevantes.
+- Para cambios de UI o flujos completos, considera system tests con Capybara.
+- Ejecuta el conjunto mínimo relevante y después las comprobaciones de seguridad
+  cuando el cambio afecte a autenticación, autorización, entradas o datos.
+- No cambies un test existente solo porque contradice una implementación nueva;
+  primero determina el contrato correcto y pide confirmación si el alcance no
+  está claro.
+
+## Cambios y documentación
+
+Antes de implementar una funcionalidad transversal, describe en el cambio:
+
+1. Qué usuario o proceso resuelve.
+2. Qué modelos, permisos y datos afecta.
+3. Qué sucede ante errores y entradas inválidas.
+4. Cómo se prueba y cómo se revierte.
+
+Mantén el README orientado a incorporación y operación local. Mantén este
+documento orientado a decisiones que los agentes deben aplicar. Usa `docs/` para
+especificaciones funcionales, decisiones arquitectónicas o procedimientos
+largos, y enlázalos desde `AGENTS.md`.
+
+## Flujo de ramas y releases
+
+El flujo de trabajo con git (tipos de rama, ciclo de una feature, formato de
+commits) está en [`docs/git-workflow.md`](./docs/git-workflow.md); el proceso
+de publicación de versiones y dónde vive la versión, en
+[`docs/versioning.md`](./docs/versioning.md); las fases del proyecto, en
+[`docs/roadmap.md`](./docs/roadmap.md). Esos documentos son la referencia
+operativa; respétalos y actualízalos cuando el flujo cambie.
+
+Dos decisiones que los atraviesan:
+
+- La seguridad es transversal (brakeman, bundler-audit e importmap audit en
+  cada `bin/ci`), no una fase posterior. Las correcciones de seguridad usan
+  rama `fix/` y sección `Seguridad` en el changelog.
+- Los agentes nunca hacen commits, merges, push ni tags sin confirmación
+  explícita del usuario.
+
+## Definición de terminado
+
+Una tarea está terminada cuando:
+
+- el comportamiento solicitado funciona en los flujos afectados;
+- la autorización y la validación están cubiertas;
+- no se han introducido secretos ni regresiones conocidas;
+- los tests y linters relevantes pasan, o se informa claramente de la limitación;
+- el README, `CHANGELOG.md` o la documentación relacionada refleja cualquier
+  cambio operativo o visible.
+
