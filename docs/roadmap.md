@@ -44,10 +44,10 @@ Sin una especificación aprobada aparte (regla de `AGENTS.full.md`):
 
 ## Fases
 
-### 🚧 v0.1.0 — Base del proyecto
+### ✅ v0.1.0 — Base del proyecto
 
 Estructura Rails 8.1, documentación del proyecto y de agentes, versionado y
-flujo de trabajo con git. *(Esta fase: solo falta el push inicial y el tag.)*
+flujo de trabajo con git. Publicada el 2026-10-11 con el tag `v0.1.0`.
 
 ### ⬜ v0.2.0 — Autenticación y usuarios
 
