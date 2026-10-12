@@ -8,15 +8,15 @@ publicación de una versión.
 ## Tipos de ramas
 
 - `main`: rama estable. Siempre debe arrancar y pasar las validaciones.
-- `feature/<nombre>`: funcionalidad nueva. Ej.: `feature/autenticacion`,
-  `feature/catalogo-productos`, `feature/carrito`.
-- `fix/<nombre>`: corrección de un error detectado en `main`.
-- `chore/<nombre>`: tareas técnicas sin cambio funcional (dependencias,
+- `feat/<name>`: funcionalidad nueva. Ej.: `feat/authentication`,
+  `feat/catalog`, `feat/cart`.
+- `fix/<name>`: corrección de un error detectado en `main`.
+- `chore/<name>`: tareas técnicas sin cambio funcional (dependencias,
   configuración).
-- `docs/<nombre>`: cambios solo de documentación.
+- `docs/<name>`: cambios solo de documentación.
 
-Nombres en minúsculas, con guiones, en español y descriptivos. Una rama = una
-responsabilidad.
+Nombres en minúsculas, con guiones, **en inglés** y descriptivos. Una rama =
+una responsabilidad.
 
 ## Ciclo de una feature
 
@@ -24,7 +24,7 @@ responsabilidad.
 
    ```bash
    git switch main && git pull
-   git switch -c feature/<nombre>
+   git switch -c feat/<name>
    ```
 
 2. Commits pequeños y frecuentes con los mensajes descritos abajo.
@@ -44,15 +44,15 @@ responsabilidad.
 
 ## Mensajes de commit
 
-Formato [Conventional Commits](https://www.conventionalcommits.org/es/) en
-español e imperativo:
+Formato [Conventional Commits](https://www.conventionalcommits.org/) con
+`type` y `scope` en inglés y resumen en imperativo también en inglés:
 
-- `feat: añade registro de clientes`
-- `fix: corrige validación de email duplicado`
-- `docs: actualiza roadmap con la fase de catálogo`
-- `test: cubre autorización del panel admin`
-- `refactor: extrae servicio de búsqueda de productos`
-- `chore: actualiza gemas`
+- `feat: add user signup`
+- `fix: handle duplicate email validation`
+- `docs: update roadmap with the catalog phase`
+- `test: cover admin panel authorization`
+- `refactor: extract product search service`
+- `chore: bump gems`
 
 ## Reglas
 
