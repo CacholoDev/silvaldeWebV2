@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_11_231226) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_12_183314) do
   create_table "password_reset_tokens", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "token_digest"
@@ -20,6 +20,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_11_231226) do
     t.datetime "updated_at", null: false
     t.index ["token_digest"], name: "index_password_reset_tokens_on_token_digest", unique: true
     t.index ["user_id"], name: "index_password_reset_tokens_on_user_id"
+  end
+
+  create_table "sessions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "ip_address"
+    t.string "user_agent"
+    t.datetime "expires_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["expires_at"], name: "index_sessions_on_expires_at"
+    t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -36,4 +47,5 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_11_231226) do
   end
 
   add_foreign_key "password_reset_tokens", "users"
+  add_foreign_key "sessions", "users"
 end
