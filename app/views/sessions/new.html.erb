@@ -1,0 +1,28 @@
+<h1 class="mb-6 text-2xl font-semibold tracking-tight"><%= t("sessions.new.title") %></h1>
+
+<%= form_with url: login_path, local: true, class: "space-y-4" do |f| %>
+  <div>
+    <%= f.label :email_address, t("passwords.create.email_label"), class: "mb-1 block text-sm font-medium" %>
+    <%= f.email_field :email_address, value: @email, required: true, autofocus: true, autocomplete: "email", class: "w-full rounded border border-stone-300 px-3 py-2" %>
+  </div>
+
+  <div>
+    <%= f.label :password, class: "mb-1 block text-sm font-medium" %>
+    <%= f.password_field :password, required: true, autocomplete: "current-password", class: "w-full rounded border border-stone-300 px-3 py-2" %>
+  </div>
+
+  <label class="flex items-center gap-2 text-sm text-stone-700">
+    <%= f.check_box :remember_me, { class: "rounded border-stone-300" }, "1", "0" %>
+    <%= t("sessions.new.remember_me") %>
+  </label>
+
+  <%= f.submit t("sessions.new.submit"), class: "w-full rounded bg-stone-900 px-4 py-2 text-white hover:bg-stone-700 cursor-pointer" %>
+<% end %>
+
+<div class="mt-6 flex items-center justify-between text-sm">
+  <%= link_to t("sessions.new.forgot_password"), new_password_path, class: "text-stone-600 hover:text-stone-900" %>
+  <span class="text-stone-500">
+    <%= t("sessions.new.no_account") %>
+    <%= link_to t("sessions.new.sign_up"), signup_path, class: "font-medium text-stone-900 hover:underline" %>
+  </span>
+</div>
