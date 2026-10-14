@@ -134,7 +134,9 @@ transiciones válidas y cómo se muestran al usuario.
 - Las fases del proyecto y su estado están en
   [`docs/roadmap.md`](./docs/roadmap.md); actualízalo al completar una fase.
 - Los agentes no hacen commits, merges, push ni tags sin confirmación
-  explícita del usuario.
+  explícita del usuario. El push es una **acción aparte** que nunca se
+  agrupa con un commit: aunque el usuario haya aprobado el commit, hay
+  que esperar a su "sí, haz push" específico en el mismo turno.
 
 ## Documentación
 
@@ -154,3 +156,27 @@ El proyecto puede definir skills propias en `.agents/skills/` (gestionado por
 las skills disponibles** y cargar las que apliquen al trabajo (frontend,
 accesibilidad, SEO, etc.). Las skills globales del agente siguen disponibles;
 esta regla añade una capa local al proyecto.
+
+## Ritmo de trabajo y modelo mental
+
+El usuario es junior y está aprendiendo. Las siguientes reglas evitan que
+el agente implemente demasiada superficie en una sola sesión y deje al
+usuario sin contexto.
+
+- **Vertical slices, no capas horizontales.** Una sesión de trabajo es
+  una unidad pequeña y verificable a mano (por ejemplo: "modelo User con
+  validaciones" o "signup end-to-end"). No se implementa modelo +
+  controller + vista + mailer + jobs + tests de todo en la misma sesión.
+  Antes de empezar cada slice, el agente debe: (a) explicar en una frase
+  qué entra y qué queda fuera, (b) decir cómo se prueba a mano, (c)
+  esperar a que el usuario lo valide antes de continuar.
+- **Mapa mental al inicio de cada sesión.** Al abrir una sesión de
+  trabajo, el agente muestra un mapa breve del estado actual: tablas,
+  controllers, URLs, tests, rama y commits sin pushear. Eso le da al
+  usuario el contexto para decidir. Si la sesión anterior terminó con
+  cambios sin comitear o sin pushear, se avisa al principio.
+- **Explicar conceptos antes de preguntar opciones.** Si el usuario no
+  puede evaluar una opción porque no conoce el concepto, el agente
+  explica primero y pregunta después. Si el usuario dice "no sé", el
+  agente propone la opción más sensata con su razonamiento y la aplica,
+  sin esperar confirmación sobre algo que el usuario no puede juzgar.

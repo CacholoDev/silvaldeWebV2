@@ -68,6 +68,7 @@ module Authentication
     end
 
     Current.session = record
+    Current.user = record.user
   end
 
   def renew_browser_session
