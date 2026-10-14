@@ -1,0 +1,15 @@
+<section class="text-center">
+  <h1 class="text-3xl font-semibold tracking-tight">Silvalde Web</h1>
+  <p class="mt-3 text-stone-600">
+    Tienda online de decoración. Muy pronto verás aquí nuestro catálogo.
+  </p>
+
+  <% if user_signed_in? %>
+    <p class="mt-6 text-sm text-stone-500">Has iniciado sesión como <strong><%= current_user.email_address %></strong>.</p>
+  <% else %>
+    <div class="mt-8 flex justify-center gap-3 text-sm">
+      <%= link_to t("users.new.sign_in"), login_path, class: "rounded bg-stone-900 px-4 py-2 text-white hover:bg-stone-700" %>
+      <%= link_to t("users.new.title"), signup_path, class: "rounded border border-stone-300 px-4 py-2 hover:bg-stone-100" %>
+    </div>
+  <% end %>
+</section>
