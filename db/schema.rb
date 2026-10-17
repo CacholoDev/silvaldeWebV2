@@ -10,7 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_17_020232) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_17_024939) do
+  create_table "password_reset_tokens", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "token_digest", null: false
+    t.datetime "expires_at", null: false
+    t.datetime "used_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["token_digest"], name: "index_password_reset_tokens_on_token_digest", unique: true
+    t.index ["user_id"], name: "index_password_reset_tokens_on_user_id"
+  end
+
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "email", null: false
     t.string "name", null: false
@@ -19,4 +30,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_17_020232) do
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
   end
+
+  add_foreign_key "password_reset_tokens", "users"
 end
