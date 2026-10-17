@@ -178,6 +178,20 @@ transiciones válidas y cómo se muestran al usuario.
   explícita del usuario. El push es una **acción aparte** que nunca se
   agrupa con un commit: aunque el usuario haya aprobado el commit, hay
   que esperar a su "sí, haz push" específico en el mismo turno.
+- **Confirma el nombre de la rama antes de crearla.** Al iniciar una
+  tarea de código, además de comprobar la rama actual, el agente debe
+  proponer un nombre de rama y esperar la confirmación explícita del
+  usuario antes de ejecutar `git checkout -b`. Si el usuario no puede
+  evaluar la propuesta, el agente explica primero las opciones y luego
+  aplica la más sensata. Una vez creada, el agente avisa del nombre
+  definitivo antes de seguir.
+- **Una rama por feature o fix, no por slice.** Las ramas se crean
+  únicamente para delimitar una feature (`feat/`, `feature/`) o un fix
+  (`fix/`). Los slices son unidades de commit dentro de la misma rama,
+  no ramas nuevas. Antes de empezar cada slice el agente confirma con
+  el usuario si va a trabajar sobre la rama actual o si necesita abrir
+  una rama nueva (en este último caso, aplica la regla anterior de
+  confirmación del nombre).
 
 ## Documentación
 
