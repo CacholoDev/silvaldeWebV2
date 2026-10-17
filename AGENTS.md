@@ -28,11 +28,18 @@ añadas estructura por adelantado.
   en inglés (Conventional Commits) y espera a que el usuario confirme.
   El usuario puede decir "haz commit", pedir cambios al mensaje, o pedir
   partir el slice en dos commits. Por defecto, un slice = un commit.
+  Antes de ejecutar `git commit`, el agente muestra el `git diff
+  --staged` o `git status` para que el usuario vea exactamente qué
+  entra, y espera un OK literal ("haz commit"). Instrucciones generales
+  como "arranca ya", "vamos" o "tira" **no** cuentan como confirmación
+  de commit: el agente debe pedir ese OK explícito antes de ejecutar
+  `git commit`.
 - **Tests en el mismo commit que el código.** Los tests del slice se
   commitean junto con el código que prueban, en el mismo commit, para
   que el historial refleje qué se probó junto con qué. No se hacen
   commits `test:` sueltos salvo para arreglar regresiones o cubrir
-  código viejo.
+  código viejo. En este proyecto los tests son specs de RSpec y viven
+  en `spec/`.
 - **Internacionalización (i18n) obligatoria desde el inicio.** La app
   debe estar preparada para español e inglés, y el idioma lo elige la
   usuaria desde la UI (un selector visible). Nada de cadenas
@@ -46,6 +53,14 @@ añadas estructura por adelantado.
   controllers orquestan (`authorize → service → respond`) y no
   contienen reglas ni consultas Active Record complejas. Consultar
   `AGENTS.full.md` para detalles de la arquitectura services/decorators.
+- **Reset de BD permitido fuera de producción.** Mientras el entorno
+  no sea el de producción, está permitido borrar y recrear la base de
+  datos para alinearla con los cambios del slice (por ejemplo, cuando
+  rehacer desde cero es más limpio que migrar incrementalmente). En
+  desarrollo local: `docker compose down -v db && docker compose up -d
+  db && bin/rails db:create db:schema:load` (o `db:migrate` si se
+  prefiere). En staging y producción queda prohibido hasta que se
+  defina un proceso de migraciones explícito y aprobado.
 - **Explica el plan antes de implementar**: al empezar una feature o fix,
   resume al usuario en lenguaje sencillo qué vas a crear, qué herramientas de
   Rails usarás (generadores, migraciones, gemas…) y por qué. El usuario es
@@ -76,8 +91,11 @@ añadas estructura por adelantado.
 - Ruby 4.0.7, Rails 8.1 y MySQL 8.0 (Docker Compose en desarrollo).
 - Tailwind CSS para estilos; Turbo/Stimulus e Importmap para interacción.
   Usa JavaScript adicional solo cuando sea necesario.
-- Minitest (con Capybara/Selenium para system tests). Usa el estilo ya
-  presente antes de introducir otra herramienta.
+- RSpec + FactoryBot (con Capybara/Selenium para system tests). El
+  proyecto usa RSpec como framework de tests y FactoryBot para generar
+  datos de prueba. Los specs viven en `spec/`; los factories en
+  `spec/factories/`. Si necesitas Minitest, abre una excepción y
+  justifícala.
 - Autenticación nativa de Rails 8 y sesiones con cookie firmada (no Devise ni
   JWT). Solid Queue/Cache sobre MySQL (no Redis ni Sidekiq); jobs vía
   `Active Job`.
@@ -94,7 +112,7 @@ añadas estructura por adelantado.
 docker compose up -d db   # MySQL 8.0; obligatorio antes de test/dev
 bin/setup                 # dependencias + db:prepare
 bin/dev                   # Puma + tailwindcss:watch (no uses `rails s` a secas)
-bin/rails test            # Minitest (requiere MySQL arrancado)
+bundle exec rspec         # RSpec (requiere MySQL arrancado)
 bin/rails test:system     # system tests (job aparte en CI, opt-in en local)
 bin/ci                    # CI local completo: setup, rubocop, audits, brakeman, test, seeds
 ```
@@ -188,11 +206,13 @@ usuario sin contexto.
 - **Sub-slices dentro del slice.** Un slice puede contener varias
   features internas (por ejemplo: en `feature/user-model`, primero
   migración, luego modelo, luego validaciones, luego fixture/factory,
-  luego test). Cada feature interna termina con su propio commit
-  siguiendo la regla "commits al cerrar un slice". Antes de empezar la
-  siguiente feature, el agente espera la confirmación del usuario y
-  propone el mensaje de commit. Por defecto, una feature interna = un
-  commit, con sus tests incluidos.
+  luego test). Los sub-slices son unidades conceptuales para mantener
+  el orden y el foco del trabajo; por defecto, todos los sub-slices
+  de un mismo slice se commitean juntos en un único commit al cerrar
+  el slice. Si el usuario lo pide, se pueden separar en commits
+  individuales por sub-slice. El agente propone el mensaje de commit
+  al final y espera la confirmación explícita antes de ejecutar
+  `git commit`.
 - **Mapa mental al inicio de cada sesión.** Al abrir una sesión de
   trabajo, el agente muestra un mapa breve del estado actual: tablas,
   controllers, URLs, tests, rama y commits sin pushear. Eso le da al

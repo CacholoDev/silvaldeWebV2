@@ -1,57 +1,17 @@
 es:
-  authentication:
-    flash:
-      sign_in_required: "Inicia sesión para continuar."
-      signed_in: "Has iniciado sesión."
-      signed_out: "Has cerrado sesión."
-      invalid_credentials: "Email o contraseña incorrectos."
-      account_created: "Cuenta creada. Revisa tu correo para confirmar el email."
-      confirmation_sent: "Te hemos enviado un email de confirmación."
-      email_confirmed: "Email confirmado. Ya puedes iniciar sesión."
-      email_already_confirmed: "Tu email ya estaba confirmado."
-      confirmation_invalid: "El enlace de confirmación no es válido o ha caducado."
-      password_reset_sent: "Si la cuenta existe, te hemos enviado un email para restablecer la contraseña."
-      password_reset_invalid: "El enlace para restablecer la contraseña no es válido o ha caducado."
-      password_reset_success: "Contraseña actualizada. Ya puedes iniciar sesión."
-  sessions:
-    new:
-      title: "Iniciar sesión"
-      submit: "Iniciar sesión"
-      remember_me: "Recordarme"
-      forgot_password: "¿Olvidaste tu contraseña?"
-      no_account: "¿No tienes cuenta?"
-      sign_up: "Regístrate"
-  users:
-    new:
-      title: "Crear cuenta"
-      submit: "Crear cuenta"
-      have_account: "¿Ya tienes cuenta?"
-      sign_in: "Iniciar sesión"
-  passwords:
-    new:
-      title: "Recuperar contraseña"
-      submit: "Enviar enlace"
-      instructions: "Te enviaremos un email con un enlace para crear una nueva contraseña."
-    edit:
-      title: "Nueva contraseña"
-      submit: "Guardar contraseña"
-    create:
-      email_label: "Email"
-  email_confirmations:
-    show:
-      success: "Email confirmado"
-  mailers:
-    authentication:
-      confirmation:
-        subject: "Confirma tu email"
-        greeting: "Hola,"
-        body: "Gracias por registrarte. Confirma tu email haciendo clic en el siguiente enlace:"
-        cta: "Confirmar email"
-        expires: "Este enlace caduca en 24 horas."
-      password_reset:
-        subject: "Restablecer contraseña"
-        greeting: "Hola,"
-        body: "Has solicitado restablecer tu contraseña. Haz clic en el siguiente enlace para continuar:"
-        cta: "Restablecer contraseña"
-        expires: "Este enlace caduca en 15 minutos."
-        ignore: "Si no has sido tú, ignora este mensaje."
+  activerecord:
+    errors:
+      models:
+        user:
+          attributes:
+            email:
+              blank: "El email no puede estar vacío."
+              invalid: "El formato del email no es válido."
+              taken: "Ese email ya está registrado."
+              too_long: "El email es demasiado largo (máximo %{count} caracteres)."
+            name:
+              blank: "El nombre no puede estar vacío."
+              too_long: "El nombre es demasiado largo (máximo %{count} caracteres)."
+            password:
+              blank: "La contraseña no puede estar vacía."
+              too_short: "La contraseña es demasiado corta (mínimo %{count} caracteres)."
