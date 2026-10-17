@@ -11,36 +11,20 @@
 
     <%= yield :head %>
 
+    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
+    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
+    <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="min-h-screen bg-stone-50 text-stone-900 antialiased">
-    <% if user_signed_in? %>
-      <header class="border-b border-stone-200 bg-white">
-        <nav class="container mx-auto flex items-center justify-between px-5 py-4">
-          <%= link_to "Silvalde Web", root_path, class: "text-lg font-semibold" %>
-          <div class="flex items-center gap-4 text-sm">
-            <span class="text-stone-600"><%= current_user.email_address %></span>
-            <%= button_to t("authentication.flash.signed_out"), logout_path, method: :delete, class: "rounded border border-stone-300 px-3 py-1 hover:bg-stone-100" %>
-          </div>
-        </nav>
-      </header>
-    <% end %>
-
-    <% flash.each do |level, message| %>
-      <div class="container mx-auto mt-4 px-5">
-        <div class="rounded border px-4 py-2 text-sm <%= level == "alert" ? "border-red-300 bg-red-50 text-red-800" : "border-emerald-300 bg-emerald-50 text-emerald-800" %>">
-          <%= message %>
-        </div>
-      </div>
-    <% end %>
-
-    <main class="container mx-auto mt-10 px-5">
+  <body>
+    <main class="container mx-auto mt-28 px-5 flex">
       <%= yield %>
     </main>
   </body>

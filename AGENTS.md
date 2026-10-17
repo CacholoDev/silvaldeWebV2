@@ -112,8 +112,7 @@ añadas estructura por adelantado.
 docker compose up -d db   # MySQL 8.0; obligatorio antes de test/dev
 bin/setup                 # dependencias + db:prepare
 bin/dev                   # Puma + tailwindcss:watch (no uses `rails s` a secas)
-bundle exec rspec         # RSpec (requiere MySQL arrancado)
-bin/rails test:system     # system tests (job aparte en CI, opt-in en local)
+bundle exec rspec         # RSpec (requiere MySQL arrancado); incluye system specs
 bin/ci                    # CI local completo: setup, rubocop, audits, brakeman, test, seeds
 ```
 
@@ -170,7 +169,7 @@ transiciones válidas y cómo se muestran al usuario.
   de verdad; la app la expone como `SilvaldeWebV2::APP_VERSION`) y su
   historial en [`CHANGELOG.md`](./CHANGELOG.md). SemVer: estamos en `0.x.y`
   hasta el lanzamiento público, que será `1.0.0`. No subas la versión dentro
-  de una rama `feature/*`. Proceso de publicación:
+  de una rama `feat/*`. Proceso de publicación:
   [`docs/versioning.md`](./docs/versioning.md).
 - Las fases del proyecto y su estado están en
   [`docs/roadmap.md`](./docs/roadmap.md); actualízalo al completar una fase.
@@ -190,7 +189,7 @@ transiciones válidas y cómo se muestran al usuario.
   aplica la más sensata. Una vez creada, el agente avisa del nombre
   definitivo antes de seguir.
 - **Una rama por feature o fix, no por slice.** Las ramas se crean
-  únicamente para delimitar una feature (`feat/`, `feature/`) o un fix
+  únicamente para delimitar una feature (`feat/`) o un fix
   (`fix/`). Los slices son unidades de commit dentro de la misma rama,
   no ramas nuevas. Antes de empezar cada slice el agente confirma con
   el usuario si va a trabajar sobre la rama actual o si necesita abrir
@@ -222,7 +221,7 @@ usuario sin contexto.
   qué entra y qué queda fuera, (b) decir cómo se prueba a mano, (c)
   esperar a que el usuario lo valide antes de continuar.
 - **Sub-slices dentro del slice.** Un slice puede contener varias
-  features internas (por ejemplo: en `feature/user-model`, primero
+  features internas (por ejemplo: en `feat/user-model`, primero
   migración, luego modelo, luego validaciones, luego fixture/factory,
   luego test). Los sub-slices son unidades conceptuales para mantener
   el orden y el foco del trabajo; por defecto, todos los sub-slices
@@ -250,26 +249,15 @@ las skills disponibles** y cargar las que apliquen al trabajo (frontend,
 accesibilidad, SEO, etc.). Las skills globales del agente siguen disponibles;
 esta regla añade una capa local al proyecto.
 
-## Ritmo de trabajo y modelo mental
+**Skills de superpowers (globales, obligatorias según el caso).** El agente
+usa el plugin `superpowers`, que aporta skills de proceso. Debe cargarlas
+antes de actuar siempre que apliquen, en orden proceso → implementación:
 
-El usuario es junior y está aprendiendo. Las siguientes reglas evitan que
-el agente implemente demasiada superficie en una sola sesión y deje al
-usuario sin contexto.
+- `brainstorming` antes de cualquier trabajo creativo (feature nueva, cambio de comportamiento).
+- `systematic-debugging` ante cualquier bug, test en rojo o comportamiento inesperado (antes de proponer fixes).
+- `test-driven-development` al implementar feature o fix, antes de escribir código.
+- `writing-plans` y `executing-plans` cuando hay una tarea multi-paso con spec.
+- `verification-before-completion` antes de afirmar que algo está terminado o en verde.
+- `requesting-code-review` / `receiving-code-review` al cerrar una tarea o recibir feedback.
 
-- **Vertical slices, no capas horizontales.** Una sesión de trabajo es
-  una unidad pequeña y verificable a mano (por ejemplo: "modelo User con
-  validaciones" o "signup end-to-end"). No se implementa modelo +
-  controller + vista + mailer + jobs + tests de todo en la misma sesión.
-  Antes de empezar cada slice, el agente debe: (a) explicar en una frase
-  qué entra y qué queda fuera, (b) decir cómo se prueba a mano, (c)
-  esperar a que el usuario lo valide antes de continuar.
-- **Mapa mental al inicio de cada sesión.** Al abrir una sesión de
-  trabajo, el agente muestra un mapa breve del estado actual: tablas,
-  controllers, URLs, tests, rama y commits sin pushear. Eso le da al
-  usuario el contexto para decidir. Si la sesión anterior terminó con
-  cambios sin comitear o sin pushear, se avisa al principio.
-- **Explicar conceptos antes de preguntar opciones.** Si el usuario no
-  puede evaluar una opción porque no conoce el concepto, el agente
-  explica primero y pregunta después. Si el usuario dice "no sé", el
-  agente propone la opción más sensata con su razonamiento y la aplica,
-  sin esperar confirmación sobre algo que el usuario no puede juzgar.
+La lista completa se consulta con el tool nativo `skill`.

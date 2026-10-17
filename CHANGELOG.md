@@ -16,7 +16,7 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
 
 - Decisiones de stack documentadas en `AGENTS.full.md`: autenticación nativa
   de Rails 8 (no Devise), sesiones con cookie (no JWT), Solid Queue/Cache (no
-  Redis/Sidekiq), Minitest + fixtures (no RSpec), web HTML sin API pública
+  Redis/Sidekiq), RSpec + FactoryBot (no Minitest), web HTML sin API pública
   (no Grape/Swagger), política de generadores (sin `scaffold`) y Pundit como
   candidato futuro para el panel admin.
 

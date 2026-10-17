@@ -1,4 +1,10 @@
 en:
+  authentication:
+    flash:
+      sign_in_required: "Please sign in to continue."
+      signed_in: "You have signed in."
+      signed_out: "You have signed out."
+      invalid_credentials: "Email or password is incorrect."
   activerecord:
     errors:
       models:

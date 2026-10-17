@@ -34,7 +34,7 @@ una responsabilidad.
    bin/ci
    ```
 
-   (Equivale a `bin/rails test`, `bin/rubocop`, `bin/brakeman`,
+   (Equivale a `bundle exec rspec`, `bin/rubocop`, `bin/brakeman`,
    `bin/bundler-audit` y el audit de importmap.)
 
 4. Integrar en `main`. Si la feature completa una fase del

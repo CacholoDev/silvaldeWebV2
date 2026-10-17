@@ -40,18 +40,18 @@ consultar al usuario y actualizar esta sección y el changelog.
 
 **Lo que usamos:**
 
-- **Autenticación nativa de Rails 8** (generador oficial
-  `bin/rails generate authentication`, con `has_secure_password`/bcrypt).
-  No Devise: la auth integrada es suficiente, la mantiene el core de Rails y
-  reduce dependencias y «magia».
+- **Autenticación nativa de Rails 8** (`has_secure_password`/bcrypt y sesiones
+  con cookie firmada). No Devise: la auth integrada es suficiente, la mantiene
+  el core de Rails y reduce dependencias y «magia». Se implementa slice a
+  slice a mano, no con el generador oficial de una vez.
 - **Sesiones con cookie firmada** (tabla `sessions`). No JWT: JWT es para
   APIs stateless; en una web HTML las sesiones son más seguras y revocables.
 - **Solid Queue y Solid Cache** sobre MySQL (ya configurados en el scaffold).
   No Redis ni Sidekiq: suficiente para la escala del proyecto y sin servicios
   extra que mantener. El código usa `Active Job`, así que migrar a Sidekiq en
   el futuro sería barato si hiciera falta.
-- **Minitest + fixtures**: infraestructura ya configurada y es la que corre el
-  CI. No RSpec ni FactoryBot.
+- **RSpec + FactoryBot**: framework de tests del proyecto (los specs viven en
+  `spec/` y las factories en `spec/factories/`). No Minitest.
 - **Web HTML con Hotwire**: no hay API pública; por tanto nada de Grape,
   Swagger ni JWT. Si algún día se necesita una API, se especifica aparte
   (sección «Cambios y documentación»).
@@ -62,15 +62,15 @@ consultar al usuario y actualizar esta sección y el changelog.
   arquitectura de servicios y decorators.
 - Generadores pequeños (`model`, `migration`) están permitidos como punto de
   partida; controllers, servicios, decorators y vistas se escriben a mano.
-- Excepción justificada: el generador oficial de autenticación, por seguridad
-  (lo escribe el core team de Rails). Al usarlo, se revisa archivo a archivo
-  con el usuario.
+- La autenticación se escribe a mano, slice a slice (ver `AGENTS.md`, «Ritmo
+  de trabajo y modelo mental»); no se usa el generador oficial para hacerlo
+  todo de una vez.
 
 **Candidatos futuros (decidir cuando toque, no instalar ahora):**
 
 - **Pundit** (autorización por policies): candidato en v0.6.0 (panel admin) si
   los permisos crecen más allá del check de rol en `before_action`.
-- **Grape/Swagger, Redis/Sidekiq, RSpec**: solo si aparece una necesidad real
+- **Grape/Swagger, Redis/Sidekiq**: solo si aparece una necesidad real
   documentada (API pública, volumen de jobs alto, etc.).
 
 ## Patrones de Rails
@@ -156,7 +156,9 @@ consultar al usuario y actualizar esta sección y el changelog.
 
 ## Pruebas y calidad
 
-- Usa Minitest y las convenciones ya creadas en `test/`.
+- Usa RSpec y FactoryBot: los specs viven en `spec/` y las factories en
+  `spec/factories/`. Escribe primero el spec que fija el comportamiento y luego
+  el código de producción (skill `test-driven-development`).
 - Cubre casos de éxito, validación, autorización y límites relevantes.
 - Para cambios de UI o flujos completos, considera system tests con Capybara.
 - Ejecuta el conjunto mínimo relevante y después las comprobaciones de seguridad
@@ -200,6 +202,8 @@ Dos decisiones que los atraviesan:
 
 Una tarea está terminada cuando:
 
+- se ha verificado ejecutando (tests, linters, arranque) y se muestra la
+  evidencia, no solo la afirmación (skill `verification-before-completion`);
 - el comportamiento solicitado funciona en los flujos afectados;
 - la autorización y la validación están cubiertas;
 - no se han introducido secretos ni regresiones conocidas;

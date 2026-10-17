@@ -27,7 +27,8 @@ motivación, límites y efecto sobre los flujos existentes antes de implementars
 - **Hotwire** (Turbo y Stimulus) e **Importmap** para JavaScript.
 - **JavaScript adicional** solo cuando Hotwire/Stimulus no resuelvan la necesidad.
 - **Propshaft** para el pipeline de assets.
-- **Minitest** y system tests con Capybara/Selenium, según la configuración actual.
+- **RSpec + FactoryBot** para los tests (system tests con Capybara/Selenium),
+  según la configuración actual.
 
 ## Desarrollo local
 
@@ -59,14 +60,15 @@ arquitectura, seguridad, datos o UX.
 
 ## Estado y versionado
 
-El proyecto está en fase inicial (greenfield): todavía no hay modelos de
-dominio ni funcionalidad implementada. La versión actual es **0.1.0**
-(desarrollo previo al lanzamiento); la fuente única de verdad es el archivo
+El proyecto está en desarrollo temprano: la autenticación (usuarios y
+sesiones) se construye por slices sobre la base de Rails 8.1. La versión
+publicada actual es **0.1.0** (la **0.2.0**, «autenticación y usuarios», está
+en curso); la fuente única de verdad es el archivo
 [`VERSION`](./VERSION) y el historial de cambios vive en
 [`CHANGELOG.md`](./CHANGELOG.md).
 
-El desarrollo se organiza en ramas por funcionalidad (`feature/autenticacion`,
-`feature/catalogo-productos`, …) que se fusionan en `main` con el CI en verde.
+El desarrollo se organiza en ramas por funcionalidad (`feat/authentication`,
+`feat/catalog`, …) que se fusionan en `main` con el CI en verde.
 Las fases previstas están en [`docs/roadmap.md`](./docs/roadmap.md) y la
 convención completa de ramas y releases en [`AGENTS.md`](./AGENTS.md).
 
