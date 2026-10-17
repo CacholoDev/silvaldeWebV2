@@ -174,10 +174,14 @@ transiciones válidas y cómo se muestran al usuario.
   [`docs/versioning.md`](./docs/versioning.md).
 - Las fases del proyecto y su estado están en
   [`docs/roadmap.md`](./docs/roadmap.md); actualízalo al completar una fase.
-- Los agentes no hacen commits, merges, push ni tags sin confirmación
+- Los agentes no hacen commits, push ni tags sin confirmación
   explícita del usuario. El push es una **acción aparte** que nunca se
   agrupa con un commit: aunque el usuario haya aprobado el commit, hay
-  que esperar a su "sí, haz push" específico en el mismo turno.
+  que esperar a su "sí, haz push" específico en el mismo turno. Los
+  merges en `main` requieren una confirmación adicional y dedicada
+  (ver "Reglas de merge"). **Las pull requests sí pueden ser abiertas
+  por el agente** cuando el usuario lo pida explícitamente; el agente
+  no debe abrirlas por su cuenta sin instrucción directa del usuario.
 - **Confirma el nombre de la rama antes de crearla.** Al iniciar una
   tarea de código, además de comprobar la rama actual, el agente debe
   proponer un nombre de rama y esperar la confirmación explícita del
