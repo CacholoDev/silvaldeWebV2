@@ -13,6 +13,15 @@ services:
       - "${DB_PORT:-3306}:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+      # Grants the application user full privileges on any database
+      # (including the *_test sibling created by `bin/rails db:create`).
+      # Runs only on the first boot of a fresh MySQL volume.
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
 
 volumes:
   mysql_data:

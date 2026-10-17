@@ -23,6 +23,44 @@ añadas estructura por adelantado.
 
 - Inspecciona el código existente antes de crear archivos o abstracciones.
 - Haz cambios pequeños, explícitos y coherentes con Rails.
+- **Commits al cerrar un slice, no antes.** Cuando un slice está
+  terminado y verificado a mano, el agente propone un mensaje de commit
+  en inglés (Conventional Commits) y espera a que el usuario confirme.
+  El usuario puede decir "haz commit", pedir cambios al mensaje, o pedir
+  partir el slice en dos commits. Por defecto, un slice = un commit.
+  Antes de ejecutar `git commit`, el agente muestra el `git diff
+  --staged` o `git status` para que el usuario vea exactamente qué
+  entra, y espera un OK literal ("haz commit"). Instrucciones generales
+  como "arranca ya", "vamos" o "tira" **no** cuentan como confirmación
+  de commit: el agente debe pedir ese OK explícito antes de ejecutar
+  `git commit`.
+- **Tests en el mismo commit que el código.** Los tests del slice se
+  commitean junto con el código que prueban, en el mismo commit, para
+  que el historial refleje qué se probó junto con qué. No se hacen
+  commits `test:` sueltos salvo para arreglar regresiones o cubrir
+  código viejo. En este proyecto los tests son specs de RSpec y viven
+  en `spec/`.
+- **Internacionalización (i18n) obligatoria desde el inicio.** La app
+  debe estar preparada para español e inglés, y el idioma lo elige la
+  usuaria desde la UI (un selector visible). Nada de cadenas
+  hardcodeadas en vistas, mailers ni controladores: todo va en
+  `config/locales/{es,en}.yml`. La detección inicial se delega a la
+  UI; no se deduce automáticamente de la URL ni de `Accept-Language`
+  hasta que se defina explícitamente.
+- **Services obligatorios para lógica que cruza modelos o casos de uso.**
+  Cualquier operación que toque varios modelos o tenga reglas de
+  negocio va en `app/services/<contexto>/<caso_de_uso>.rb`. Los
+  controllers orquestan (`authorize → service → respond`) y no
+  contienen reglas ni consultas Active Record complejas. Consultar
+  `AGENTS.full.md` para detalles de la arquitectura services/decorators.
+- **Reset de BD permitido fuera de producción.** Mientras el entorno
+  no sea el de producción, está permitido borrar y recrear la base de
+  datos para alinearla con los cambios del slice (por ejemplo, cuando
+  rehacer desde cero es más limpio que migrar incrementalmente). En
+  desarrollo local: `docker compose down -v db && docker compose up -d
+  db && bin/rails db:create db:schema:load` (o `db:migrate` si se
+  prefiere). En staging y producción queda prohibido hasta que se
+  defina un proceso de migraciones explícito y aprobado.
 - **Explica el plan antes de implementar**: al empezar una feature o fix,
   resume al usuario en lenguaje sencillo qué vas a crear, qué herramientas de
   Rails usarás (generadores, migraciones, gemas…) y por qué. El usuario es
@@ -53,8 +91,11 @@ añadas estructura por adelantado.
 - Ruby 4.0.7, Rails 8.1 y MySQL 8.0 (Docker Compose en desarrollo).
 - Tailwind CSS para estilos; Turbo/Stimulus e Importmap para interacción.
   Usa JavaScript adicional solo cuando sea necesario.
-- Minitest (con Capybara/Selenium para system tests). Usa el estilo ya
-  presente antes de introducir otra herramienta.
+- RSpec + FactoryBot (con Capybara/Selenium para system tests). El
+  proyecto usa RSpec como framework de tests y FactoryBot para generar
+  datos de prueba. Los specs viven en `spec/`; los factories en
+  `spec/factories/`. Si necesitas Minitest, abre una excepción y
+  justifícala.
 - Autenticación nativa de Rails 8 y sesiones con cookie firmada (no Devise ni
   JWT). Solid Queue/Cache sobre MySQL (no Redis ni Sidekiq); jobs vía
   `Active Job`.
@@ -71,7 +112,7 @@ añadas estructura por adelantado.
 docker compose up -d db   # MySQL 8.0; obligatorio antes de test/dev
 bin/setup                 # dependencias + db:prepare
 bin/dev                   # Puma + tailwindcss:watch (no uses `rails s` a secas)
-bin/rails test            # Minitest (requiere MySQL arrancado)
+bundle exec rspec         # RSpec (requiere MySQL arrancado)
 bin/rails test:system     # system tests (job aparte en CI, opt-in en local)
 bin/ci                    # CI local completo: setup, rubocop, audits, brakeman, test, seeds
 ```
@@ -133,10 +174,28 @@ transiciones válidas y cómo se muestran al usuario.
   [`docs/versioning.md`](./docs/versioning.md).
 - Las fases del proyecto y su estado están en
   [`docs/roadmap.md`](./docs/roadmap.md); actualízalo al completar una fase.
-- Los agentes no hacen commits, merges, push ni tags sin confirmación
+- Los agentes no hacen commits, push ni tags sin confirmación
   explícita del usuario. El push es una **acción aparte** que nunca se
   agrupa con un commit: aunque el usuario haya aprobado el commit, hay
-  que esperar a su "sí, haz push" específico en el mismo turno.
+  que esperar a su "sí, haz push" específico en el mismo turno. Los
+  merges en `main` requieren una confirmación adicional y dedicada
+  (ver "Reglas de merge"). **Las pull requests sí pueden ser abiertas
+  por el agente** cuando el usuario lo pida explícitamente; el agente
+  no debe abrirlas por su cuenta sin instrucción directa del usuario.
+- **Confirma el nombre de la rama antes de crearla.** Al iniciar una
+  tarea de código, además de comprobar la rama actual, el agente debe
+  proponer un nombre de rama y esperar la confirmación explícita del
+  usuario antes de ejecutar `git checkout -b`. Si el usuario no puede
+  evaluar la propuesta, el agente explica primero las opciones y luego
+  aplica la más sensata. Una vez creada, el agente avisa del nombre
+  definitivo antes de seguir.
+- **Una rama por feature o fix, no por slice.** Las ramas se crean
+  únicamente para delimitar una feature (`feat/`, `feature/`) o un fix
+  (`fix/`). Los slices son unidades de commit dentro de la misma rama,
+  no ramas nuevas. Antes de empezar cada slice el agente confirma con
+  el usuario si va a trabajar sobre la rama actual o si necesita abrir
+  una rama nueva (en este último caso, aplica la regla anterior de
+  confirmación del nombre).
 
 ## Documentación
 
@@ -148,6 +207,40 @@ para que sean visibles en la primera carga del agente.
 `AGENTS.md`, `AGENTS.full.md`, `README.md`, `CHANGELOG.md` y `docs/` están
 versionados en git junto al código: la documentación es parte del producto y
 debe actualizarse en la misma rama que el cambio que la motiva.
+
+## Ritmo de trabajo y modelo mental
+
+El usuario es junior y está aprendiendo. Las siguientes reglas evitan que
+el agente implemente demasiada superficie en una sola sesión y deje al
+usuario sin contexto.
+
+- **Vertical slices, no capas horizontales.** Una sesión de trabajo es
+  una unidad pequeña y verificable a mano (por ejemplo: "modelo User con
+  validaciones" o "signup end-to-end"). No se implementa modelo +
+  controller + vista + mailer + jobs + tests de todo en la misma sesión.
+  Antes de empezar cada slice el agente debe: (a) explicar en una frase
+  qué entra y qué queda fuera, (b) decir cómo se prueba a mano, (c)
+  esperar a que el usuario lo valide antes de continuar.
+- **Sub-slices dentro del slice.** Un slice puede contener varias
+  features internas (por ejemplo: en `feature/user-model`, primero
+  migración, luego modelo, luego validaciones, luego fixture/factory,
+  luego test). Los sub-slices son unidades conceptuales para mantener
+  el orden y el foco del trabajo; por defecto, todos los sub-slices
+  de un mismo slice se commitean juntos en un único commit al cerrar
+  el slice. Si el usuario lo pide, se pueden separar en commits
+  individuales por sub-slice. El agente propone el mensaje de commit
+  al final y espera la confirmación explícita antes de ejecutar
+  `git commit`.
+- **Mapa mental al inicio de cada sesión.** Al abrir una sesión de
+  trabajo, el agente muestra un mapa breve del estado actual: tablas,
+  controllers, URLs, tests, rama y commits sin pushear. Eso le da al
+  usuario el contexto para decidir. Si la sesión anterior terminó con
+  cambios sin comitear o sin pushear, se avisa al principio.
+- **Explicar conceptos antes de preguntar opciones.** Si el usuario no
+  puede evaluar una opción porque no conoce el concepto, el agente
+  explica primero y pregunta después. Si el usuario dice "no sé", el
+  agente propone la opción más sensata con su razonamiento y la aplica,
+  sin esperar confirmación sobre algo que el usuario no puede juzgar.
 
 ## Skills locales
 
