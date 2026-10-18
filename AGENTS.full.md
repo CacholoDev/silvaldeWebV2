@@ -23,6 +23,11 @@ confianza, claridad y mantenimiento sencillo. El catálogo, el carrito, los
 pedidos, el registro de clientes y el panel administrativo son dominios
 relacionados, pero deben mantener límites claros.
 
+La web es pública y el registro es opcional: la visitante ve primero el
+catálogo/landing, no una pantalla de login. El login aparece solo cuando una
+acción protegida lo requiere. Por tanto, la ruta raíz (`/`) apunta a la
+landing (catálogo), nunca a `sessions#new`.
+
 El registro de clientes existe para compras y para futuras ofertas o rebajas.
 La comunicación comercial debe ser consentida, trazable y revocable. No
 implementes campañas, pagos reales, facturación fiscal o integraciones externas
@@ -55,6 +60,11 @@ consultar al usuario y actualizar esta sección y el changelog.
 - **Web HTML con Hotwire**: no hay API pública; por tanto nada de Grape,
   Swagger ni JWT. Si algún día se necesita una API, se especifica aparte
   (sección «Cambios y documentación»).
+- **AASM para la máquina de estados de los pedidos** (`Order`): estados
+  `pending → confirmed → shipped → delivered` (o `cancelled`), con transiciones
+  definidas y documentadas (ver `docs/roadmap.md`, fase v0.5.0). La gema se
+  añade a la `Gemfile` cuando lleguemos a esa fase; la decisión se registra
+  ahora para no improvisar una máquina de estados a mano.
 
 **Política de generadores:**
 

@@ -1,0 +1,15 @@
+<h1><%= t("authentication.login.title") %></h1>
+
+<%= form_with url: login_path do |form| %>
+  <div>
+    <%= form.label :email, t("authentication.login.email") %>
+    <%= form.email_field :email, required: true, autofocus: true %>
+  </div>
+
+  <div>
+    <%= form.label :password, t("authentication.login.password") %>
+    <%= form.password_field :password, required: true %>
+  </div>
+
+  <%= form.submit t("authentication.login.submit") %>
+<% end %>

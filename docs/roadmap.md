@@ -4,6 +4,9 @@ Plan de fases del proyecto y referencia de control. Cada fase terminada e
 integrada en `main` publica una versión (ver [versioning.md](./versioning.md)).
 Este documento se actualiza conforme avanza el proyecto.
 
+El desglose fino del backend en **slices** está en
+[`backend-plan.md`](./backend-plan.md).
+
 Leyenda: ✅ hecho · 🚧 en curso · ⬜ pendiente
 
 ---
@@ -90,8 +93,9 @@ Turbo Frames para no recargar la página.
 estados, detalle visible para la clienta y email de confirmación.
 
 **Cómo se hará:** modelos `Order` y `OrderItem` con los precios congelados en
-el momento de la compra; estados definidos y documentados
-(pendiente → confirmado → enviado → entregado, o cancelado); servicio de
+el momento de la compra; máquina de estados del pedido con **AASM** —estados
+`pending → confirmed → shipped → delivered`, o `cancelled` (en la UI:
+pendiente → confirmado → enviado → entregado, o cancelado)—; servicio de
 checkout con transacción (crea pedido + vacía carrito o falla todo); emails
 con Action Mailer.
 

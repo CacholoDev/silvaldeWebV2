@@ -26,6 +26,19 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
 - `AGENTS.md`: nuevas reglas — los agentes deben explicar el plan antes de
   implementar (usuario junior) y crear la rama de trabajo antes de escribir
   código, avisando al usuario.
+- Decisión de stack: **AASM** para la máquina de estados de los pedidos
+  (`Order`), con estados `pending → confirmed → shipped → delivered` (o
+  `cancelled`). Documentado en `AGENTS.full.md`, `docs/roadmap.md` y
+  `docs/backend-plan.md`.
+- Principio de producto: la web es pública y el registro es opcional — la
+  visitante ve la landing/catálogo, no el login (documentado en
+  `AGENTS.full.md`).
+- `docs/backend-plan.md`: desglose del backend en slices, con los grupos
+  renombrados para no colisionar con las versiones del roadmap.
+- Autenticación (slice 4): rutas de login/logout (`/login`, `/logout`),
+  controlador `SessionsController` con request spec, y un `root` provisional
+  (`HomeController`) que luego será la landing del catálogo. Resuelve el spec
+  que esperaba `login_path`.
 
 ## [0.1.0] - 2026-10-11
 

@@ -25,7 +25,7 @@ RSpec.describe Authentication, type: :controller do
       get "index" => "anonymous#index"
       get "protected" => "anonymous#protected_action"
       get "sign_out" => "anonymous#sign_out"
-      get "login" => "anonymous#index" # login_path used by require_authentication
+      get "login" => "anonymous#index", as: :login # login_path used by require_authentication
     end
     # Re-apply the require_authentication filter on the test controller.
     controller_class = controller.class
