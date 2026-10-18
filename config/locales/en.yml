@@ -5,11 +5,19 @@ en:
       signed_in: "You have signed in."
       signed_out: "You have signed out."
       invalid_credentials: "Email or password is incorrect."
+      signed_up: "Account created. Welcome!"
     login:
       title: "Sign in"
       email: "Email"
       password: "Password"
       submit: "Sign in"
+    signup:
+      title: "Create account"
+      name: "Name"
+      email: "Email"
+      password: "Password"
+      password_confirmation: "Confirm password"
+      submit: "Sign up"
   home:
     welcome: "Welcome to Silvalde Web."
   activerecord:

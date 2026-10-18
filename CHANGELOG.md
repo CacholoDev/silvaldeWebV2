@@ -39,6 +39,13 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
   controlador `SessionsController` con request spec, y un `root` provisional
   (`HomeController`) que luego será la landing del catálogo. Resuelve el spec
   que esperaba `login_path`.
+- Autenticación (slice 5): registro (signup) — rutas `/signup`, controlador
+  `UsersController`, service `Users::Register` y request spec. La usuaria
+  queda logueada automáticamente tras registrarse.
+- Refactor de autenticación: lógica de login/signup extraída a services
+  (`Users::Authenticate` y `Users::Register`). Nueva regla en `AGENTS.md` y
+  `AGENTS.full.md`: los controllers no consultan ni escriben en la base de
+  datos; esa interacción vive en services.
 
 ## [0.1.0] - 2026-10-11
 

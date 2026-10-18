@@ -89,14 +89,18 @@ consultar al usuario y actualizar esta sección y el changelog.
 
 - Una acción debe recibir parámetros, autorizar, invocar un servicio y responder.
 - Usa strong parameters y validaciones apropiadas para cada flujo.
-- Evita `Model.find`, `Model.all` y consultas complejas directamente en el
-  controller; encapsúlalas en servicios de búsqueda o en un objeto de consulta
-  bien delimitado.
+- Un controller **no consulta ni escribe en la base de datos**: no usa
+  `Model.find`, `Model.all`, `Model.where`, `Model.create`, `Model.update`,
+  ni `authenticate_by` directamente. Esa interacción es responsabilidad de los
+  services (o de un método del modelo). La única excepción es la infraestructura
+  transversal (la concern `Authentication` para la sesión por cookie).
 - No uses callbacks de controller para esconder reglas de negocio.
 - Devuelve estados HTTP correctos y errores de validación comprensibles.
 
 ### Services
 
+- Un servicio hace **una única cosa** (una sola responsabilidad, un caso de uso).
+  Si un servicio empieza a hacer dos cosas distintas, se divide en dos servicios.
 - Un servicio representa un caso de uso, no una colección arbitraria de helpers.
 - Usa transacciones cuando una operación modifique varias tablas.
 - Usa métodos bang para invariantes que no deberían fallar silenciosamente

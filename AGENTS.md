@@ -50,8 +50,11 @@ añadas estructura por adelantado.
 - **Services obligatorios para lógica que cruza modelos o casos de uso.**
   Cualquier operación que toque varios modelos o tenga reglas de
   negocio va en `app/services/<contexto>/<caso_de_uso>.rb`. Los
-  controllers orquestan (`authorize → service → respond`) y no
-  contienen reglas ni consultas Active Record complejas. Consultar
+  controllers orquestan (`authorize → service → respond`): **no consultan
+  ni escriben en la base de datos directamente** (nada de `Model.find`,
+  `Model.create`, `Model.where`, `authenticate_by`, …); toda interacción
+  con ActiveRecord vive en services o en métodos del modelo. Cada service
+  hace una única cosa (una sola responsabilidad). Consultar
   `AGENTS.full.md` para detalles de la arquitectura services/decorators.
 - **Reset de BD permitido fuera de producción.** Mientras el entorno
   no sea el de producción, está permitido borrar y recrear la base de
@@ -131,7 +134,9 @@ el arranque y los tests.
 Usa MVC con **servicios** y **decorators**:
 
 - **Controllers**: orquestan la petición, autorización, servicio y respuesta.
-  No contienen reglas de negocio ni consultas Active Record complejas.
+  No contienen reglas de negocio ni acceso directo a la base de datos: no usan
+  `Model.find`, `Model.create`, `Model.where` ni `authenticate_by`. Toda
+  interacción con ActiveRecord vive en services o en métodos del modelo.
 - **Models**: contienen asociaciones, validaciones, invariantes y comportamiento
   propio de la entidad. Deben mantenerse delgados.
 - **Services**: encapsulan casos de uso y operaciones con varios modelos. Cada

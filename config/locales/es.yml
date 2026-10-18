@@ -5,11 +5,19 @@ es:
       signed_in: "Has iniciado sesión."
       signed_out: "Has cerrado sesión."
       invalid_credentials: "Email o contraseña incorrectos."
+      signed_up: "Cuenta creada. ¡Bienvenida!"
     login:
       title: "Iniciar sesión"
       email: "Email"
       password: "Contraseña"
       submit: "Entrar"
+    signup:
+      title: "Crear cuenta"
+      name: "Nombre"
+      email: "Email"
+      password: "Contraseña"
+      password_confirmation: "Confirmar contraseña"
+      submit: "Registrarse"
   home:
     welcome: "Bienvenida a Silvalde Web."
   activerecord:

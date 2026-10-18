@@ -5,7 +5,7 @@ class SessionsController < ApplicationController
   end
 
   def create
-    user = User.authenticate_by(email: params[:email], password: params[:password])
+    user = Users::Authenticate.call(email: params[:email], password: params[:password])
 
     if user
       start_new_session_for user
