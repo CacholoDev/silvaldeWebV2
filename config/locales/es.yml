@@ -33,10 +33,17 @@ es:
   passwords:
     flash:
       sent: "Si esa dirección de email está registrada, recibirás un enlace para restablecer tu contraseña."
+      invalid_token: "El enlace no es válido o ha caducado."
+      reset_success: "Contraseña actualizada. Ya puedes iniciar sesión."
     new:
       title: "Restablecer contraseña"
       email: "Email"
       submit: "Enviar instrucciones"
+    edit:
+      title: "Nueva contraseña"
+      password: "Contraseña"
+      password_confirmation: "Confirmar contraseña"
+      submit: "Guardar contraseña"
     mailer:
       subject: "Restablece tu contraseña"
       instruction: "Hola %{name}, hemos recibido una solicitud para restablecer tu contraseña."

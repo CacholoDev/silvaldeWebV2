@@ -26,7 +26,7 @@ Rails.application.routes.draw do
   get "password/reset", to: "passwords#new", as: :new_password
   post "password/reset", to: "passwords#create"
   get "password/reset/:token/edit", to: "passwords#edit", as: :edit_password
-  patch "password/reset/:token", to: "passwords#update"
+  patch "password/reset/:token", to: "passwords#update", as: :update_password
 
   # Locale switching
   post "locale", to: "locales#update", as: :locale

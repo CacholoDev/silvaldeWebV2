@@ -54,6 +54,10 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
   `Passwords::RequestReset`, mailer `PasswordsMailer` y envío async
   (`deliver_later`). La usuaria pide el reset y recibe un enlace por email;
   sin revelar si el email existe o no.
+- Autenticación (slice 8): recuperación de contraseña (parte 2) — vistas y
+  acciones `edit`/`update` para poner la nueva contraseña, service
+  `Passwords::Reset`. El token pasa de BCrypt a SHA256 (como las sesiones)
+  para poder buscarlo por el enlace.
 
 ### Corregido
 

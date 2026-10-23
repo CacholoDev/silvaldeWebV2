@@ -33,10 +33,17 @@ en:
   passwords:
     flash:
       sent: "If that email address is registered, you will receive a link to reset your password."
+      invalid_token: "The link is invalid or has expired."
+      reset_success: "Password updated. You can now sign in."
     new:
       title: "Reset password"
       email: "Email"
       submit: "Send instructions"
+    edit:
+      title: "New password"
+      password: "Password"
+      password_confirmation: "Confirm password"
+      submit: "Save password"
     mailer:
       subject: "Reset your password"
       instruction: "Hello %{name}, we received a request to reset your password."

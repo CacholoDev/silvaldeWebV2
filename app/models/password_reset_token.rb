@@ -10,12 +10,11 @@ class PasswordResetToken < ApplicationRecord
   scope :expired, -> { where("expires_at <= ?", Time.current) }
   scope :used, -> { where.not(used_at: nil) }
 
-  # Hashes a plaintext token with BCrypt and stores the digest. The
-  # plaintext token is what gets sent in the email; only the digest
-  # is persisted, so a leaked database cannot be used to reset
-  # arbitrary passwords.
+  # Hashes a plaintext token with SHA256 and returns the hex digest.
+  # SHA256 is fast and sufficient for opaque reset tokens (256 bits of
+  # entropy); we don't need BCrypt's brute-force resistance here.
   def self.digest_for(plaintext)
-    BCrypt::Password.create(plaintext)
+    Digest::SHA256.hexdigest(plaintext)
   end
 
   def self.build_for(user, plaintext: SecureRandom.urlsafe_base64(32))
@@ -25,6 +24,13 @@ class PasswordResetToken < ApplicationRecord
       expires_at: EXPIRATION.from_now
     )
     [ token, plaintext ]
+  end
+
+  # Finds the active token for a plaintext token (e.g. from an email link).
+  def self.find_active_by_plaintext(plaintext)
+    return nil if plaintext.blank?
+
+    active.find_by(token_digest: digest_for(plaintext))
   end
 
   def active?

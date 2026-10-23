@@ -28,7 +28,7 @@ RSpec.describe PasswordResetToken, type: :model do
     end
 
     it "enforces unique token_digest" do
-      digest = BCrypt::Password.create("shared-token")
+      digest = described_class.digest_for("shared-token")
       create(:password_reset_token, token_digest: digest)
       duplicate = build(:password_reset_token, token_digest: digest)
       expect(duplicate).not_to be_valid
@@ -46,12 +46,45 @@ RSpec.describe PasswordResetToken, type: :model do
       expect(token.expires_at).to be_within(2.seconds).of(15.minutes.from_now)
     end
 
-    it "stores the BCrypt digest, not the plaintext" do
+    it "stores a SHA256 digest, not the plaintext" do
       user = create(:user)
       token, plaintext = described_class.build_for(user)
 
       expect(token.token_digest).not_to eq(plaintext)
-      expect(BCrypt::Password.new(token.token_digest) == plaintext).to be(true)
+      expect(token.token_digest).to eq(described_class.digest_for(plaintext))
+    end
+  end
+
+  describe ".find_active_by_plaintext" do
+    let(:user) { create(:user) }
+
+    it "returns the active token matching the plaintext" do
+      token, plaintext = described_class.build_for(user)
+      token.save!
+
+      expect(described_class.find_active_by_plaintext(plaintext)).to eq(token)
+    end
+
+    it "returns nil for a wrong plaintext" do
+      described_class.build_for(user).first.save!
+
+      expect(described_class.find_active_by_plaintext("wrong")).to be_nil
+    end
+
+    it "returns nil for an expired token" do
+      token, plaintext = described_class.build_for(user)
+      token.update!(expires_at: 1.minute.ago)
+      token.save!
+
+      expect(described_class.find_active_by_plaintext(plaintext)).to be_nil
+    end
+
+    it "returns nil for a used token" do
+      token, plaintext = described_class.build_for(user)
+      token.save!
+      token.mark_used!
+
+      expect(described_class.find_active_by_plaintext(plaintext)).to be_nil
     end
   end
 

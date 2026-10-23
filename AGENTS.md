@@ -26,14 +26,13 @@ añadas estructura por adelantado.
 - **Commits al cerrar un slice, no antes.** Cuando un slice está
   terminado y verificado a mano, el agente propone un mensaje de commit
   en inglés (Conventional Commits) y espera a que el usuario confirme.
-  El usuario puede decir "haz commit", pedir cambios al mensaje, o pedir
-  partir el slice en dos commits. Por defecto, un slice = un commit.
-  Antes de ejecutar `git commit`, el agente muestra el `git diff
-  --staged` o `git status` para que el usuario vea exactamente qué
-  entra, y espera un OK literal ("haz commit"). Instrucciones generales
-  como "arranca ya", "vamos" o "tira" **no** cuentan como confirmación
-  de commit: el agente debe pedir ese OK explícito antes de ejecutar
-  `git commit`.
+  El usuario puede confirmar con una afirmación clara ("dale", "sí",
+  "haz commit", "vamos"…), pedir cambios al mensaje, o pedir partir el
+  slice en dos commits. Por defecto, un slice = un commit. Antes de
+  ejecutar `git commit`, el agente muestra el `git diff --staged` o
+  `git status` para que el usuario vea exactamente qué entra. Si la
+  instrucción es ambigua, el agente confirma antes de ejecutar el
+  commit.
 - **Tests en el mismo commit que el código.** Los tests del slice se
   commitean junto con el código que prueban, en el mismo commit, para
   que el historial refleje qué se probó junto con qué. No se hacen
