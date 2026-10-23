@@ -1,12 +1,12 @@
 require "rails_helper"
 
-RSpec.describe Users::Register do
+RSpec.describe Auth::Register do
   let(:attributes) { attributes_for(:user) }
 
   it "returns a persisted user with valid attributes" do
     user = described_class.call(attributes)
 
-    expect(user).to be_a(User)
+    expect(user).to be_a(Users::User)
     expect(user).to be_persisted
   end
 

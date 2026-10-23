@@ -41,7 +41,7 @@ RSpec.describe Authentication, type: :controller do
     end
 
     it "is the user when a valid session cookie is present" do
-      session_record, plaintext = Session.build_for(user)
+      session_record, plaintext = Auth::Session.build_for(user)
       session_record.save!
       cookies.signed[:session_token] = plaintext
 
@@ -57,7 +57,7 @@ RSpec.describe Authentication, type: :controller do
     end
 
     it "ignores an expired session cookie" do
-      session_record, plaintext = Session.build_for(user)
+      session_record, plaintext = Auth::Session.build_for(user)
       session_record.update!(expires_at: 1.minute.ago)
       session_record.save!
       cookies.signed[:session_token] = plaintext
@@ -74,7 +74,7 @@ RSpec.describe Authentication, type: :controller do
     end
 
     it "is true with a valid session" do
-      session_record, plaintext = Session.build_for(user)
+      session_record, plaintext = Auth::Session.build_for(user)
       session_record.save!
       cookies.signed[:session_token] = plaintext
 
@@ -91,7 +91,7 @@ RSpec.describe Authentication, type: :controller do
     end
 
     it "lets the request through when signed in" do
-      session_record, plaintext = Session.build_for(user)
+      session_record, plaintext = Auth::Session.build_for(user)
       session_record.save!
       cookies.signed[:session_token] = plaintext
 
@@ -102,17 +102,17 @@ RSpec.describe Authentication, type: :controller do
 
   describe "terminate_session" do
     it "destroys the session and clears the cookie" do
-      session_record, plaintext = Session.build_for(user)
+      session_record, plaintext = Auth::Session.build_for(user)
       session_record.save!
       cookies.signed[:session_token] = plaintext
 
       get :index
-      expect(Session.find_by(id: session_record.id)).to be_present
+      expect(Auth::Session.find_by(id: session_record.id)).to be_present
 
       get :sign_out
 
       expect(response.body).to eq("signed-out")
-      expect(Session.find_by(id: session_record.id)).to be_nil
+      expect(Auth::Session.find_by(id: session_record.id)).to be_nil
     end
   end
 

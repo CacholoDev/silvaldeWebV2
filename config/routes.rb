@@ -14,19 +14,19 @@ Rails.application.routes.draw do
   root "home#index"
 
   # Authentication (login/logout)
-  get "login", to: "sessions#new", as: :login
-  post "login", to: "sessions#create"
-  delete "logout", to: "sessions#destroy", as: :logout
+  get "login", to: "auth/sessions#new", as: :login
+  post "login", to: "auth/sessions#create"
+  delete "logout", to: "auth/sessions#destroy", as: :logout
 
   # Sign up
-  get "signup", to: "users#new", as: :signup
-  post "signup", to: "users#create"
+  get "signup", to: "auth/registrations#new", as: :signup
+  post "signup", to: "auth/registrations#create"
 
   # Password reset
-  get "password/reset", to: "passwords#new", as: :new_password
-  post "password/reset", to: "passwords#create"
-  get "password/reset/:token/edit", to: "passwords#edit", as: :edit_password
-  patch "password/reset/:token", to: "passwords#update", as: :update_password
+  get "password/reset", to: "auth/passwords#new", as: :new_password
+  post "password/reset", to: "auth/passwords#create"
+  get "password/reset/:token/edit", to: "auth/passwords#edit", as: :edit_password
+  patch "password/reset/:token", to: "auth/passwords#update", as: :update_password
 
   # Locale switching
   post "locale", to: "locales#update", as: :locale

@@ -17,7 +17,7 @@ RSpec.describe "Passwords", type: :request do
     it "creates a token, sends an email and redirects for an existing email" do
       expect {
         post new_password_path, params: { email: user.email }
-      }.to change(PasswordResetToken, :count).by(1)
+      }.to change(Auth::PasswordResetToken, :count).by(1)
         .and change { ActionMailer::Base.deliveries.count }.by(1)
 
       expect(response).to redirect_to(new_password_path)
@@ -29,7 +29,7 @@ RSpec.describe "Passwords", type: :request do
 
       expect(response).to redirect_to(new_password_path)
       expect(flash[:notice]).to eq(I18n.t("passwords.flash.sent"))
-      expect(PasswordResetToken.count).to eq(0)
+      expect(Auth::PasswordResetToken.count).to eq(0)
     end
   end
 
@@ -37,7 +37,7 @@ RSpec.describe "Passwords", type: :request do
     let(:user) { create(:user) }
 
     def build_plaintext
-      token, plaintext = PasswordResetToken.build_for(user)
+      token, plaintext = Auth::PasswordResetToken.build_for(user)
       token.save!
       plaintext
     end
@@ -59,7 +59,7 @@ RSpec.describe "Passwords", type: :request do
     let(:user) { create(:user) }
 
     def build_plaintext
-      token, plaintext = PasswordResetToken.build_for(user)
+      token, plaintext = Auth::PasswordResetToken.build_for(user)
       token.save!
       plaintext
     end

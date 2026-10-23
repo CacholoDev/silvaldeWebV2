@@ -58,6 +58,16 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
   acciones `edit`/`update` para poner la nueva contraseña, service
   `Passwords::Reset`. El token pasa de BCrypt a SHA256 (como las sesiones)
   para poder buscarlo por el enlace.
+- Autenticación (slice 9): columna `role` en `User` (enum `customer`/`admin`,
+  por defecto `customer`) + migración.
+
+### Cambiado
+
+- Refactor de organización: el código de autenticación se agrupa por dominio en
+  namespaces (`Auth::` y `Users::`); controllers, models y services dejan de
+  estar en la raíz. Las consultas se mueven a services de búsqueda
+  (`Auth::Search`, patrón `search.rb`), sacándolas de models y controllers.
+  Documentado en `AGENTS.md` y `AGENTS.full.md`.
 
 ### Corregido
 

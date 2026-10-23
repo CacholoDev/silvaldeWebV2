@@ -1,9 +1,9 @@
-module Passwords
+module Auth
   class RequestReset
     # Creates a reset token and emails the reset link for the given email.
     # Silently does nothing for unknown emails (avoids account enumeration).
     def self.call(email:)
-      user = User.find_by(email: email)
+      user = Users::User.find_by(email: email)
       return unless user
 
       token, plaintext = PasswordResetToken.build_for(user)

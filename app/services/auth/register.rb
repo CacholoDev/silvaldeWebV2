@@ -1,9 +1,9 @@
-module Users
+module Auth
   class Register
     # Builds and persists a User from the given attributes.
     # Returns the User (persisted on success, with errors otherwise).
     def self.call(attributes)
-      user = User.new(attributes)
+      user = Users::User.new(attributes)
       user.save
       user
     end

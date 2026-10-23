@@ -19,9 +19,9 @@ RSpec.describe "Users", type: :request do
         post signup_path, params: valid_params
 
         expect(response).to redirect_to(root_path)
-        expect(User.count).to eq(1)
-        expect(User.last.email).to eq("nueva@example.com")
-        expect(Session.count).to eq(1)
+        expect(Users::User.count).to eq(1)
+        expect(Users::User.last.email).to eq("nueva@example.com")
+        expect(Auth::Session.count).to eq(1)
       end
     end
 
@@ -30,7 +30,7 @@ RSpec.describe "Users", type: :request do
         post signup_path, params: { user: { name: "", email: "invalid", password: "secret123", password_confirmation: "secret123" } }
 
         expect(response).to have_http_status(:unprocessable_content)
-        expect(User.count).to eq(0)
+        expect(Users::User.count).to eq(0)
         expect(response.body).to include(I18n.t("activerecord.errors.models.user.attributes.name.blank"))
       end
     end

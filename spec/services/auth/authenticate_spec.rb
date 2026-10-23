@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Users::Authenticate do
+RSpec.describe Auth::Authenticate do
   let(:user) { create(:user) }
 
   it "returns the user with valid credentials" do

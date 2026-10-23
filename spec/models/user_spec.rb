@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe User, type: :model do
+RSpec.describe Users::User, type: :model do
   describe "validations" do
     subject { build(:user) }
 
@@ -66,6 +66,16 @@ RSpec.describe User, type: :model do
     it "rejects an incorrect password" do
       user = create(:user, password: "secret123", password_confirmation: "secret123")
       expect(user.authenticate("wrong")).to be(false)
+    end
+  end
+
+  describe "role" do
+    it "defaults to customer" do
+      expect(build(:user).role).to eq("customer")
+    end
+
+    it "supports admin" do
+      expect(build(:user, role: :admin)).to be_admin
     end
   end
 end

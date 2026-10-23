@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe Passwords::RequestReset do
+RSpec.describe Auth::RequestReset do
   describe ".call" do
     context "with an existing user" do
       let(:user) { create(:user) }
@@ -8,9 +8,9 @@ RSpec.describe Passwords::RequestReset do
       it "creates a password reset token for the user" do
         expect {
           described_class.call(email: user.email)
-        }.to change(PasswordResetToken, :count).by(1)
+        }.to change(Auth::PasswordResetToken, :count).by(1)
 
-        expect(PasswordResetToken.last.user).to eq(user)
+        expect(Auth::PasswordResetToken.last.user).to eq(user)
       end
     end
 
@@ -18,7 +18,7 @@ RSpec.describe Passwords::RequestReset do
       it "does not create a token" do
         expect {
           described_class.call(email: "unknown@example.com")
-        }.not_to change(PasswordResetToken, :count)
+        }.not_to change(Auth::PasswordResetToken, :count)
       end
     end
   end

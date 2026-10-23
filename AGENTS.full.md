@@ -85,15 +85,21 @@ consultar al usuario y actualizar esta sección y el changelog.
 
 ## Patrones de Rails
 
+El código se organiza por **dominio** en namespaces (`Auth`, `Users`, …): cada
+dominio agrupa sus controllers, models y services en
+`app/controllers/<dominio>/`, `app/models/<dominio>/` y
+`app/services/<dominio>/`. La infraestructura transversal (concerns, `Current`,
+`ApplicationRecord`, páginas como `Home`) puede quedarse en la raíz.
+
 ### Controllers
 
 - Una acción debe recibir parámetros, autorizar, invocar un servicio y responder.
 - Usa strong parameters y validaciones apropiadas para cada flujo.
 - Un controller **no consulta ni escribe en la base de datos**: no usa
   `Model.find`, `Model.all`, `Model.where`, `Model.create`, `Model.update`,
-  ni `authenticate_by` directamente. Esa interacción es responsabilidad de los
-  services (o de un método del modelo). La única excepción es la infraestructura
-  transversal (la concern `Authentication` para la sesión por cookie).
+  ni `authenticate_by` directamente. Las consultas se delegan en services de
+  búsqueda (`search.rb`). La única excepción es la infraestructura transversal
+  (la concern `Authentication` para la sesión por cookie).
 - No uses callbacks de controller para esconder reglas de negocio.
 - Devuelve estados HTTP correctos y errores de validación comprensibles.
 
@@ -101,6 +107,9 @@ consultar al usuario y actualizar esta sección y el changelog.
 
 - Un servicio hace **una única cosa** (una sola responsabilidad, un caso de uso).
   Si un servicio empieza a hacer dos cosas distintas, se divide en dos servicios.
+- Las **consultas de lectura** se agrupan en un service `search.rb` por dominio
+  (`app/services/<contexto>/search.rb`, p. ej. `Auth::Search`). Los services de
+  caso de uso y los controllers delegan ahí sus búsquedas.
 - Un servicio representa un caso de uso, no una colección arbitraria de helpers.
 - Usa transacciones cuando una operación modifique varias tablas.
 - Usa métodos bang para invariantes que no deberían fallar silenciosamente
@@ -115,6 +124,9 @@ consultar al usuario y actualizar esta sección y el changelog.
 
 - Mantén en el modelo asociaciones, validaciones, constraints de dominio y
   comportamiento pequeño propio de la entidad.
+- No pongas métodos de consulta en el modelo (`find_by_xxx`, `lookup`, …): las
+  consultas viven en services de búsqueda (`search.rb`). El modelo guarda
+  asociaciones, validaciones y comportamiento propio (fábricas, hashing).
 - Añade índices y restricciones de base de datos para unicidad e integridad; una
   validación Ruby por sí sola no evita carreras.
 - Evita `default_scope` y scopes personalizados salvo que una decisión de dominio

@@ -34,10 +34,9 @@ versión la define el roadmap.
 ## Estado actual
 
 - Rama de trabajo: `feat/authenticationV2`.
-- **Hecho** (slices 1-8): modelos de auth, login/logout, signup, vistas y
-  recuperación de contraseña completa (solicitar + poner nueva). **89 specs en
-  verde**.
-- **Siguiente**: slice 9 (columna `role` en `User`).
+- **Hecho** (slices 1-9): modelos de auth, login/logout, signup, vistas,
+  recuperación de contraseña y columna `role`. **91 specs en verde**.
+- **Siguiente**: slice 10 (perfil del cliente: ver/editar).
 
 ---
 
@@ -58,9 +57,9 @@ versión la define el roadmap.
 7. ✅ **`passwords` controller** (solicitar reset) + mailer + job.
 8. ✅ **`passwords` controller** (editar/actualizar) + vistas + specs.
 
-## Clientes: roles, perfil y consentimiento
+## Clientes: roles, perfil y consentimiento 🚧
 
-9. ⬜ **Columna `role`** en `User` (enum customer/admin) + migración.
+9. ✅ **Columna `role`** en `User` (enum customer/admin) + migración.
 10. ⬜ **Perfil del cliente** (ver/editar) + controller + vistas.
 11. ⬜ **Consentimiento de comunicaciones** (columna + toggle + spec).
 

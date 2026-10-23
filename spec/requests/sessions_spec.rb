@@ -17,8 +17,8 @@ RSpec.describe "Sessions", type: :request do
         post login_path, params: { email: user.email, password: "secret123" }
 
         expect(response).to redirect_to(root_path)
-        expect(Session.count).to eq(1)
-        expect(Session.last.user).to eq(user)
+        expect(Auth::Session.count).to eq(1)
+        expect(Auth::Session.last.user).to eq(user)
       end
     end
 
@@ -28,7 +28,7 @@ RSpec.describe "Sessions", type: :request do
 
         expect(response).to redirect_to(login_path)
         expect(flash[:alert]).to eq(I18n.t("authentication.flash.invalid_credentials"))
-        expect(Session.count).to eq(0)
+        expect(Auth::Session.count).to eq(0)
       end
     end
   end
@@ -40,7 +40,7 @@ RSpec.describe "Sessions", type: :request do
       delete logout_path
 
       expect(response).to redirect_to(root_path)
-      expect(Session.count).to eq(0)
+      expect(Auth::Session.count).to eq(0)
     end
   end
 end

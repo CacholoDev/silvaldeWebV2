@@ -1,10 +1,10 @@
 require "rails_helper"
 
-RSpec.describe Passwords::Reset do
+RSpec.describe Auth::Reset do
   let(:user) { create(:user) }
 
   def build_plaintext
-    token, plaintext = PasswordResetToken.build_for(user)
+    token, plaintext = Auth::PasswordResetToken.build_for(user)
     token.save!
     plaintext
   end
@@ -23,7 +23,7 @@ RSpec.describe Passwords::Reset do
         expect(result).to eq(user)
         expect(result.errors).to be_empty
         expect(user.reload.authenticate("newsecret")).to eq(user)
-        expect(PasswordResetToken.find_active_by_plaintext(plaintext)).to be_nil
+        expect(Auth::Search.find_active_password_reset_token(plaintext)).to be_nil
       end
     end
 
@@ -39,7 +39,7 @@ RSpec.describe Passwords::Reset do
 
         expect(result).to eq(user)
         expect(result.errors).not_to be_empty
-        expect(PasswordResetToken.find_active_by_plaintext(plaintext)).to be_present
+        expect(Auth::Search.find_active_password_reset_token(plaintext)).to be_present
       end
     end
 

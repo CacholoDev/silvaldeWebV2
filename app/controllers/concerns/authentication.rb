@@ -33,7 +33,7 @@ module Authentication
   # (survives browser close) and the DB-side expiration is 30 days.
   # Otherwise the cookie is session-only and the DB-side cap is 1 day.
   def start_new_session_for(user, remember_me: false)
-    session_record, plaintext = Session.build_for(
+    session_record, plaintext = Auth::Session.build_for(
       user,
       ip_address: request.remote_ip,
       user_agent: request.user_agent,
@@ -76,7 +76,7 @@ module Authentication
     return Current.session if Current.session.present?
 
     plaintext = cookies.signed[COOKIE_KEY]
-    record = Session.lookup(plaintext)
+    record = Auth::Search.find_session_by_plaintext(plaintext)
     if record.nil?
       cookies.delete(COOKIE_KEY)
       return nil

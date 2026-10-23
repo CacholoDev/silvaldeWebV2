@@ -52,8 +52,8 @@ añadas estructura por adelantado.
   controllers orquestan (`authorize → service → respond`): **no consultan
   ni escriben en la base de datos directamente** (nada de `Model.find`,
   `Model.create`, `Model.where`, `authenticate_by`, …); toda interacción
-  con ActiveRecord vive en services o en métodos del modelo. Cada service
-  hace una única cosa (una sola responsabilidad). Consultar
+  con ActiveRecord vive en services (las consultas en `search.rb`). Cada
+  service hace una única cosa (una sola responsabilidad). Consultar
   `AGENTS.full.md` para detalles de la arquitectura services/decorators.
 - **Reset de BD permitido fuera de producción.** Mientras el entorno
   no sea el de producción, está permitido borrar y recrear la base de

@@ -1,9 +1,9 @@
 require "rails_helper"
 
-RSpec.describe PasswordResetToken, type: :model do
+RSpec.describe Auth::PasswordResetToken, type: :model do
   describe "associations" do
     it "belongs to a user" do
-      expect(PasswordResetToken.reflect_on_association(:user).macro).to eq(:belongs_to)
+      expect(Auth::PasswordResetToken.reflect_on_association(:user).macro).to eq(:belongs_to)
     end
 
     it "is invalid without a user" do
@@ -52,39 +52,6 @@ RSpec.describe PasswordResetToken, type: :model do
 
       expect(token.token_digest).not_to eq(plaintext)
       expect(token.token_digest).to eq(described_class.digest_for(plaintext))
-    end
-  end
-
-  describe ".find_active_by_plaintext" do
-    let(:user) { create(:user) }
-
-    it "returns the active token matching the plaintext" do
-      token, plaintext = described_class.build_for(user)
-      token.save!
-
-      expect(described_class.find_active_by_plaintext(plaintext)).to eq(token)
-    end
-
-    it "returns nil for a wrong plaintext" do
-      described_class.build_for(user).first.save!
-
-      expect(described_class.find_active_by_plaintext("wrong")).to be_nil
-    end
-
-    it "returns nil for an expired token" do
-      token, plaintext = described_class.build_for(user)
-      token.update!(expires_at: 1.minute.ago)
-      token.save!
-
-      expect(described_class.find_active_by_plaintext(plaintext)).to be_nil
-    end
-
-    it "returns nil for a used token" do
-      token, plaintext = described_class.build_for(user)
-      token.save!
-      token.mark_used!
-
-      expect(described_class.find_active_by_plaintext(plaintext)).to be_nil
     end
   end
 
