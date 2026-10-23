@@ -61,11 +61,10 @@ arquitectura, seguridad, datos o UX.
 ## Estado y versionado
 
 El proyecto está en desarrollo temprano: la autenticación (usuarios y
-sesiones) se construye por slices sobre la base de Rails 8.1. La versión
-publicada actual es **0.1.0** (la **0.2.0**, «autenticación y usuarios», está
-en curso); la fuente única de verdad es el archivo
-[`VERSION`](./VERSION) y el historial de cambios vive en
-[`CHANGELOG.md`](./CHANGELOG.md).
+sesiones) ya está terminada y publicada. La versión publicada actual es
+**0.2.0** («autenticación y usuarios»); la siguiente, **0.3.0**, es el
+catálogo. La fuente única de verdad es el archivo [`VERSION`](./VERSION) y el
+historial de cambios vive en [`CHANGELOG.md`](./CHANGELOG.md).
 
 El desarrollo se organiza en ramas por funcionalidad (`feat/authentication`,
 `feat/catalog`, …) que se fusionan en `main` con el CI en verde.

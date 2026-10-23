@@ -33,11 +33,11 @@ versión la define el roadmap.
 
 ## Estado actual
 
-- Rama de trabajo: `feat/authenticationV2`.
 - **Hecho** (slices 1-11): autenticación y usuarios completos (modelos,
   login/logout, signup, vistas, recuperación de contraseña, roles, perfil y
-  consentimiento de comunicaciones). **103 specs en verde**.
-- **Siguiente**: v0.3.0 (catálogo) tras integrar esta rama.
+  consentimiento de comunicaciones). **103 specs en verde**. Publicado como
+  `v0.2.0`.
+- **Siguiente**: v0.3.0 (catálogo) en la rama `feat/catalog`.
 
 ---
 

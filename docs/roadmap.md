@@ -52,20 +52,12 @@ Sin una especificación aprobada aparte (regla de `AGENTS.full.md`):
 Estructura Rails 8.1, documentación del proyecto y de agentes, versionado y
 flujo de trabajo con git. Publicada el 2026-10-11 con el tag `v0.1.0`.
 
-### 🚧 v0.2.0 — Autenticación y usuarios *(rama `feat/authenticationV2`)*
+### ✅ v0.2.0 — Autenticación y usuarios
 
-**Qué se hace:** registro, inicio/cierre de sesión y recuperación de contraseña;
-roles `customer`/`admin`; perfil de cliente; consentimiento de comunicaciones.
-
-**Cómo se hará:** por **slices pequeños**, cada uno verificable a mano y
-commiteado antes de pasar al siguiente (así el usuario junior aprende en cada
-paso). Sobre la base de Rails 8 (auth nativa: `User` con `has_secure_password`
-/bcrypt, `Session` con cookie firmada) se avanza en vertical: slice 1 → modelo
-`User` con validaciones, factory y spec RSpec; slice 2 → `PasswordResetToken`
-con su spec; slice 3 → `Session` y la concern de autenticación; y después
-controllers, vistas, mailers, jobs y el registro (sign-up), siempre con sus
-specs. La columna `role` (enum `customer`/`admin`, por defecto `customer`) y el
-consentimiento de comunicaciones entran en sus propios slices.
+Registro, inicio/cierre de sesión y recuperación de contraseña; roles
+`customer`/`admin`; perfil de cliente; consentimiento de comunicaciones.
+Construida por slices pequeños (11 slices, 103 specs en verde). Publicada el
+2026-10-24 con el tag `v0.2.0`.
 
 ### ⬜ v0.3.0 — Catálogo
 
