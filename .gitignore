@@ -15,6 +15,9 @@
 /.agents/
 /.ruby-lsp/
 
+# Codegraph local index (not part of the repo).
+/.codegraph/
+
 # Ignore all logfiles and tempfiles.
 /log/*
 /tmp/*
