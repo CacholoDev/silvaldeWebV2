@@ -24,7 +24,7 @@ lanzamiento público de la tienda.
 ## Cómo publicar una nueva versión
 
 1. Asegurarse de que `main` está verde: `bin/ci` (o, como mínimo,
-   `bin/rails test`, `bin/rubocop`, `bin/brakeman` y `bin/bundler-audit`).
+   `bundle exec rspec`, `bin/rubocop`, `bin/brakeman` y `bin/bundler-audit`).
 2. Actualizar `CHANGELOG.md`: mover lo acumulado en «Sin publicar» a la nueva
    versión con su fecha.
 3. Actualizar el archivo `VERSION` (solo eso: la app lo lee sola).

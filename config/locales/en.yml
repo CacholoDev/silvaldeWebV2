@@ -1,31 +1,82 @@
-# Files in the config/locales directory are used for internationalization and
-# are automatically loaded by Rails. If you want to use locales other than
-# English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t "hello"
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t("hello") %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# To learn more about the API, please read the Rails Internationalization guide
-# at https://guides.rubyonrails.org/i18n.html.
-#
-# Be aware that YAML interprets the following case-insensitive strings as
-# booleans: `true`, `false`, `on`, `off`, `yes`, `no`. Therefore, these strings
-# must be quoted to be interpreted as strings. For example:
-#
-#     en:
-#       "yes": yup
-#       enabled: "ON"
-
 en:
-  hello: "Hello world"
+  authentication:
+    flash:
+      sign_in_required: "Please sign in to continue."
+      signed_in: "You have signed in."
+      signed_out: "You have signed out."
+      invalid_credentials: "Email or password is incorrect."
+      signed_up: "Account created. Welcome!"
+    errors_title: "There were problems:"
+    login:
+      title: "Sign in"
+      email: "Email"
+      password: "Password"
+      submit: "Sign in"
+      no_account: "Don't have an account?"
+      forgot_password: "Forgot your password?"
+    signup:
+      title: "Create account"
+      name: "Name"
+      email: "Email"
+      password: "Password"
+      password_confirmation: "Confirm password"
+      submit: "Sign up"
+      have_account: "Already have an account?"
+  navigation:
+    main: "Main navigation"
+    sign_in: "Sign in"
+    sign_up: "Sign up"
+    sign_out: "Sign out"
+    language: "Language"
+    profile: "Profile"
+  home:
+    welcome: "Welcome to Silvalde Web."
+  passwords:
+    flash:
+      sent: "If that email address is registered, you will receive a link to reset your password."
+      invalid_token: "The link is invalid or has expired."
+      reset_success: "Password updated. You can now sign in."
+    new:
+      title: "Reset password"
+      email: "Email"
+      submit: "Send instructions"
+    edit:
+      title: "New password"
+      password: "Password"
+      password_confirmation: "Confirm password"
+      submit: "Save password"
+    mailer:
+      subject: "Reset your password"
+      instruction: "Hello %{name}, we received a request to reset your password."
+      link_text: "Reset password"
+  profiles:
+    flash:
+      updated: "Profile updated."
+    show:
+      title: "Your profile"
+      name: "Name"
+      email: "Email"
+      edit: "Edit profile"
+    edit:
+      title: "Edit profile"
+      name: "Name"
+      email: "Email"
+      submit: "Save"
+  communications_consent:
+    label: "I want to receive offers and promotions."
+  activerecord:
+    errors:
+      models:
+        user:
+          attributes:
+            email:
+              blank: "Email can't be blank."
+              invalid: "Email format is invalid."
+              taken: "Email has already been taken."
+              too_long: "Email is too long (maximum %{count} characters)."
+            name:
+              blank: "Name can't be blank."
+              too_long: "Name is too long (maximum %{count} characters)."
+            password:
+              blank: "Password can't be blank."
+              too_short: "Password is too short (minimum %{count} characters)."

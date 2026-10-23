@@ -23,6 +23,11 @@ confianza, claridad y mantenimiento sencillo. El catálogo, el carrito, los
 pedidos, el registro de clientes y el panel administrativo son dominios
 relacionados, pero deben mantener límites claros.
 
+La web es pública y el registro es opcional: la visitante ve primero el
+catálogo/landing, no una pantalla de login. El login aparece solo cuando una
+acción protegida lo requiere. Por tanto, la ruta raíz (`/`) apunta a la
+landing (catálogo), nunca a `sessions#new`.
+
 El registro de clientes existe para compras y para futuras ofertas o rebajas.
 La comunicación comercial debe ser consentida, trazable y revocable. No
 implementes campañas, pagos reales, facturación fiscal o integraciones externas
@@ -40,21 +45,26 @@ consultar al usuario y actualizar esta sección y el changelog.
 
 **Lo que usamos:**
 
-- **Autenticación nativa de Rails 8** (generador oficial
-  `bin/rails generate authentication`, con `has_secure_password`/bcrypt).
-  No Devise: la auth integrada es suficiente, la mantiene el core de Rails y
-  reduce dependencias y «magia».
+- **Autenticación nativa de Rails 8** (`has_secure_password`/bcrypt y sesiones
+  con cookie firmada). No Devise: la auth integrada es suficiente, la mantiene
+  el core de Rails y reduce dependencias y «magia». Se implementa slice a
+  slice a mano, no con el generador oficial de una vez.
 - **Sesiones con cookie firmada** (tabla `sessions`). No JWT: JWT es para
   APIs stateless; en una web HTML las sesiones son más seguras y revocables.
 - **Solid Queue y Solid Cache** sobre MySQL (ya configurados en el scaffold).
   No Redis ni Sidekiq: suficiente para la escala del proyecto y sin servicios
   extra que mantener. El código usa `Active Job`, así que migrar a Sidekiq en
   el futuro sería barato si hiciera falta.
-- **Minitest + fixtures**: infraestructura ya configurada y es la que corre el
-  CI. No RSpec ni FactoryBot.
+- **RSpec + FactoryBot**: framework de tests del proyecto (los specs viven en
+  `spec/` y las factories en `spec/factories/`). No Minitest.
 - **Web HTML con Hotwire**: no hay API pública; por tanto nada de Grape,
   Swagger ni JWT. Si algún día se necesita una API, se especifica aparte
   (sección «Cambios y documentación»).
+- **AASM para la máquina de estados de los pedidos** (`Order`): estados
+  `pending → confirmed → shipped → delivered` (o `cancelled`), con transiciones
+  definidas y documentadas (ver `docs/roadmap.md`, fase v0.5.0). La gema se
+  añade a la `Gemfile` cuando lleguemos a esa fase; la decisión se registra
+  ahora para no improvisar una máquina de estados a mano.
 
 **Política de generadores:**
 
@@ -62,31 +72,44 @@ consultar al usuario y actualizar esta sección y el changelog.
   arquitectura de servicios y decorators.
 - Generadores pequeños (`model`, `migration`) están permitidos como punto de
   partida; controllers, servicios, decorators y vistas se escriben a mano.
-- Excepción justificada: el generador oficial de autenticación, por seguridad
-  (lo escribe el core team de Rails). Al usarlo, se revisa archivo a archivo
-  con el usuario.
+- La autenticación se escribe a mano, slice a slice (ver `AGENTS.md`, «Ritmo
+  de trabajo y modelo mental»); no se usa el generador oficial para hacerlo
+  todo de una vez.
 
 **Candidatos futuros (decidir cuando toque, no instalar ahora):**
 
 - **Pundit** (autorización por policies): candidato en v0.6.0 (panel admin) si
   los permisos crecen más allá del check de rol en `before_action`.
-- **Grape/Swagger, Redis/Sidekiq, RSpec**: solo si aparece una necesidad real
+- **Grape/Swagger, Redis/Sidekiq**: solo si aparece una necesidad real
   documentada (API pública, volumen de jobs alto, etc.).
 
 ## Patrones de Rails
+
+El código se organiza por **dominio** en namespaces (`Auth`, `Users`, …): cada
+dominio agrupa sus controllers, models y services en
+`app/controllers/<dominio>/`, `app/models/<dominio>/` y
+`app/services/<dominio>/`. La infraestructura transversal (concerns, `Current`,
+`ApplicationRecord`, páginas como `Home`) puede quedarse en la raíz.
 
 ### Controllers
 
 - Una acción debe recibir parámetros, autorizar, invocar un servicio y responder.
 - Usa strong parameters y validaciones apropiadas para cada flujo.
-- Evita `Model.find`, `Model.all` y consultas complejas directamente en el
-  controller; encapsúlalas en servicios de búsqueda o en un objeto de consulta
-  bien delimitado.
+- Un controller **no consulta ni escribe en la base de datos**: no usa
+  `Model.find`, `Model.all`, `Model.where`, `Model.create`, `Model.update`,
+  ni `authenticate_by` directamente. Las consultas se delegan en services de
+  búsqueda (`search.rb`). La única excepción es la infraestructura transversal
+  (la concern `Authentication` para la sesión por cookie).
 - No uses callbacks de controller para esconder reglas de negocio.
 - Devuelve estados HTTP correctos y errores de validación comprensibles.
 
 ### Services
 
+- Un servicio hace **una única cosa** (una sola responsabilidad, un caso de uso).
+  Si un servicio empieza a hacer dos cosas distintas, se divide en dos servicios.
+- Las **consultas de lectura** se agrupan en un service `search.rb` por dominio
+  (`app/services/<contexto>/search.rb`, p. ej. `Auth::Search`). Los services de
+  caso de uso y los controllers delegan ahí sus búsquedas.
 - Un servicio representa un caso de uso, no una colección arbitraria de helpers.
 - Usa transacciones cuando una operación modifique varias tablas.
 - Usa métodos bang para invariantes que no deberían fallar silenciosamente
@@ -101,6 +124,9 @@ consultar al usuario y actualizar esta sección y el changelog.
 
 - Mantén en el modelo asociaciones, validaciones, constraints de dominio y
   comportamiento pequeño propio de la entidad.
+- No pongas métodos de consulta en el modelo (`find_by_xxx`, `lookup`, …): las
+  consultas viven en services de búsqueda (`search.rb`). El modelo guarda
+  asociaciones, validaciones y comportamiento propio (fábricas, hashing).
 - Añade índices y restricciones de base de datos para unicidad e integridad; una
   validación Ruby por sí sola no evita carreras.
 - Evita `default_scope` y scopes personalizados salvo que una decisión de dominio
@@ -156,7 +182,9 @@ consultar al usuario y actualizar esta sección y el changelog.
 
 ## Pruebas y calidad
 
-- Usa Minitest y las convenciones ya creadas en `test/`.
+- Usa RSpec y FactoryBot: los specs viven en `spec/` y las factories en
+  `spec/factories/`. Escribe primero el spec que fija el comportamiento y luego
+  el código de producción (skill `test-driven-development`).
 - Cubre casos de éxito, validación, autorización y límites relevantes.
 - Para cambios de UI o flujos completos, considera system tests con Capybara.
 - Ejecuta el conjunto mínimo relevante y después las comprobaciones de seguridad
@@ -200,6 +228,8 @@ Dos decisiones que los atraviesan:
 
 Una tarea está terminada cuando:
 
+- se ha verificado ejecutando (tests, linters, arranque) y se muestra la
+  evidencia, no solo la afirmación (skill `verification-before-completion`);
 - el comportamiento solicitado funciona en los flujos afectados;
 - la autorización y la validación están cubiertas;
 - no se han introducido secretos ni regresiones conocidas;

@@ -16,7 +16,7 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
 
 - Decisiones de stack documentadas en `AGENTS.full.md`: autenticación nativa
   de Rails 8 (no Devise), sesiones con cookie (no JWT), Solid Queue/Cache (no
-  Redis/Sidekiq), Minitest + fixtures (no RSpec), web HTML sin API pública
+  Redis/Sidekiq), RSpec + FactoryBot (no Minitest), web HTML sin API pública
   (no Grape/Swagger), política de generadores (sin `scaffold`) y Pundit como
   candidato futuro para el panel admin.
 
@@ -26,6 +26,61 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
 - `AGENTS.md`: nuevas reglas — los agentes deben explicar el plan antes de
   implementar (usuario junior) y crear la rama de trabajo antes de escribir
   código, avisando al usuario.
+- Decisión de stack: **AASM** para la máquina de estados de los pedidos
+  (`Order`), con estados `pending → confirmed → shipped → delivered` (o
+  `cancelled`). Documentado en `AGENTS.full.md`, `docs/roadmap.md` y
+  `docs/backend-plan.md`.
+- Principio de producto: la web es pública y el registro es opcional — la
+  visitante ve la landing/catálogo, no el login (documentado en
+  `AGENTS.full.md`).
+- `docs/backend-plan.md`: desglose del backend en slices, con los grupos
+  renombrados para no colisionar con las versiones del roadmap.
+- Autenticación (slice 4): rutas de login/logout (`/login`, `/logout`),
+  controlador `SessionsController` con request spec, y un `root` provisional
+  (`HomeController`) que luego será la landing del catálogo. Resuelve el spec
+  que esperaba `login_path`.
+- Autenticación (slice 5): registro (signup) — rutas `/signup`, controlador
+  `UsersController`, service `Users::Register` y request spec. La usuaria
+  queda logueada automáticamente tras registrarse.
+- Refactor de autenticación: lógica de login/signup extraída a services
+  (`Users::Authenticate` y `Users::Register`). Nueva regla en `AGENTS.md` y
+  `AGENTS.full.md`: los controllers no consultan ni escriben en la base de
+  datos; esa interacción vive en services.
+- Autenticación (slice 6): vistas de login/signup con Tailwind, navegación
+  global (navbar con estado de sesión) y selector de idioma (español/inglés)
+  persistido en cookie.
+- Autenticación (slice 7): recuperación de contraseña (parte 1) — rutas
+  `/password/reset`, controlador `PasswordsController`, service
+  `Passwords::RequestReset`, mailer `PasswordsMailer` y envío async
+  (`deliver_later`). La usuaria pide el reset y recibe un enlace por email;
+  sin revelar si el email existe o no.
+- Autenticación (slice 8): recuperación de contraseña (parte 2) — vistas y
+  acciones `edit`/`update` para poner la nueva contraseña, service
+  `Passwords::Reset`. El token pasa de BCrypt a SHA256 (como las sesiones)
+  para poder buscarlo por el enlace.
+- Autenticación (slice 9): columna `role` en `User` (enum `customer`/`admin`,
+  por defecto `customer`) + migración.
+- Autenticación (slice 10): perfil del cliente — controller
+  `Users::ProfilesController` (ver/editar, protegido con
+  `require_authentication`), service `Users::UpdateProfile` y enlace "Perfil"
+  en el navbar.
+- Autenticación (slice 11): consentimiento de comunicaciones — columna
+  `communications_consent` (booleana, por defecto `false`) + checkbox en el
+  registro y el perfil (revocable).
+
+### Cambiado
+
+- Refactor de organización: el código de autenticación se agrupa por dominio en
+  namespaces (`Auth::` y `Users::`); controllers, models y services dejan de
+  estar en la raíz. Las consultas se mueven a services de búsqueda
+  (`Auth::Search`, patrón `search.rb`), sacándolas de models y controllers.
+  Documentado en `AGENTS.md` y `AGENTS.full.md`.
+
+### Corregido
+
+- Concern `Authentication`: renombrado `user_signed_in` a `user_signed_in?`
+  para que coincida con el `helper_method` y funcione en las vistas (detectado
+  al añadir la navegación).
 
 ## [0.1.0] - 2026-10-11
 

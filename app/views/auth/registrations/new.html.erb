@@ -1,0 +1,53 @@
+<div class="mx-auto w-full max-w-sm">
+  <h1 class="font-serif text-3xl font-semibold tracking-tight"><%= t("authentication.signup.title") %></h1>
+
+  <% if @user.errors.any? %>
+    <div class="mt-6 rounded-md border border-error/30 bg-error/5 p-4 text-sm text-error" role="alert">
+      <p class="font-medium"><%= t("authentication.errors_title") %></p>
+      <ul class="mt-2 list-disc pl-5">
+        <% @user.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= form_with model: @user, url: signup_path, class: "mt-8 space-y-5" do |form| %>
+    <div>
+      <%= form.label :name, t("authentication.signup.name"), class: "mb-1 block text-sm font-medium" %>
+      <%= form.text_field :name, required: true, autofocus: true, autocomplete: "name",
+            class: "block w-full rounded-md border border-line bg-surface px-3 py-2 text-ink shadow-sm focus:border-sage focus:outline-none focus:ring-2 focus:ring-sage/30" %>
+    </div>
+
+    <div>
+      <%= form.label :email, t("authentication.signup.email"), class: "mb-1 block text-sm font-medium" %>
+      <%= form.email_field :email, required: true, autocomplete: "email",
+            class: "block w-full rounded-md border border-line bg-surface px-3 py-2 text-ink shadow-sm focus:border-sage focus:outline-none focus:ring-2 focus:ring-sage/30" %>
+    </div>
+
+    <div>
+      <%= form.label :password, t("authentication.signup.password"), class: "mb-1 block text-sm font-medium" %>
+      <%= form.password_field :password, required: true, autocomplete: "new-password",
+            class: "block w-full rounded-md border border-line bg-surface px-3 py-2 text-ink shadow-sm focus:border-sage focus:outline-none focus:ring-2 focus:ring-sage/30" %>
+    </div>
+
+    <div>
+      <%= form.label :password_confirmation, t("authentication.signup.password_confirmation"), class: "mb-1 block text-sm font-medium" %>
+      <%= form.password_field :password_confirmation, required: true, autocomplete: "new-password",
+            class: "block w-full rounded-md border border-line bg-surface px-3 py-2 text-ink shadow-sm focus:border-sage focus:outline-none focus:ring-2 focus:ring-sage/30" %>
+    </div>
+
+    <label class="flex items-center gap-2 text-sm text-muted">
+      <%= form.check_box :communications_consent, class: "rounded border-line text-sage focus:ring-sage" %>
+      <%= t("communications_consent.label") %>
+    </label>
+
+    <%= form.submit t("authentication.signup.submit"),
+          class: "w-full rounded-md bg-sage px-4 py-2 font-medium text-white hover:bg-sage-dark focus:outline-none focus:ring-2 focus:ring-sage focus:ring-offset-2" %>
+  <% end %>
+
+  <p class="mt-6 text-center text-sm text-muted">
+    <%= t("authentication.signup.have_account") %>
+    <%= link_to t("navigation.sign_in"), login_path, class: "font-medium text-sage hover:underline" %>
+  </p>
+</div>

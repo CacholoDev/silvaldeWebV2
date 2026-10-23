@@ -1,0 +1,12 @@
+<div class="flex items-center gap-1" aria-label="<%= t("navigation.language") %>">
+  <% %w[es en].each do |loc| %>
+    <% active = I18n.locale.to_s == loc %>
+    <%= button_to loc.upcase,
+          locale_path(locale: loc),
+          method: :post,
+          class: [
+            "rounded px-2 py-1 text-sm font-medium",
+            active ? "bg-sage text-white" : "text-muted hover:text-ink"
+          ].join(" ") %>
+  <% end %>
+</div>

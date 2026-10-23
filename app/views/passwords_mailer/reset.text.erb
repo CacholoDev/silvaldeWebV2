@@ -1,0 +1,3 @@
+<%= t("passwords.mailer.instruction", name: @user.name) %>
+
+<%= t("passwords.mailer.link_text") %>: <%= edit_password_url(token: @token) %>

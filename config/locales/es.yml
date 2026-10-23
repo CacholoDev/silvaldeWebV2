@@ -5,53 +5,78 @@ es:
       signed_in: "Has iniciado sesión."
       signed_out: "Has cerrado sesión."
       invalid_credentials: "Email o contraseña incorrectos."
-      account_created: "Cuenta creada. Revisa tu correo para confirmar el email."
-      confirmation_sent: "Te hemos enviado un email de confirmación."
-      email_confirmed: "Email confirmado. Ya puedes iniciar sesión."
-      email_already_confirmed: "Tu email ya estaba confirmado."
-      confirmation_invalid: "El enlace de confirmación no es válido o ha caducado."
-      password_reset_sent: "Si la cuenta existe, te hemos enviado un email para restablecer la contraseña."
-      password_reset_invalid: "El enlace para restablecer la contraseña no es válido o ha caducado."
-      password_reset_success: "Contraseña actualizada. Ya puedes iniciar sesión."
-  sessions:
-    new:
+      signed_up: "Cuenta creada. ¡Bienvenida!"
+    errors_title: "No se pudo completar:"
+    login:
       title: "Iniciar sesión"
-      submit: "Iniciar sesión"
-      remember_me: "Recordarme"
-      forgot_password: "¿Olvidaste tu contraseña?"
+      email: "Email"
+      password: "Contraseña"
+      submit: "Entrar"
       no_account: "¿No tienes cuenta?"
-      sign_up: "Regístrate"
-  users:
-    new:
+      forgot_password: "¿Olvidaste tu contraseña?"
+    signup:
       title: "Crear cuenta"
-      submit: "Crear cuenta"
+      name: "Nombre"
+      email: "Email"
+      password: "Contraseña"
+      password_confirmation: "Confirmar contraseña"
+      submit: "Registrarse"
       have_account: "¿Ya tienes cuenta?"
-      sign_in: "Iniciar sesión"
+  navigation:
+    main: "Navegación"
+    sign_in: "Iniciar sesión"
+    sign_up: "Crear cuenta"
+    sign_out: "Cerrar sesión"
+    language: "Idioma"
+    profile: "Perfil"
+  home:
+    welcome: "Bienvenida a Silvalde Web."
   passwords:
+    flash:
+      sent: "Si esa dirección de email está registrada, recibirás un enlace para restablecer tu contraseña."
+      invalid_token: "El enlace no es válido o ha caducado."
+      reset_success: "Contraseña actualizada. Ya puedes iniciar sesión."
     new:
-      title: "Recuperar contraseña"
-      submit: "Enviar enlace"
-      instructions: "Te enviaremos un email con un enlace para crear una nueva contraseña."
+      title: "Restablecer contraseña"
+      email: "Email"
+      submit: "Enviar instrucciones"
     edit:
       title: "Nueva contraseña"
+      password: "Contraseña"
+      password_confirmation: "Confirmar contraseña"
       submit: "Guardar contraseña"
-    create:
-      email_label: "Email"
-  email_confirmations:
+    mailer:
+      subject: "Restablece tu contraseña"
+      instruction: "Hola %{name}, hemos recibido una solicitud para restablecer tu contraseña."
+      link_text: "Restablecer contraseña"
+  profiles:
+    flash:
+      updated: "Perfil actualizado."
     show:
-      success: "Email confirmado"
-  mailers:
-    authentication:
-      confirmation:
-        subject: "Confirma tu email"
-        greeting: "Hola,"
-        body: "Gracias por registrarte. Confirma tu email haciendo clic en el siguiente enlace:"
-        cta: "Confirmar email"
-        expires: "Este enlace caduca en 24 horas."
-      password_reset:
-        subject: "Restablecer contraseña"
-        greeting: "Hola,"
-        body: "Has solicitado restablecer tu contraseña. Haz clic en el siguiente enlace para continuar:"
-        cta: "Restablecer contraseña"
-        expires: "Este enlace caduca en 15 minutos."
-        ignore: "Si no has sido tú, ignora este mensaje."
+      title: "Tu perfil"
+      name: "Nombre"
+      email: "Email"
+      edit: "Editar perfil"
+    edit:
+      title: "Editar perfil"
+      name: "Nombre"
+      email: "Email"
+      submit: "Guardar"
+  communications_consent:
+    label: "Quiero recibir ofertas y rebajas."
+  activerecord:
+    errors:
+      models:
+        user:
+          attributes:
+            email:
+              blank: "El email no puede estar vacío."
+              invalid: "El formato del email no es válido."
+              taken: "Ese email ya está registrado."
+              too_long: "El email es demasiado largo (máximo %{count} caracteres)."
+            name:
+              blank: "El nombre no puede estar vacío."
+              too_long: "El nombre es demasiado largo (máximo %{count} caracteres)."
+            password:
+              blank: "La contraseña no puede estar vacía."
+              too_short: "La contraseña es demasiado corta (mínimo %{count} caracteres)."
