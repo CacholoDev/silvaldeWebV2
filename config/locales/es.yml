@@ -62,6 +62,8 @@ es:
       name: "Nombre"
       email: "Email"
       submit: "Guardar"
+  communications_consent:
+    label: "Quiero recibir ofertas y rebajas."
   activerecord:
     errors:
       models:

@@ -25,6 +25,11 @@
             class: "block w-full rounded-md border border-line bg-surface px-3 py-2 text-ink shadow-sm focus:border-sage focus:outline-none focus:ring-2 focus:ring-sage/30" %>
     </div>
 
+    <label class="flex items-center gap-2 text-sm text-muted">
+      <%= form.check_box :communications_consent, class: "rounded border-line text-sage focus:ring-sage" %>
+      <%= t("communications_consent.label") %>
+    </label>
+
     <%= form.submit t("profiles.edit.submit"),
           class: "w-full rounded-md bg-sage px-4 py-2 font-medium text-white hover:bg-sage-dark focus:outline-none focus:ring-2 focus:ring-sage focus:ring-offset-2" %>
   <% end %>

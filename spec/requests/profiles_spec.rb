@@ -55,6 +55,13 @@ RSpec.describe "Profiles", type: :request do
       expect(user.reload.email).to eq("nuevo@example.com")
     end
 
+    it "updates the communications consent" do
+      sign_in
+      patch profile_path, params: { user: { name: user.name, email: user.email, communications_consent: "1" } }
+
+      expect(user.reload.communications_consent).to be(true)
+    end
+
     it "re-renders the form with invalid params" do
       sign_in
       patch profile_path, params: { user: { name: "", email: user.email } }

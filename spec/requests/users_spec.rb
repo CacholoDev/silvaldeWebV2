@@ -23,6 +23,12 @@ RSpec.describe "Users", type: :request do
         expect(Users::User.last.email).to eq("nueva@example.com")
         expect(Auth::Session.count).to eq(1)
       end
+
+      it "stores the communications consent when opted in" do
+        post signup_path, params: { user: { name: "Nueva", email: "consent@example.com", password: "secret123", password_confirmation: "secret123", communications_consent: "1" } }
+
+        expect(Users::User.last.communications_consent).to be(true)
+      end
     end
 
     context "with invalid params" do

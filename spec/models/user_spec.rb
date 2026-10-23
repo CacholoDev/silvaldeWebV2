@@ -78,4 +78,10 @@ RSpec.describe Users::User, type: :model do
       expect(build(:user, role: :admin)).to be_admin
     end
   end
+
+  describe "communications consent" do
+    it "defaults to false" do
+      expect(build(:user).communications_consent).to be(false)
+    end
+  end
 end

@@ -64,6 +64,9 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
   `Users::ProfilesController` (ver/editar, protegido con
   `require_authentication`), service `Users::UpdateProfile` y enlace "Perfil"
   en el navbar.
+- Autenticación (slice 11): consentimiento de comunicaciones — columna
+  `communications_consent` (booleana, por defecto `false`) + checkbox en el
+  registro y el perfil (revocable).
 
 ### Cambiado
 

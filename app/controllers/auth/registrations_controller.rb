@@ -18,7 +18,7 @@ module Auth
     private
 
     def user_params
-      params.require(:user).permit(:name, :email, :password, :password_confirmation)
+      params.require(:user).permit(:name, :email, :password, :password_confirmation, :communications_consent)
     end
   end
 end

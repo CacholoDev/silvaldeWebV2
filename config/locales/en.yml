@@ -62,6 +62,8 @@ en:
       name: "Name"
       email: "Email"
       submit: "Save"
+  communications_consent:
+    label: "I want to receive offers and promotions."
   activerecord:
     errors:
       models:
