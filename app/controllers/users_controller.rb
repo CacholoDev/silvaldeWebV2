@@ -1,6 +1,4 @@
 class UsersController < ApplicationController
-  include Authentication
-
   def new
     @user = User.new
   end

@@ -24,7 +24,7 @@ module Authentication
     Current.user ||= Current.session&.user
   end
 
-  def user_signed_in
+  def user_signed_in?
     Current.user_signed_in?
   end
 

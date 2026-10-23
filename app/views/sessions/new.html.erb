@@ -1,15 +1,25 @@
-<h1><%= t("authentication.login.title") %></h1>
+<div class="mx-auto w-full max-w-sm">
+  <h1 class="font-serif text-3xl font-semibold tracking-tight"><%= t("authentication.login.title") %></h1>
 
-<%= form_with url: login_path do |form| %>
-  <div>
-    <%= form.label :email, t("authentication.login.email") %>
-    <%= form.email_field :email, required: true, autofocus: true %>
-  </div>
+  <%= form_with url: login_path, class: "mt-8 space-y-5" do |form| %>
+    <div>
+      <%= form.label :email, t("authentication.login.email"), class: "mb-1 block text-sm font-medium" %>
+      <%= form.email_field :email, required: true, autofocus: true, autocomplete: "email",
+            class: "block w-full rounded-md border border-line bg-surface px-3 py-2 text-ink shadow-sm focus:border-sage focus:outline-none focus:ring-2 focus:ring-sage/30" %>
+    </div>
 
-  <div>
-    <%= form.label :password, t("authentication.login.password") %>
-    <%= form.password_field :password, required: true %>
-  </div>
+    <div>
+      <%= form.label :password, t("authentication.login.password"), class: "mb-1 block text-sm font-medium" %>
+      <%= form.password_field :password, required: true, autocomplete: "current-password",
+            class: "block w-full rounded-md border border-line bg-surface px-3 py-2 text-ink shadow-sm focus:border-sage focus:outline-none focus:ring-2 focus:ring-sage/30" %>
+    </div>
 
-  <%= form.submit t("authentication.login.submit") %>
-<% end %>
+    <%= form.submit t("authentication.login.submit"),
+          class: "w-full rounded-md bg-sage px-4 py-2 font-medium text-white hover:bg-sage-dark focus:outline-none focus:ring-2 focus:ring-sage focus:ring-offset-2" %>
+  <% end %>
+
+  <p class="mt-6 text-center text-sm text-muted">
+    <%= t("authentication.login.no_account") %>
+    <%= link_to t("navigation.sign_up"), signup_path, class: "font-medium text-sage hover:underline" %>
+  </p>
+</div>

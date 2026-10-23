@@ -6,11 +6,13 @@ es:
       signed_out: "Has cerrado sesión."
       invalid_credentials: "Email o contraseña incorrectos."
       signed_up: "Cuenta creada. ¡Bienvenida!"
+    errors_title: "No se pudo completar:"
     login:
       title: "Iniciar sesión"
       email: "Email"
       password: "Contraseña"
       submit: "Entrar"
+      no_account: "¿No tienes cuenta?"
     signup:
       title: "Crear cuenta"
       name: "Nombre"
@@ -18,6 +20,13 @@ es:
       password: "Contraseña"
       password_confirmation: "Confirmar contraseña"
       submit: "Registrarse"
+      have_account: "¿Ya tienes cuenta?"
+  navigation:
+    main: "Navegación"
+    sign_in: "Iniciar sesión"
+    sign_up: "Crear cuenta"
+    sign_out: "Cerrar sesión"
+    language: "Idioma"
   home:
     welcome: "Bienvenida a Silvalde Web."
   activerecord:

@@ -46,6 +46,15 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
   (`Users::Authenticate` y `Users::Register`). Nueva regla en `AGENTS.md` y
   `AGENTS.full.md`: los controllers no consultan ni escriben en la base de
   datos; esa interacción vive en services.
+- Autenticación (slice 6): vistas de login/signup con Tailwind, navegación
+  global (navbar con estado de sesión) y selector de idioma (español/inglés)
+  persistido en cookie.
+
+### Corregido
+
+- Concern `Authentication`: renombrado `user_signed_in` a `user_signed_in?`
+  para que coincida con el `helper_method` y funcione en las vistas (detectado
+  al añadir la navegación).
 
 ## [0.1.0] - 2026-10-11
 

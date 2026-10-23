@@ -1,6 +1,4 @@
 class SessionsController < ApplicationController
-  include Authentication
-
   def new
   end
 

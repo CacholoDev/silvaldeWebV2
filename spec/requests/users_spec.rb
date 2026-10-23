@@ -31,6 +31,7 @@ RSpec.describe "Users", type: :request do
 
         expect(response).to have_http_status(:unprocessable_content)
         expect(User.count).to eq(0)
+        expect(response.body).to include(I18n.t("activerecord.errors.models.user.attributes.name.blank"))
       end
     end
   end

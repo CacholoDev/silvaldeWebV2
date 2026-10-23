@@ -21,4 +21,7 @@ Rails.application.routes.draw do
   # Sign up
   get "signup", to: "users#new", as: :signup
   post "signup", to: "users#create"
+
+  # Locale switching
+  post "locale", to: "locales#update", as: :locale
 end

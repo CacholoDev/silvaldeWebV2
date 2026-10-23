@@ -34,10 +34,10 @@ versión la define el roadmap.
 ## Estado actual
 
 - Rama de trabajo: `feat/authenticationV2`.
-- **Hecho** (slices 1-5): modelos de auth (`User`, `PasswordResetToken`,
-  `Session` + concern `Authentication`), login/logout y signup, con services
-  (`Users::Authenticate`, `Users::Register`) y specs. **63 specs en verde**.
-- **Siguiente**: slice 6 (vistas de login/signup + navegación).
+- **Hecho** (slices 1-6): modelos de auth, login/logout, signup y las vistas
+  de login/signup con navegación, selector de idioma y services. **69 specs en
+  verde**.
+- **Siguiente**: slice 7 (recuperación de contraseña: `passwords` controller).
 
 ---
 
@@ -47,11 +47,11 @@ versión la define el roadmap.
 2. ✅ **PasswordResetToken** — migración, expiración y scopes, factory y spec.
 3. ✅ **Session + Current + concern Authentication** — sesión por cookie, usuario actual y specs.
 
-## Autenticación: registro, login y logout 🚧
+## Autenticación: registro, login y logout ✅
 
 4. ✅ **Rutas de auth + `sessions` controller** (login/logout) + request spec. *(define `login_path`, cierra el spec rojo actual)*
 5. ✅ **`users` controller** (signup) + service `Users::Register` + request spec.
-6. ⬜ **Vistas de login/signup** + navegación + i18n.
+6. ✅ **Vistas de login/signup** + navegación + selector de idioma + i18n.
 
 ## Autenticación: recuperación de contraseña
 

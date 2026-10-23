@@ -6,11 +6,13 @@ en:
       signed_out: "You have signed out."
       invalid_credentials: "Email or password is incorrect."
       signed_up: "Account created. Welcome!"
+    errors_title: "There were problems:"
     login:
       title: "Sign in"
       email: "Email"
       password: "Password"
       submit: "Sign in"
+      no_account: "Don't have an account?"
     signup:
       title: "Create account"
       name: "Name"
@@ -18,6 +20,13 @@ en:
       password: "Password"
       password_confirmation: "Confirm password"
       submit: "Sign up"
+      have_account: "Already have an account?"
+  navigation:
+    main: "Main navigation"
+    sign_in: "Sign in"
+    sign_up: "Sign up"
+    sign_out: "Sign out"
+    language: "Language"
   home:
     welcome: "Welcome to Silvalde Web."
   activerecord:
