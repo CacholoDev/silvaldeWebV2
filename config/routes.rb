@@ -22,6 +22,12 @@ Rails.application.routes.draw do
   get "signup", to: "users#new", as: :signup
   post "signup", to: "users#create"
 
+  # Password reset
+  get "password/reset", to: "passwords#new", as: :new_password
+  post "password/reset", to: "passwords#create"
+  get "password/reset/:token/edit", to: "passwords#edit", as: :edit_password
+  patch "password/reset/:token", to: "passwords#update"
+
   # Locale switching
   post "locale", to: "locales#update", as: :locale
 end

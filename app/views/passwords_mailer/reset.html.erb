@@ -1,0 +1,3 @@
+<p><%= t("passwords.mailer.instruction", name: @user.name) %></p>
+
+<p><%= link_to t("passwords.mailer.link_text"), edit_password_url(token: @token) %></p>

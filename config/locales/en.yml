@@ -13,6 +13,7 @@ en:
       password: "Password"
       submit: "Sign in"
       no_account: "Don't have an account?"
+      forgot_password: "Forgot your password?"
     signup:
       title: "Create account"
       name: "Name"
@@ -29,6 +30,17 @@ en:
     language: "Language"
   home:
     welcome: "Welcome to Silvalde Web."
+  passwords:
+    flash:
+      sent: "If that email address is registered, you will receive a link to reset your password."
+    new:
+      title: "Reset password"
+      email: "Email"
+      submit: "Send instructions"
+    mailer:
+      subject: "Reset your password"
+      instruction: "Hello %{name}, we received a request to reset your password."
+      link_text: "Reset password"
   activerecord:
     errors:
       models:

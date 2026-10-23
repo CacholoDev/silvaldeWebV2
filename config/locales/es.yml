@@ -13,6 +13,7 @@ es:
       password: "Contraseña"
       submit: "Entrar"
       no_account: "¿No tienes cuenta?"
+      forgot_password: "¿Olvidaste tu contraseña?"
     signup:
       title: "Crear cuenta"
       name: "Nombre"
@@ -29,6 +30,17 @@ es:
     language: "Idioma"
   home:
     welcome: "Bienvenida a Silvalde Web."
+  passwords:
+    flash:
+      sent: "Si esa dirección de email está registrada, recibirás un enlace para restablecer tu contraseña."
+    new:
+      title: "Restablecer contraseña"
+      email: "Email"
+      submit: "Enviar instrucciones"
+    mailer:
+      subject: "Restablece tu contraseña"
+      instruction: "Hola %{name}, hemos recibido una solicitud para restablecer tu contraseña."
+      link_text: "Restablecer contraseña"
   activerecord:
     errors:
       models:

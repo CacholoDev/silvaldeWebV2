@@ -49,6 +49,11 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
 - Autenticación (slice 6): vistas de login/signup con Tailwind, navegación
   global (navbar con estado de sesión) y selector de idioma (español/inglés)
   persistido en cookie.
+- Autenticación (slice 7): recuperación de contraseña (parte 1) — rutas
+  `/password/reset`, controlador `PasswordsController`, service
+  `Passwords::RequestReset`, mailer `PasswordsMailer` y envío async
+  (`deliver_later`). La usuaria pide el reset y recibe un enlace por email;
+  sin revelar si el email existe o no.
 
 ### Corregido
 
