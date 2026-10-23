@@ -26,7 +26,10 @@ relacionados, pero deben mantener límites claros.
 La web es pública y el registro es opcional: la visitante ve primero el
 catálogo/landing, no una pantalla de login. El login aparece solo cuando una
 acción protegida lo requiere. Por tanto, la ruta raíz (`/`) apunta a la
-landing (catálogo), nunca a `sessions#new`.
+landing (catálogo), nunca a `sessions#new`. La landing es la presentación
+completa de la tienda: productos destacados, ofertas y rebajas, carrusel de
+fotos y acceso al catálogo por categorías; el login es siempre opcional y
+nunca es la portada.
 
 El registro de clientes existe para compras y para futuras ofertas o rebajas.
 La comunicación comercial debe ser consentida, trazable y revocable. No
@@ -65,6 +68,23 @@ consultar al usuario y actualizar esta sección y el changelog.
   definidas y documentadas (ver `docs/roadmap.md`, fase v0.5.0). La gema se
   añade a la `Gemfile` cuando lleguemos a esa fase; la decisión se registra
   ahora para no improvisar una máquina de estados a mano.
+
+**Decisiones de datos del catálogo (2026-10-24):**
+
+- **Namespace `Catalog::`** para models, services y controllers del catálogo
+  (tablas sin prefijo: `categories`, `products`, `variants`), coherente con
+  `Auth::` y `Users::`.
+- **Precios en céntimos** (`price_cents`, entero; euros fijos, sin columna de
+  moneda): evita errores de redondeo de los decimales; el formato «45,00 €»
+  lo prepara un decorator.
+- **Variante obligatoria**: todo producto tiene al menos una variante; los
+  artículos únicos llevan una sola variante («Única»). El stock vive solo en
+  la variante; no hay stock a nivel de producto.
+- **Disponibilidad = stock de la variante** (`stock > 0`). El producto está
+  disponible si alguna de sus variantes lo está.
+- **Slug automático** desde el nombre con `parameterize` (URL-safe: minúsculas
+  y sin acentos), usado en las URLs públicas. Se genera al crear y no cambia
+  al renombrar, para no romper enlaces existentes.
 
 **Política de generadores:**
 
@@ -166,6 +186,10 @@ dominio agrupa sus controllers, models y services en
 - Autoriza cada operación administrativa en servidor.
 - Protege sesiones, contraseñas, tokens y datos de pedidos. No registres
   contraseñas, tokens ni datos de pago.
+- El stock solo se modifica dentro de una transacción con bloqueo de fila
+  (`with_lock` / `SELECT ... FOR UPDATE`) y validando stock suficiente, con
+  rollback completo si algo falla: dos pedidos simultáneos no pueden vender
+  la misma unidad (se implementa en el checkout de v0.5.0).
 - Minimiza los datos personales almacenados y ofrece una estrategia clara para
   consentimiento y baja de comunicaciones comerciales.
 - Valida cargas de archivos, limita tipos/tamaños y utiliza Active Storage de

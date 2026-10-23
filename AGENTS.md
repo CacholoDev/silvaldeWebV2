@@ -13,11 +13,15 @@ consulta [`README.md`](./README.md). El historial de cambios vive en
 
 ## Estado del proyecto
 
-Greenfield: scaffold de Rails 8.1 sin modelos, rutas ni migraciones de dominio
-(solo las tablas internas de solid_cache, solid_queue y solid_cable).
-`app/services` y `app/decorators` aún no existen: créalos cuando el primer
-caso de uso los necesite, aplicando la arquitectura obligatoria de abajo. No
-añadas estructura por adelantado.
+Publicada la v0.2.0 (autenticación y usuarios): modelo `Users::User`,
+sesiones y tokens de reset (`Auth::`), services en `app/services` (`Auth::`,
+`Users::`, con las consultas de lectura en `search.rb`) y rutas de registro,
+login/logout, recuperación de contraseña y perfil. En curso, v0.3.0
+(catálogo) en la rama `feat/catalog`: modelos `Catalog::Category`,
+`Catalog::Product` y `Catalog::Variant` (precios en céntimos, disponibilidad
+por stock de la variante). `app/decorators` aún no existe: créalo cuando el
+primer caso de uso lo necesite, aplicando la arquitectura obligatoria de
+abajo. No añadas estructura por adelantado.
 
 ## Reglas de trabajo
 

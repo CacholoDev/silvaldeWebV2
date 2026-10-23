@@ -80,3 +80,43 @@ en:
             password:
               blank: "Password can't be blank."
               too_short: "Password is too short (minimum %{count} characters)."
+        category:
+          attributes:
+            name:
+              blank: "Name can't be blank."
+              too_long: "Name is too long (maximum %{count} characters)."
+              taken: "That name is already in use."
+            slug:
+              blank: "Slug can't be blank."
+              too_long: "Slug is too long (maximum %{count} characters)."
+              taken: "That slug is already in use."
+        product:
+          attributes:
+            category:
+              required: "Category can't be blank."
+            name:
+              blank: "Name can't be blank."
+              too_long: "Name is too long (maximum %{count} characters)."
+              taken: "That name is already in use."
+            slug:
+              blank: "Slug can't be blank."
+              too_long: "Slug is too long (maximum %{count} characters)."
+              taken: "That slug is already in use."
+            description:
+              blank: "Description can't be blank."
+            price_cents:
+              blank: "Price can't be blank."
+              greater_than_or_equal_to: "Price can't be negative."
+        variant:
+          attributes:
+            product:
+              required: "Product can't be blank."
+            name:
+              blank: "Name can't be blank."
+              too_long: "Name is too long (maximum %{count} characters)."
+              taken: "That name is already in use."
+            stock:
+              blank: "Stock can't be blank."
+              greater_than_or_equal_to: "Stock can't be negative."
+            price_cents:
+              greater_than_or_equal_to: "Price can't be negative."

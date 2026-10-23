@@ -10,7 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_23_130000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_24_140000) do
+  create_table "categories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "name", limit: 100, null: false
+    t.string "slug", limit: 150, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_categories_on_name", unique: true
+    t.index ["slug"], name: "index_categories_on_slug", unique: true
+  end
+
   create_table "password_reset_tokens", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "token_digest", null: false
@@ -20,6 +29,19 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_23_130000) do
     t.datetime "updated_at", null: false
     t.index ["token_digest"], name: "index_password_reset_tokens_on_token_digest", unique: true
     t.index ["user_id"], name: "index_password_reset_tokens_on_user_id"
+  end
+
+  create_table "products", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "category_id", null: false
+    t.string "name", limit: 150, null: false
+    t.string "slug", limit: 200, null: false
+    t.text "description", null: false
+    t.integer "price_cents", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_products_on_category_id"
+    t.index ["name"], name: "index_products_on_name", unique: true
+    t.index ["slug"], name: "index_products_on_slug", unique: true
   end
 
   create_table "sessions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -46,6 +68,19 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_23_130000) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  create_table "variants", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "product_id", null: false
+    t.string "name", limit: 100, null: false
+    t.integer "stock", default: 0, null: false
+    t.integer "price_cents"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id", "name"], name: "index_variants_on_product_id_and_name", unique: true
+    t.index ["product_id"], name: "index_variants_on_product_id"
+  end
+
   add_foreign_key "password_reset_tokens", "users"
+  add_foreign_key "products", "categories"
   add_foreign_key "sessions", "users"
+  add_foreign_key "variants", "products"
 end

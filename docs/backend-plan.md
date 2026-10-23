@@ -37,7 +37,10 @@ versión la define el roadmap.
   login/logout, signup, vistas, recuperación de contraseña, roles, perfil y
   consentimiento de comunicaciones). **103 specs en verde**. Publicado como
   `v0.2.0`.
-- **Siguiente**: v0.3.0 (catálogo) en la rama `feat/catalog`.
+- **En curso** (v0.3.0, rama `feat/catalog`): modelos del catálogo (slices
+  12-14) — `Catalog::Category`, `Catalog::Product` y `Catalog::Variant` con
+  migraciones, índices, factories y specs. **144 specs en verde**.
+- **Siguiente**: imágenes (Active Storage), seed y búsqueda del catálogo.
 
 ---
 
@@ -64,21 +67,25 @@ versión la define el roadmap.
 10. ✅ **Perfil del cliente** (ver/editar) + controller + vistas.
 11. ✅ **Consentimiento de comunicaciones** (columna + toggle + spec).
 
-## Catálogo: categorías y productos
+## Catálogo: modelos ✅
 
-12. ⬜ **Modelo `Category`** + migración + factory + spec.
-13. ⬜ **Modelo `Product`** + migración + factory + spec.
-14. ⬜ **Seed** de categorías y productos de ejemplo.
+12. ✅ **Modelo `Category`** + migración + factory + spec.
+13. ✅ **Modelo `Product`** + migración + factory + spec (slug automático,
+    precio en céntimos, categoría obligatoria).
+14. ✅ **Modelo `Variant`** + migración + factory + spec (stock y precio
+    opcional que sobrescribe al del producto).
 
-## Catálogo: variantes e imágenes
+## Catálogo: imágenes y datos de ejemplo
 
-15. ⬜ **Modelo `Variant`** + migración + factory + spec.
-16. ⬜ **Imágenes de producto** con Active Storage.
+15. ⬜ **Imágenes de producto** con Active Storage.
+16. ⬜ **Seed** de categorías, productos y variantes de ejemplo.
 
 ## Catálogo: búsqueda y navegación
 
 17. ⬜ **Servicio de búsqueda** (`Catalog::Search`) + spec.
-18. ⬜ **Página pública de catálogo y búsqueda** + vistas.
+18. ⬜ **Vistas públicas** + vistas: landing (`/`) con la presentación de la
+    tienda (productos destacados, ofertas y carrusel de fotos), listado,
+    categoría, detalle de producto y resultados de búsqueda.
 
 ## Carrito: invitado
 
@@ -94,7 +101,10 @@ versión la define el roadmap.
 22. ⬜ **Modelos `Order` y `OrderItem`** + máquina de estados del pedido con
     **AASM** (`pending → confirmed → shipped → delivered`, o `cancelled`) +
     migración + factories + specs.
-23. ⬜ **Servicio de checkout** con transacción + spec.
+23. ⬜ **Servicio de checkout** con transacción + spec. El descuento de stock
+    se hace con bloqueo de fila (transacción + `with_lock`) y rollback
+    completo si falla: dos pedidos simultáneos no pueden vender la misma
+    unidad.
 
 ## Pedidos: email y detalle
 

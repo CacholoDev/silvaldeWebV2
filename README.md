@@ -8,6 +8,9 @@ perder control sobre la experiencia de compra ni sobre la operación interna.
 
 - Catálogo de productos de decoración con imágenes, variantes y disponibilidad.
 - Navegación por categorías y búsqueda.
+- Landing pública como portada (`/`): presentación de la tienda, productos
+  destacados, ofertas y carrusel de fotos. El login es opcional y nunca es la
+  portada.
 - Carrito y proceso de compra.
 - Registro, inicio de sesión y gestión del perfil del cliente.
 - Comunicación futura de ofertas y rebajas para usuarios registrados, siempre
@@ -62,8 +65,11 @@ arquitectura, seguridad, datos o UX.
 
 El proyecto está en desarrollo temprano: la autenticación (usuarios y
 sesiones) ya está terminada y publicada. La versión publicada actual es
-**0.2.0** («autenticación y usuarios»); la siguiente, **0.3.0**, es el
-catálogo. La fuente única de verdad es el archivo [`VERSION`](./VERSION) y el
+**0.2.0** («autenticación y usuarios»). La versión en desarrollo es la
+**0.3.0** («catálogo»), en la rama `feat/catalog`: los modelos
+`Catalog::Category`, `Catalog::Product` y `Catalog::Variant` ya están
+terminados; quedan las imágenes, el seed, la búsqueda y las vistas públicas.
+La fuente única de verdad es el archivo [`VERSION`](./VERSION) y el
 historial de cambios vive en [`CHANGELOG.md`](./CHANGELOG.md).
 
 El desarrollo se organiza en ramas por funcionalidad (`feat/authentication`,

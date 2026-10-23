@@ -59,7 +59,7 @@ Registro, inicio/cierre de sesión y recuperación de contraseña; roles
 Construida por slices pequeños (11 slices, 103 specs en verde). Publicada el
 2026-10-24 con el tag `v0.2.0`.
 
-### ⬜ v0.3.0 — Catálogo
+### 🚧 v0.3.0 — Catálogo
 
 **Qué se hace:** categorías y productos con variantes, imágenes y
 disponibilidad; navegación pública por categorías y búsqueda.
@@ -67,7 +67,11 @@ disponibilidad; navegación pública por categorías y búsqueda.
 **Cómo se hará:** modelos `Category`, `Product` y `Variant` con sus índices y
 validaciones; imágenes con Active Storage (ya incluido en Rails); servicio de
 búsqueda para no ensuciar el controlador; vistas públicas con Tailwind;
-`db/seeds.rb` con productos de ejemplo para trabajar.
+`db/seeds.rb` con productos de ejemplo para trabajar. La raíz `/` será la
+landing de la tienda: presentación, productos destacados, ofertas y carrusel
+de fotos, con acceso al catálogo por categorías. Nunca una pantalla de login:
+entrar en la web no exige cuenta. Los modelos del catálogo están terminados
+en la rama `feat/catalog`.
 
 ### ⬜ v0.4.0 — Carrito
 
@@ -88,8 +92,9 @@ estados, detalle visible para la clienta y email de confirmación.
 el momento de la compra; máquina de estados del pedido con **AASM** —estados
 `pending → confirmed → shipped → delivered`, o `cancelled` (en la UI:
 pendiente → confirmado → enviado → entregado, o cancelado)—; servicio de
-checkout con transacción (crea pedido + vacía carrito o falla todo); emails
-con Action Mailer.
+checkout con transacción (crea pedido + vacía carrito o falla todo) y
+descuento de stock con bloqueo de fila, para que dos pedidos simultáneos no
+vendan la misma unidad; emails con Action Mailer.
 
 ### ⬜ v0.6.0 — Panel de administración
 

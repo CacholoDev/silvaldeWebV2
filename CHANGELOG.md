@@ -12,6 +12,31 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
 
 ## [Sin publicar]
 
+### Añadido
+
+- Catálogo (slices 1-3 de v0.3.0): modelos `Catalog::Category`,
+  `Catalog::Product` y `Catalog::Variant` con migraciones, índices únicos,
+  claves foráneas, factories y specs de modelo. Decisiones de datos
+  documentadas en `AGENTS.full.md`: namespace `Catalog::` con tablas sin
+  prefijo, precios en céntimos (`price_cents`, euros fijos), slug automático
+  desde el nombre con `parameterize`, disponibilidad = stock de la variante
+  (`stock > 0`) y variante obligatoria (los artículos únicos llevan una
+  variante «Única»). Una categoría con productos no se puede borrar
+  (`restrict_with_exception`) y un producto borra sus variantes al borrarse
+  (`dependent: :destroy`).
+- Traducciones de validaciones (es/en) para los modelos del catálogo en
+  `config/locales/{es,en}.yml`.
+
+### Cambiado
+
+- Documentación actualizada al estado real del proyecto (pendiente desde
+  v0.2.0): `AGENTS.md` (estado del proyecto), `README.md` (estado y landing
+  como portada), `AGENTS.full.md` (landing con productos, ofertas y carrusel
+  de fotos; login opcional; decisiones de datos del catálogo; el stock solo se
+  modifica en transacciones con bloqueo de fila), `docs/backend-plan.md`
+  (slices del catálogo reordenados: modelos → imágenes → seed → búsqueda →
+  vistas) y `docs/roadmap.md` (v0.3.0 en curso).
+
 ## [0.2.0] - 2026-10-24
 
 ### Añadido

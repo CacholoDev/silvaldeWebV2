@@ -80,3 +80,43 @@ es:
             password:
               blank: "La contraseña no puede estar vacía."
               too_short: "La contraseña es demasiado corta (mínimo %{count} caracteres)."
+        category:
+          attributes:
+            name:
+              blank: "El nombre no puede estar vacío."
+              too_long: "El nombre es demasiado largo (máximo %{count} caracteres)."
+              taken: "Ese nombre ya está en uso."
+            slug:
+              blank: "El slug no puede estar vacío."
+              too_long: "El slug es demasiado largo (máximo %{count} caracteres)."
+              taken: "Ese slug ya está en uso."
+        product:
+          attributes:
+            category:
+              required: "La categoría no puede estar vacía."
+            name:
+              blank: "El nombre no puede estar vacío."
+              too_long: "El nombre es demasiado largo (máximo %{count} caracteres)."
+              taken: "Ese nombre ya está en uso."
+            slug:
+              blank: "El slug no puede estar vacío."
+              too_long: "El slug es demasiado largo (máximo %{count} caracteres)."
+              taken: "Ese slug ya está en uso."
+            description:
+              blank: "La descripción no puede estar vacía."
+            price_cents:
+              blank: "El precio no puede estar vacío."
+              greater_than_or_equal_to: "El precio no puede ser negativo."
+        variant:
+          attributes:
+            product:
+              required: "El producto no puede estar vacío."
+            name:
+              blank: "El nombre no puede estar vacío."
+              too_long: "El nombre es demasiado largo (máximo %{count} caracteres)."
+              taken: "Ese nombre ya está en uso."
+            stock:
+              blank: "El stock no puede estar vacío."
+              greater_than_or_equal_to: "El stock no puede ser negativo."
+            price_cents:
+              greater_than_or_equal_to: "El precio no puede ser negativo."
