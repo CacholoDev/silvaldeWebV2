@@ -60,6 +60,10 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
   para poder buscarlo por el enlace.
 - Autenticación (slice 9): columna `role` en `User` (enum `customer`/`admin`,
   por defecto `customer`) + migración.
+- Autenticación (slice 10): perfil del cliente — controller
+  `Users::ProfilesController` (ver/editar, protegido con
+  `require_authentication`), service `Users::UpdateProfile` y enlace "Perfil"
+  en el navbar.
 
 ### Cambiado
 

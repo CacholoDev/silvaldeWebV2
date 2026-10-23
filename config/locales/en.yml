@@ -28,6 +28,7 @@ en:
     sign_up: "Sign up"
     sign_out: "Sign out"
     language: "Language"
+    profile: "Profile"
   home:
     welcome: "Welcome to Silvalde Web."
   passwords:
@@ -48,6 +49,19 @@ en:
       subject: "Reset your password"
       instruction: "Hello %{name}, we received a request to reset your password."
       link_text: "Reset password"
+  profiles:
+    flash:
+      updated: "Profile updated."
+    show:
+      title: "Your profile"
+      name: "Name"
+      email: "Email"
+      edit: "Edit profile"
+    edit:
+      title: "Edit profile"
+      name: "Name"
+      email: "Email"
+      submit: "Save"
   activerecord:
     errors:
       models:

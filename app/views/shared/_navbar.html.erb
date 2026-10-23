@@ -4,6 +4,7 @@
 
     <div class="flex items-center gap-4">
       <% if user_signed_in? %>
+        <%= link_to t("navigation.profile"), profile_path, class: "text-sm font-medium text-muted hover:text-ink" %>
         <%= link_to t("navigation.sign_out"), logout_path, data: { turbo_method: :delete },
               class: "text-sm font-medium text-muted hover:text-ink" %>
       <% else %>

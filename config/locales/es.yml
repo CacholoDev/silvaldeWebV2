@@ -28,6 +28,7 @@ es:
     sign_up: "Crear cuenta"
     sign_out: "Cerrar sesión"
     language: "Idioma"
+    profile: "Perfil"
   home:
     welcome: "Bienvenida a Silvalde Web."
   passwords:
@@ -48,6 +49,19 @@ es:
       subject: "Restablece tu contraseña"
       instruction: "Hola %{name}, hemos recibido una solicitud para restablecer tu contraseña."
       link_text: "Restablecer contraseña"
+  profiles:
+    flash:
+      updated: "Perfil actualizado."
+    show:
+      title: "Tu perfil"
+      name: "Nombre"
+      email: "Email"
+      edit: "Editar perfil"
+    edit:
+      title: "Editar perfil"
+      name: "Nombre"
+      email: "Email"
+      submit: "Guardar"
   activerecord:
     errors:
       models:

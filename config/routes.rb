@@ -28,6 +28,9 @@ Rails.application.routes.draw do
   get "password/reset/:token/edit", to: "auth/passwords#edit", as: :edit_password
   patch "password/reset/:token", to: "auth/passwords#update", as: :update_password
 
+  # Profile
+  resource :profile, only: %i[show edit update], controller: "users/profiles"
+
   # Locale switching
   post "locale", to: "locales#update", as: :locale
 end
