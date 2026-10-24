@@ -11,7 +11,7 @@ RSpec.describe PasswordsMailer, type: :mailer do
     end
 
     it "sends to the user's email" do
-      expect(mail.to).to eq([user.email])
+      expect(mail.to).to eq([ user.email ])
     end
 
     it "includes the reset link with the token" do
