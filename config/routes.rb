@@ -22,11 +22,12 @@ Rails.application.routes.draw do
   get "signup", to: "auth/registrations#new", as: :signup
   post "signup", to: "auth/registrations#create"
 
-  # Password reset
+  # Password reset. The token travels as a query parameter (not in the URL
+  # path) so Rails' filtered_path keeps it out of the server logs.
   get "password/reset", to: "auth/passwords#new", as: :new_password
   post "password/reset", to: "auth/passwords#create"
-  get "password/reset/:token/edit", to: "auth/passwords#edit", as: :edit_password
-  patch "password/reset/:token", to: "auth/passwords#update", as: :update_password
+  get "password/reset/edit", to: "auth/passwords#edit", as: :edit_password
+  patch "password/reset", to: "auth/passwords#update", as: :update_password
 
   # Profile
   resource :profile, only: %i[show edit update], controller: "users/profiles"

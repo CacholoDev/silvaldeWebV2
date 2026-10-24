@@ -1,4 +1,6 @@
 es:
+  errors:
+    format: "%{message}"
   authentication:
     flash:
       sign_in_required: "Inicia sesión para continuar."
@@ -80,6 +82,9 @@ es:
             password:
               blank: "La contraseña no puede estar vacía."
               too_short: "La contraseña es demasiado corta (mínimo %{count} caracteres)."
+              password_too_long: "La contraseña es demasiado larga (máximo 72 caracteres)."
+            password_confirmation:
+              confirmation: "La confirmación de contraseña no coincide."
         category:
           attributes:
             name:

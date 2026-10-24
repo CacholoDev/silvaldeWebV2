@@ -80,6 +80,22 @@ RSpec.describe "Passwords", type: :request do
       expect(user.reload.authenticate("newsecret")).to be(false)
     end
 
+    it "shows a translated error when the confirmation does not match" do
+      patch update_password_path(token: build_plaintext),
+            params: { user: { password: "newsecret", password_confirmation: "different" } }
+
+      expect(response.body).to include("La confirmación de contraseña no coincide.")
+      expect(response.body).not_to include("Translation missing")
+    end
+
+    it "revokes the user's other sessions on success" do
+      create(:session, user: user)
+      patch update_password_path(token: build_plaintext),
+            params: { user: { password: "newsecret", password_confirmation: "newsecret" } }
+
+      expect(Auth::Session.where(user: user).count).to eq(0)
+    end
+
     it "redirects with an invalid token" do
       patch update_password_path(token: "invalid"),
             params: { user: { password: "newsecret", password_confirmation: "newsecret" } }

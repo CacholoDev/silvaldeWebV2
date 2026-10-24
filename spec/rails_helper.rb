@@ -45,6 +45,17 @@ RSpec.configure do |config|
   # instead of true.
   config.use_transactional_fixtures = true
 
+  # bin/ci runs db:seed:replant against the test database after the suite,
+  # which leaves demo rows behind. Specs assume a clean catalog, so the demo
+  # data (and its attachments) is purged before the suite starts.
+  config.before(:suite) do
+    ActiveStorage::Attachment.delete_all
+    ActiveStorage::Blob.delete_all
+    Catalog::Variant.delete_all
+    Catalog::Product.delete_all
+    Catalog::Category.delete_all
+  end
+
   # You can uncomment this line to turn off ActiveRecord support entirely.
   # config.use_active_record = false
 

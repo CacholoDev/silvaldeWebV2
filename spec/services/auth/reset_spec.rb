@@ -10,6 +10,45 @@ RSpec.describe Auth::Reset do
   end
 
   describe ".call" do
+    context "when the user has open sessions and other outstanding tokens" do
+      it "revokes every session and consumes every token" do
+        create(:session, user: user)
+        create(:session, user: user)
+        other_token = create(:password_reset_token, user: user)
+        plaintext = build_plaintext
+
+        result = described_class.call(
+          plaintext: plaintext,
+          password: "newsecret",
+          password_confirmation: "newsecret"
+        )
+
+        expect(result.errors).to be_empty
+        expect(Auth::Session.where(user: user).count).to eq(0)
+        expect(other_token.reload).to be_used
+      end
+    end
+
+    context "when the token was already consumed" do
+      it "returns nil and leaves the password unchanged" do
+        plaintext = build_plaintext
+        described_class.call(
+          plaintext: plaintext,
+          password: "newsecret",
+          password_confirmation: "newsecret"
+        )
+
+        second = described_class.call(
+          plaintext: plaintext,
+          password: "othersecret",
+          password_confirmation: "othersecret"
+        )
+
+        expect(second).to be_nil
+        expect(user.reload.authenticate("othersecret")).to be(false)
+      end
+    end
+
     context "with a valid token and valid password" do
       it "updates the password and consumes the token" do
         plaintext = build_plaintext

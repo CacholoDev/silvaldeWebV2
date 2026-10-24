@@ -90,3 +90,8 @@ convención completa de ramas y releases en [`AGENTS.md`](./AGENTS.md).
 Los secretos y credenciales se cargan desde `.env` en desarrollo y nunca deben
 subirse al repositorio. No introduzcas contraseñas, claves, tokens ni datos
 personales reales en código, fixtures, documentación o commits.
+
+Antes de desplegar hay que configurar el correo: `APP_HOST` (dominio real
+para los enlaces de los emails) y `MAILER_FROM` (remitente), además del SMTP.
+Sin ellos, los emails de recuperación de contraseña no funcionan en
+producción (ver `config/environments/production.rb` y `app/mailers/`).

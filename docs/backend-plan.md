@@ -38,9 +38,12 @@ versión la define el roadmap.
   consentimiento de comunicaciones). **103 specs en verde**. Publicado como
   `v0.2.0`.
 - **En curso** (v0.3.0, rama `feat/catalog`): modelos del catálogo (slices
-  12-14) e imágenes de producto con Active Storage (slice 15), con sus
-  validaciones de tipo, tamaño y cantidad. **154 specs en verde**.
-- **Siguiente**: seed del catálogo y búsqueda (`Catalog::Search`).
+  12-14), imágenes de producto con Active Storage (slice 15), seed de
+  demostración (slice 16) y servicio de búsqueda `Catalog::Search`
+  (slice 17). **175 specs en verde**. Además, endurecimiento de auth
+  (traducciones, revocación de sesiones en el reset, tokens, CI) aplicado
+  sobre esta misma rama a raíz del code review del proyecto.
+- **Siguiente**: vistas públicas (slice 18), incluida la landing.
 
 ---
 
@@ -79,11 +82,12 @@ versión la define el roadmap.
 
 15. ✅ **Imágenes de producto** con Active Storage (tipos JPEG/PNG/WebP,
     5 MB por imagen, 10 imágenes por producto).
-16. ⬜ **Seed** de categorías, productos y variantes de ejemplo.
+16. ✅ **Seed** de categorías, productos y variantes de ejemplo (idempotente,
+    con fotos demo en `db/seeds/images/`).
 
 ## Catálogo: búsqueda y navegación
 
-17. ⬜ **Servicio de búsqueda** (`Catalog::Search`) + spec.
+17. ✅ **Servicio de búsqueda** (`Catalog::Search`) + spec.
 18. ⬜ **Vistas públicas** + vistas: landing (`/`) con la presentación de la
     tienda (productos destacados, ofertas y carrusel de fotos), listado,
     categoría, detalle de producto y resultados de búsqueda.

@@ -15,7 +15,10 @@ RSpec.describe PasswordsMailer, type: :mailer do
     end
 
     it "includes the reset link with the token" do
-      expect(mail.body.encoded).to include(edit_password_url(token: token))
+      # Parts are quoted-printable encoded; decode before matching the URL.
+      decoded_parts = mail.parts.map { |part| part.body.decoded }
+
+      expect(decoded_parts.join).to include(edit_password_url(token: token))
     end
   end
 end

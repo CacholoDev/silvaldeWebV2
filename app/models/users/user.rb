@@ -21,6 +21,7 @@ module Users
     EMAIL_FORMAT = URI::MailTo::EMAIL_REGEXP
     EMAIL_MAX_LENGTH = 255
     NAME_MAX_LENGTH = 100
+    PASSWORD_MIN_LENGTH = 8
 
     validates :email,
               presence: true,
@@ -31,5 +32,12 @@ module Users
     validates :name,
               presence: true,
               length: { maximum: NAME_MAX_LENGTH }
+
+    # Minimum length on creation and password changes; blank keeps profile
+    # updates (without a password) working. The 72-byte cap is bcrypt's and
+    # is enforced by has_secure_password.
+    validates :password,
+              length: { minimum: PASSWORD_MIN_LENGTH },
+              allow_blank: true
   end
 end

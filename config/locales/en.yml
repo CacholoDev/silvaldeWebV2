@@ -1,4 +1,6 @@
 en:
+  errors:
+    format: "%{message}"
   authentication:
     flash:
       sign_in_required: "Please sign in to continue."
@@ -80,6 +82,9 @@ en:
             password:
               blank: "Password can't be blank."
               too_short: "Password is too short (minimum %{count} characters)."
+              password_too_long: "Password is too long (maximum 72 characters)."
+            password_confirmation:
+              confirmation: "Password confirmation doesn't match."
         category:
           attributes:
             name:

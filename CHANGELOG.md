@@ -12,6 +12,37 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
 
 ## [Sin publicar]
 
+### Seguridad
+
+- Recuperación de contraseña endurecida: un reset exitoso revoca todas las
+  sesiones del usuario y consume todos sus tokens pendientes en una sola
+  transacción (el consumo del token es atómico, así dos envíos simultáneos
+  del mismo enlace no pueden ganar los dos); pedir un nuevo enlace invalida
+  los anteriores. Una cookie robada deja de funcionar tras el reset.
+- El token de reset viaja ahora como parámetro de consulta (no en la ruta de
+  la URL) para que no se filtre en los logs del servidor: Rails lo registra
+  como `[FILTERED]`.
+- Longitud mínima de contraseña de 8 caracteres.
+
+### Corregido
+
+- Traducciones de validación faltantes (`password_too_long` y `confirmation`):
+  en español se mostraba «Translation missing...» al fallar la confirmación
+  de contraseña o con contraseñas demasiado largas. Además, `errors.format`
+  hace que los mensajes de error se lean completos (sin el nombre del campo
+  duplicado al principio).
+- El CI de GitHub ejecutaba la suite de Minitest (0 tests) en vez de RSpec:
+  ahora crea el `.env` del workflow, corre `bundle exec rspec` y los seeds,
+  y se elimina el job muerto de system tests.
+- Las consultas de lectura de auth viven ahora en `Auth::Search`
+  (`find_user_by_email`, `authenticate`), como manda la convención
+  `search.rb`.
+- El host y el remitente del mailer se configuran por variables de entorno
+  (`APP_HOST`, `MAILER_FROM`): antes apuntaban a `example.com` y los emails
+  de recuperación no habrían funcionado en producción.
+- La suite de specs purga los datos demo al arrancar (`bin/ci` deja los
+  seeds en la BD de tests y rompía los specs que asumen un catálogo limpio).
+
 ### Añadido
 
 - Catálogo (slices 1-3 de v0.3.0): modelos `Catalog::Category`,
@@ -32,6 +63,14 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
   (JPEG/PNG/WebP), tamaño (5 MB por imagen) y cantidad (10 por producto),
   specs con fixtures reales en `spec/fixtures/files/images/` y fotos demo de
   ejemplo en `db/seeds/images/`.
+- Seed de demostración (slice 5 de v0.3.0): `db/seeds.rb` con 4 categorías,
+  8 productos y 12 variantes de ejemplo (incluye variantes sin stock y con
+  precio que sobrescribe al del producto), fotos demo adjuntas y specs que
+  verifican que el seed es idempotente.
+- Búsqueda del catálogo (slice 6 de v0.3.0): service `Catalog::Search` con
+  las consultas de lectura del dominio — búsqueda por nombre/descripción
+  tolerante a mayúsculas, acentos y caracteres comodín, productos por
+  categoría y lookup por slug con las variantes precargadas — con specs.
 
 ### Cambiado
 
