@@ -38,9 +38,9 @@ versión la define el roadmap.
   consentimiento de comunicaciones). **103 specs en verde**. Publicado como
   `v0.2.0`.
 - **En curso** (v0.3.0, rama `feat/catalog`): modelos del catálogo (slices
-  12-14) — `Catalog::Category`, `Catalog::Product` y `Catalog::Variant` con
-  migraciones, índices, factories y specs. **144 specs en verde**.
-- **Siguiente**: imágenes (Active Storage), seed y búsqueda del catálogo.
+  12-14) e imágenes de producto con Active Storage (slice 15), con sus
+  validaciones de tipo, tamaño y cantidad. **154 specs en verde**.
+- **Siguiente**: seed del catálogo y búsqueda (`Catalog::Search`).
 
 ---
 
@@ -77,7 +77,8 @@ versión la define el roadmap.
 
 ## Catálogo: imágenes y datos de ejemplo
 
-15. ⬜ **Imágenes de producto** con Active Storage.
+15. ✅ **Imágenes de producto** con Active Storage (tipos JPEG/PNG/WebP,
+    5 MB por imagen, 10 imágenes por producto).
 16. ⬜ **Seed** de categorías, productos y variantes de ejemplo.
 
 ## Catálogo: búsqueda y navegación

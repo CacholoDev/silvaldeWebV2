@@ -27,9 +27,18 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
   y un producto borra sus variantes al borrarse (`dependent: :destroy`).
 - Traducciones de validaciones (es/en) para los modelos del catálogo en
   `config/locales/{es,en}.yml`.
+- Imágenes de producto (slice 4 de v0.3.0): Active Storage en
+  `Catalog::Product` (`has_many_attached :images`) con validaciones de tipo
+  (JPEG/PNG/WebP), tamaño (5 MB por imagen) y cantidad (10 por producto),
+  specs con fixtures reales en `spec/fixtures/files/images/` y fotos demo de
+  ejemplo en `db/seeds/images/`.
 
 ### Cambiado
 
+- Nueva regla de proceso (`AGENTS.md`, `AGENTS.full.md`, `docs/versioning.md`):
+  al cerrar cada versión o mini versión se pasa obligatoriamente el code
+  review de superpowers (`requesting-code-review`), apoyado en las reglas del
+  proyecto y en las skills y plugins disponibles, antes de publicar.
 - Documentación actualizada al estado real del proyecto (pendiente desde
   v0.2.0): `AGENTS.md` (estado del proyecto), `README.md` (estado y landing
   como portada), `AGENTS.full.md` (landing con productos, ofertas y carrusel

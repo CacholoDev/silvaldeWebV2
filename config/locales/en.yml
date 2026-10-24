@@ -109,6 +109,10 @@ en:
               not_a_number: "Price must be a number."
               not_an_integer: "Price must be an integer."
               greater_than_or_equal_to: "Price can't be negative."
+            images:
+              unsupported_type: "Only JPEG, PNG or WebP images are allowed."
+              too_large: "This image is too large (maximum %{count} MB)."
+              too_many: "You can upload at most %{count} images."
         variant:
           attributes:
             product:

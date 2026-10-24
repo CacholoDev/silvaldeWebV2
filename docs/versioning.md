@@ -23,13 +23,16 @@ lanzamiento público de la tienda.
 
 ## Cómo publicar una nueva versión
 
-1. Asegurarse de que `main` está verde: `bin/ci` (o, como mínimo,
+1. Pasar el code review de superpowers (skill `requesting-code-review`) sobre
+   el trabajo de la versión, usando las reglas de `AGENTS.md` y las skills y
+   plugins disponibles; corregir o documentar los hallazgos antes de seguir.
+2. Asegurarse de que `main` está verde: `bin/ci` (o, como mínimo,
    `bundle exec rspec`, `bin/rubocop`, `bin/brakeman` y `bin/bundler-audit`).
-2. Actualizar `CHANGELOG.md`: mover lo acumulado en «Sin publicar» a la nueva
+3. Actualizar `CHANGELOG.md`: mover lo acumulado en «Sin publicar» a la nueva
    versión con su fecha.
-3. Actualizar el archivo `VERSION` (solo eso: la app lo lee sola).
-4. Commit en `main`: `chore: publica vX.Y.Z`.
-5. Crear el tag y subirlo junto con la rama:
+4. Actualizar el archivo `VERSION` (solo eso: la app lo lee sola).
+5. Commit en `main`: `chore: publica vX.Y.Z`.
+6. Crear el tag y subirlo junto con la rama:
 
    ```bash
    git tag -a vX.Y.Z -m "vX.Y.Z"

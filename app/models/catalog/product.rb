@@ -15,6 +15,14 @@ module Catalog
 
     has_many :variants, dependent: :destroy, inverse_of: :product
 
+    # Product photos (Active Storage). Attachments are validated below:
+    # allowed types, per-image size limit and total count limit.
+    has_many_attached :images
+
+    MAX_IMAGES = 10
+    MAX_IMAGE_BYTES = 5.megabytes
+    ALLOWED_IMAGE_TYPES = %w[image/jpeg image/png image/webp].freeze
+
     # Normalize slug to a URL-safe form ("Jarrón artesanal" ->
     # "jarron-artesanal"), like email normalization in Users::User.
     normalizes :slug, with: ->(slug) { slug.to_s.parameterize }
@@ -38,6 +46,8 @@ module Catalog
     validates :price_cents, presence: true
     validates :price_cents, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, allow_nil: true
 
+    validate :acceptable_images
+
     # A product is available when at least one of its variants has stock.
     # A product without variants is a draft and is not for sale: the variant
     # is what carries stock, so every sellable product needs at least one.
@@ -46,6 +56,22 @@ module Catalog
     end
 
     private
+
+    def acceptable_images
+      if images.size > MAX_IMAGES
+        errors.add(:images, :too_many, count: MAX_IMAGES)
+      end
+
+      images.each do |image|
+        unless ALLOWED_IMAGE_TYPES.include?(image.content_type)
+          errors.add(:images, :unsupported_type)
+        end
+
+        if image.byte_size > MAX_IMAGE_BYTES
+          errors.add(:images, :too_large, count: MAX_IMAGE_BYTES / 1.megabyte)
+        end
+      end
+    end
 
     def generate_slug_from_name
       self.slug = name.to_s.parameterize

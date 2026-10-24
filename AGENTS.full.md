@@ -265,5 +265,8 @@ Una tarea está terminada cuando:
 - no se han introducido secretos ni regresiones conocidas;
 - los tests y linters relevantes pasan, o se informa claramente de la limitación;
 - el README, `CHANGELOG.md` o la documentación relacionada refleja cualquier
-  cambio operativo o visible.
+  cambio operativo o visible;
+- una versión o mini versión que se cierra (p. ej. `0.3.0`) ha pasado el code
+  review de superpowers (skill `requesting-code-review`), usando las reglas de
+  este documento y las skills y plugins disponibles como referencia.
 

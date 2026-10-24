@@ -179,6 +179,11 @@ transiciones válidas y cómo se muestran al usuario.
   hasta el lanzamiento público, que será `1.0.0`. No subas la versión dentro
   de una rama `feat/*`. Proceso de publicación:
   [`docs/versioning.md`](./docs/versioning.md).
+- **Code review al cerrar cada versión.** Al terminar una versión o mini
+  versión (p. ej. `0.3.0`), antes de publicarla hay que pasar el code review
+  de superpowers (skill `requesting-code-review`), apoyándose en las reglas
+  de este documento y en las skills y plugins disponibles. Los hallazgos se
+  corrigen o se documentan antes del release.
 - Las fases del proyecto y su estado están en
   [`docs/roadmap.md`](./docs/roadmap.md); actualízalo al completar una fase.
 - Los agentes no hacen commits, push ni tags sin confirmación

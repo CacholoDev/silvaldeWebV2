@@ -113,4 +113,42 @@ RSpec.describe Catalog::Product, type: :model do
       expect(product).not_to be_available
     end
   end
+
+  describe "images" do
+    def attach_image(product, filename)
+      path = Rails.root.join("spec/fixtures/files/images", filename)
+      product.images.attach(io: File.open(path), filename: filename)
+    end
+
+    it "accepts jpeg, png and webp images" do
+      product = build(:product)
+      attach_image(product, "red-square.jpg")
+      attach_image(product, "red-square.png")
+      attach_image(product, "red-square.webp")
+      expect(product).to be_valid
+    end
+
+    it "rejects files that are not jpeg, png or webp" do
+      product = build(:product)
+      attach_image(product, "notes.txt")
+      attach_image(product, "animation.gif")
+      expect(product).not_to be_valid
+      expect(product.errors[:images]).to include("Solo se admiten imágenes JPEG, PNG o WebP.")
+    end
+
+    it "rejects images larger than 5 MB" do
+      product = build(:product)
+      oversized = File.binread(Rails.root.join("spec/fixtures/files/images/red-square.jpg")) + ("\0" * 6.megabytes)
+      product.images.attach(io: StringIO.new(oversized), filename: "big.jpg")
+      expect(product).not_to be_valid
+      expect(product.errors[:images]).to include("La imagen pesa demasiado (máximo 5 MB).")
+    end
+
+    it "rejects more than 10 images" do
+      product = build(:product)
+      11.times { |n| product.images.attach(io: StringIO.new("fake"), filename: "fake-#{n}.png") }
+      expect(product).not_to be_valid
+      expect(product.errors[:images]).to include("Solo puedes subir hasta 10 imágenes.")
+    end
+  end
 end
