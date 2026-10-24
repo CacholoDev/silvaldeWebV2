@@ -52,6 +52,18 @@ RSpec.describe Catalog::Variant, type: :model do
       expect(variant.errors[:stock]).to include("El stock no puede ser negativo.")
     end
 
+    it "rejects non-numeric stock" do
+      variant = build(:variant, stock: "abc")
+      expect(variant).not_to be_valid
+      expect(variant.errors[:stock]).to include("El stock debe ser un número.")
+    end
+
+    it "rejects fractional stock" do
+      variant = build(:variant, stock: "3.5")
+      expect(variant).not_to be_valid
+      expect(variant.errors[:stock]).to include("El stock debe ser un número entero.")
+    end
+
     it "accepts a variant without price override" do
       variant = build(:variant, price_cents: nil)
       expect(variant).to be_valid
@@ -61,6 +73,18 @@ RSpec.describe Catalog::Variant, type: :model do
       variant = build(:variant, price_cents: -1)
       expect(variant).not_to be_valid
       expect(variant.errors[:price_cents]).to include("El precio no puede ser negativo.")
+    end
+
+    it "rejects a non-numeric price override" do
+      variant = build(:variant, price_cents: "abc")
+      expect(variant).not_to be_valid
+      expect(variant.errors[:price_cents]).to include("El precio debe ser un número.")
+    end
+
+    it "rejects a fractional price override" do
+      variant = build(:variant, price_cents: "9900.5")
+      expect(variant).not_to be_valid
+      expect(variant.errors[:price_cents]).to include("El precio debe ser un número entero.")
     end
   end
 

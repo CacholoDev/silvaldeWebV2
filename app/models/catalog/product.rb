@@ -36,9 +36,11 @@ module Catalog
     validates :description, presence: true
 
     validates :price_cents, presence: true
-    validates :price_cents, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
+    validates :price_cents, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, allow_nil: true
 
     # A product is available when at least one of its variants has stock.
+    # A product without variants is a draft and is not for sale: the variant
+    # is what carries stock, so every sellable product needs at least one.
     def available?
       variants.any?(&:available?)
     end

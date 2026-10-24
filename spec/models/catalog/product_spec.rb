@@ -44,6 +44,18 @@ RSpec.describe Catalog::Product, type: :model do
       expect(product).not_to be_valid
       expect(product.errors[:price_cents]).to include("El precio no puede ser negativo.")
     end
+
+    it "rejects a non-numeric price" do
+      product = build(:product, price_cents: "abc")
+      expect(product).not_to be_valid
+      expect(product.errors[:price_cents]).to include("El precio debe ser un número.")
+    end
+
+    it "rejects a fractional price" do
+      product = build(:product, price_cents: "4500.5")
+      expect(product).not_to be_valid
+      expect(product.errors[:price_cents]).to include("El precio debe ser un número entero.")
+    end
   end
 
   describe "slug" do
@@ -83,7 +95,7 @@ RSpec.describe Catalog::Product, type: :model do
   end
 
   describe "availability" do
-    it "is unavailable without variants" do
+    it "is unavailable while it has no variants (draft state)" do
       product = create(:product)
       expect(product).not_to be_available
     end

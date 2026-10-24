@@ -18,11 +18,11 @@ module Catalog
               uniqueness: { scope: :product_id }
 
     validates :stock, presence: true
-    validates :stock, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
+    validates :stock, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, allow_nil: true
 
     # Optional price override in cents: nil means "use the product price",
     # any integer (including 0) replaces it.
-    validates :price_cents, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
+    validates :price_cents, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, allow_nil: true
 
     def available?
       stock.positive?

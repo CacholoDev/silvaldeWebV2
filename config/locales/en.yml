@@ -106,6 +106,8 @@ en:
               blank: "Description can't be blank."
             price_cents:
               blank: "Price can't be blank."
+              not_a_number: "Price must be a number."
+              not_an_integer: "Price must be an integer."
               greater_than_or_equal_to: "Price can't be negative."
         variant:
           attributes:
@@ -117,6 +119,10 @@ en:
               taken: "That name is already in use."
             stock:
               blank: "Stock can't be blank."
+              not_a_number: "Stock must be a number."
+              not_an_integer: "Stock must be an integer."
               greater_than_or_equal_to: "Stock can't be negative."
             price_cents:
+              not_a_number: "Price must be a number."
+              not_an_integer: "Price must be an integer."
               greater_than_or_equal_to: "Price can't be negative."

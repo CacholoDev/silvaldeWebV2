@@ -77,14 +77,20 @@ consultar al usuario y actualizar esta sección y el changelog.
 - **Precios en céntimos** (`price_cents`, entero; euros fijos, sin columna de
   moneda): evita errores de redondeo de los decimales; el formato «45,00 €»
   lo prepara un decorator.
-- **Variante obligatoria**: todo producto tiene al menos una variante; los
-  artículos únicos llevan una sola variante («Única»). El stock vive solo en
-  la variante; no hay stock a nivel de producto.
+- **Variante obligatoria para la venta**: todo producto necesita al menos una
+  variante para estar a la venta; los artículos únicos llevan una sola
+  variante («Única»). Un producto sin variantes puede guardarse como
+  borrador, pero no está disponible. El stock vive solo en la variante; no
+  hay stock a nivel de producto.
 - **Disponibilidad = stock de la variante** (`stock > 0`). El producto está
   disponible si alguna de sus variantes lo está.
 - **Slug automático** desde el nombre con `parameterize` (URL-safe: minúsculas
   y sin acentos), usado en las URLs públicas. Se genera al crear y no cambia
   al renombrar, para no romper enlaces existentes.
+- **Unicidad de nombres insensible a acentos y mayúsculas**: la validación es
+  `case_sensitive: false` y el collation por defecto de MySQL
+  (`utf8mb4_0900_ai_ci`) hace que «Jarrón» y «Jarron» cuenten como el mismo
+  nombre tanto en la validación como en el índice único.
 
 **Política de generadores:**
 

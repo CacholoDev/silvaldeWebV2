@@ -100,7 +100,9 @@ versión la define el roadmap.
 
 22. ⬜ **Modelos `Order` y `OrderItem`** + máquina de estados del pedido con
     **AASM** (`pending → confirmed → shipped → delivered`, o `cancelled`) +
-    migración + factories + specs.
+    migración + factories + specs. Al conectar pedidos con variantes, revisar
+    el `dependent: :destroy` de `Product` → `Variant`: no se podrá borrar un
+    producto cuyas variantes aparezcan en pedidos confirmados.
 23. ⬜ **Servicio de checkout** con transacción + spec. El descuento de stock
     se hace con bloqueo de fila (transacción + `with_lock`) y rollback
     completo si falla: dos pedidos simultáneos no pueden vender la misma

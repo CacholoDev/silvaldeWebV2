@@ -18,12 +18,13 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
   `Catalog::Product` y `Catalog::Variant` con migraciones, índices únicos,
   claves foráneas, factories y specs de modelo. Decisiones de datos
   documentadas en `AGENTS.full.md`: namespace `Catalog::` con tablas sin
-  prefijo, precios en céntimos (`price_cents`, euros fijos), slug automático
-  desde el nombre con `parameterize`, disponibilidad = stock de la variante
-  (`stock > 0`) y variante obligatoria (los artículos únicos llevan una
-  variante «Única»). Una categoría con productos no se puede borrar
-  (`restrict_with_exception`) y un producto borra sus variantes al borrarse
-  (`dependent: :destroy`).
+  prefijo, precios en céntimos (`price_cents`, euros fijos) con validación
+  numérica estricta (entero, no negativo), slug automático desde el nombre
+  con `parameterize`, disponibilidad = stock de la variante (`stock > 0`) y
+  variante obligatoria para la venta (un producto sin variantes es un
+  borrador no disponible; los artículos únicos llevan una variante «Única»).
+  Una categoría con productos no se puede borrar (`restrict_with_exception`)
+  y un producto borra sus variantes al borrarse (`dependent: :destroy`).
 - Traducciones de validaciones (es/en) para los modelos del catálogo en
   `config/locales/{es,en}.yml`.
 

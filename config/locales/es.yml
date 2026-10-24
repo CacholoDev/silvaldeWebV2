@@ -106,6 +106,8 @@ es:
               blank: "La descripción no puede estar vacía."
             price_cents:
               blank: "El precio no puede estar vacío."
+              not_a_number: "El precio debe ser un número."
+              not_an_integer: "El precio debe ser un número entero."
               greater_than_or_equal_to: "El precio no puede ser negativo."
         variant:
           attributes:
@@ -117,6 +119,10 @@ es:
               taken: "Ese nombre ya está en uso."
             stock:
               blank: "El stock no puede estar vacío."
+              not_a_number: "El stock debe ser un número."
+              not_an_integer: "El stock debe ser un número entero."
               greater_than_or_equal_to: "El stock no puede ser negativo."
             price_cents:
+              not_a_number: "El precio debe ser un número."
+              not_an_integer: "El precio debe ser un número entero."
               greater_than_or_equal_to: "El precio no puede ser negativo."

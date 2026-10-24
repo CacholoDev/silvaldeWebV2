@@ -76,7 +76,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_24_140000) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["product_id", "name"], name: "index_variants_on_product_id_and_name", unique: true
-    t.index ["product_id"], name: "index_variants_on_product_id"
   end
 
   add_foreign_key "password_reset_tokens", "users"
