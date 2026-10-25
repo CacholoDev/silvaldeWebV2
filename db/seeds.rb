@@ -46,7 +46,10 @@ demo_products = [
     name: "Set de velas pilar",
     description: "Set de tres velas pilar sin perfume.",
     price_cents: 2400,
-    variants: [ { name: "Única", stock: 6 } ]
+    variants: [
+      { name: "Única", stock: 6 },
+      { name: "Pack de 4", stock: 4, price_cents: 1800 }
+    ]
   },
   {
     category: decor,

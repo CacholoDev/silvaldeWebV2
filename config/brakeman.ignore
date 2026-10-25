@@ -1,0 +1,12 @@
+{
+  "ignored_warnings": [
+    {
+      "fingerprint": "b54325c65951218f21dea78751e204360d3db72a236adc3f2fecaf3c0f31d809",
+      "note": "JSON-LD structured data (ItemList). The JSON is built from model attributes (product names and URLs) and escaped with json_escape, the standard pattern for JSON-LD inside a script tag. params[:slug] is only used to look up the record."
+    },
+    {
+      "fingerprint": "b7ad2569dbfb6eca29c619583c71bccd8c0bb7dc416270067de4a0b0ebbf3aca",
+      "note": "JSON-LD structured data (Product). Same pattern: the JSON is built from model attributes and escaped with json_escape before being rendered inside the script tag."
+    }
+  ]
+}

@@ -38,12 +38,14 @@ versión la define el roadmap.
   consentimiento de comunicaciones). **103 specs en verde**. Publicado como
   `v0.2.0`.
 - **En curso** (v0.3.0, rama `feat/catalog`): modelos del catálogo (slices
-  12-14), imágenes de producto con Active Storage (slice 15), seed de
-  demostración (slice 16) y servicio de búsqueda `Catalog::Search`
-  (slice 17). **175 specs en verde**. Además, endurecimiento de auth
-  (traducciones, revocación de sesiones en el reset, tokens, CI) aplicado
-  sobre esta misma rama a raíz del code review del proyecto.
-- **Siguiente**: vistas públicas (slice 18), incluida la landing.
+  12-14), imágenes (15), seed (16), búsqueda `Catalog::Search` (17) y las
+  vistas públicas (18a back + 18b front) — landing, listado, detalle,
+  categoría, ofertas, carrusel, SEO y accesibilidad. **199 specs en verde**.
+  Además, endurecimiento de auth (traducciones, revocación de sesiones en el
+  reset, tokens, CI) aplicado sobre esta misma rama a raíz del code review
+  del proyecto.
+- **Siguiente**: revisión de la versión v0.3.0 completa (code review de
+  superpowers antes del PR) y publicación.
 
 ---
 
@@ -88,9 +90,19 @@ versión la define el roadmap.
 ## Catálogo: búsqueda y navegación
 
 17. ✅ **Servicio de búsqueda** (`Catalog::Search`) + spec.
-18. ⬜ **Vistas públicas** + vistas: landing (`/`) con la presentación de la
-    tienda (productos destacados, ofertas y carrusel de fotos), listado,
-    categoría, detalle de producto y resultados de búsqueda.
+
+## Catálogo: vistas públicas (18a back / 18b front)
+
+18a. ✅ **Vistas públicas — parte de back**: rutas, controllers del dominio
+    `Catalog::` (landing, productos, categorías), integración con
+    `Catalog::Search`, decorators para el formato de precios, vistas
+    funcionales con i18n y request specs. URLs: `/` (landing), `/products`,
+    `/products/:slug`, `/categories/:slug`; la búsqueda usa `/products?q=`.
+18b. ✅ **Vistas públicas — parte de front**: diseño con Tailwind — landing
+    con productos destacados, ofertas y carrusel de fotos, tarjetas de
+    producto con imágenes, precios y disponibilidad, diseño responsive y
+    accesibilidad visual (WCAG 2.2 AA) más la base de SEO en página
+    (títulos, descripciones, canónicas, Open Graph, JSON-LD, sitemap).
 
 ## Carrito: invitado
 

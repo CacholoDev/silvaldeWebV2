@@ -1,6 +1,14 @@
 en:
   errors:
     format: "%{message}"
+  number:
+    currency:
+      format:
+        format: "%u %n"
+        separator: "."
+        delimiter: ","
+        precision: 2
+        unit: "€"
   authentication:
     flash:
       sign_in_required: "Please sign in to continue."
@@ -26,13 +34,62 @@ en:
       have_account: "Already have an account?"
   navigation:
     main: "Main navigation"
+    catalog: "Catalog"
+    skip_to_content: "Skip to content"
     sign_in: "Sign in"
     sign_up: "Sign up"
     sign_out: "Sign out"
     language: "Language"
     profile: "Profile"
-  home:
-    welcome: "Welcome to Silvalde Web."
+  catalog:
+    landing:
+      title: "Welcome to Silvalde Hogar"
+      meta_description: "Handmade decor for your home: vases, candles, mirrors and washed linen textiles."
+      eyebrow: "Handmade decor"
+      headline: "Pieces made by hand for your home"
+      intro: "We choose objects that last: hand-thrown ceramics, soy wax candles, brass-framed mirrors and washed linen textiles."
+      cta_catalog: "Browse the catalog"
+      cta_categories: "Explore categories"
+      categories_title: "Categories"
+      featured_title: "Featured"
+      all_products: "See all products"
+      offers_title: "Offers"
+      offers_intro: "Some pieces are priced lower in one of their variants."
+      gallery_title: "From the workshop to your home"
+      gallery_previous: "Previous photo"
+      gallery_next: "Next photo"
+      shop_title: "Why shop at Silvalde"
+      shop_handmade_title: "Made by hand"
+      shop_handmade_body: "Every piece is made by a person, with fine materials and hand-finished details."
+      shop_shipping_title: "Shipping across Spain"
+      shop_shipping_body: "We prepare your order in 24-48 hours and ship it with tracking."
+      shop_advice_title: "Personal advice"
+      shop_advice_body: "Write to us and we will help you choose the piece and finish that fit best."
+    products:
+      title: "Products"
+      meta_description: "Every decoration product at Silvalde Hogar: vases, candles, mirrors and textiles."
+      results: "Results for “%{query}”"
+      search_label: "Search products"
+      search_submit: "Search"
+      available: "In stock"
+      sold_out: "Sold out"
+      on_offer: "Offer"
+      empty: "We could not find any product matching that search."
+      no_image: "No photo"
+    show:
+      variants_title: "Variants"
+      breadcrumb: "Breadcrumb"
+    categories:
+      meta_description: "Every %{name} product at Silvalde Hogar."
+    footer:
+      categories: "Categories"
+      shop: "Shop"
+      contact: "Contact"
+      contact_body: "Write to us and we will help with your order."
+  app:
+    name: "Silvalde Hogar"
+    default_description: "Online shop of handmade decor: vases, candles, mirrors and textiles made by hand."
+    footer_tagline: "Handmade decor chosen to last."
   passwords:
     flash:
       sent: "If that email address is registered, you will receive a link to reset your password."

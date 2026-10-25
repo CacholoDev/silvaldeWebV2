@@ -11,7 +11,7 @@ RSpec.describe "Catalog demo seeds" do
 
     expect(Catalog::Category.count).to eq(4)
     expect(Catalog::Product.count).to eq(8)
-    expect(Catalog::Variant.count).to eq(12)
+    expect(Catalog::Variant.count).to eq(13)
   end
 
   it "attaches the demo photos without duplicating them" do

@@ -1,12 +1,40 @@
 @import "tailwindcss";
+@import "tailwind-animations";
 
 @theme {
-  --color-paper: #f7f4ee;
-  --color-surface: #ffffff;
+  --color-primary: #067886;
+  --color-secondary: #ffffff;
+  --color-tertiary: #4da08d;
+  --color-gold: #e6b801;
+
+  --color-paper: var(--color-secondary);
+  --color-surface: var(--color-secondary);
   --color-ink: #23201a;
   --color-muted: #6f6759;
-  --color-sage: #3e5c47;
-  --color-sage-dark: #334b3a;
+  --color-sage: var(--color-primary);
+  --color-sage-dark: #055c67;
   --color-line: #e5ded0;
+  /* Stronger border for form controls: keeps a 3:1 contrast ratio against
+     both surfaces (WCAG 1.4.11), unlike the decorative hairline. */
+  --color-line-strong: #948a78;
   --color-error: #b42318;
+}
+
+/* Visible keyboard focus everywhere (WCAG 2.4.7 / 2.4.11). */
+:focus-visible {
+  outline: 2px solid var(--color-sage);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Respect the "reduce motion" preference of the visitor (WCAG 2.3.3). */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

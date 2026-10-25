@@ -14,6 +14,10 @@
 # Local agent skills and editor tooling (not part of the repo).
 /.agents/
 /.ruby-lsp/
+/skills-lock.json
+
+# Node dependencies (Tailwind plugins and other frontend tooling).
+/node_modules/
 
 # Codegraph local index (not part of the repo).
 /.codegraph/

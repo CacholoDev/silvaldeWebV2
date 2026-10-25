@@ -7,7 +7,7 @@ RSpec.describe "Locales", type: :request do
       expect(response).to redirect_to(root_path)
 
       get root_path
-      expect(response.body).to include(I18n.t("home.welcome", locale: :en))
+      expect(response.body).to include(I18n.t("catalog.landing.title", locale: :en))
     end
 
     it "ignores an unsupported locale" do
@@ -15,7 +15,7 @@ RSpec.describe "Locales", type: :request do
       expect(response).to redirect_to(root_path)
 
       get root_path
-      expect(response.body).to include(I18n.t("home.welcome", locale: :es))
+      expect(response.body).to include(I18n.t("catalog.landing.title", locale: :es))
     end
   end
 end

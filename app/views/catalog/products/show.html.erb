@@ -1,0 +1,63 @@
+<% product = decorate(@product) %>
+<% content_for :title, "#{@product.name} — #{t("app.name")}" %>
+<% content_for :meta_description, @product.description %>
+<% content_for :og_type, "product" %>
+<% if @product.images.attached? %>
+  <% content_for :og_image, polymorphic_url(@product.images.first, host: request.host, protocol: request.protocol) %>
+<% end %>
+
+<nav aria-label="<%= t("catalog.show.breadcrumb") %>" class="text-sm text-muted">
+  <%= link_to t("catalog.products.title"), products_path, class: "hover:text-ink" %>
+  <span aria-hidden="true">/</span>
+  <span><%= @product.name %></span>
+</nav>
+
+<div class="mt-6 grid gap-10 lg:grid-cols-2">
+  <div class="space-y-4">
+    <% if @product.images.attached? %>
+      <% @product.images.each do |image| %>
+        <%= image_tag image, alt: @product.name, class: "aspect-square w-full rounded-md object-cover" %>
+      <% end %>
+    <% else %>
+      <div class="flex aspect-square w-full items-center justify-center rounded-md bg-surface text-sm text-muted">
+        <%= t("catalog.products.no_image") %>
+      </div>
+    <% end %>
+  </div>
+
+  <div>
+    <h1 class="font-serif text-3xl font-semibold tracking-tight sm:text-4xl"><%= @product.name %></h1>
+
+    <p class="mt-4 text-lg"><%= product.formatted_price %></p>
+
+    <p class="mt-2 text-sm text-muted"><%= product.availability_label %></p>
+
+    <p class="mt-6 max-w-prose text-muted"><%= @product.description %></p>
+
+    <% if @product.variants.any? %>
+      <h2 class="mt-10 font-serif text-lg font-semibold"><%= t("catalog.show.variants_title") %></h2>
+      <dl class="mt-4 divide-y divide-line border-y border-line">
+        <% product.decorated_variants.each do |variant| %>
+          <div class="flex flex-wrap items-baseline justify-between gap-2 py-3">
+            <dt class="font-medium">
+              <%= variant.name %>
+              <% if variant.on_offer? %>
+                <span class="ml-2 rounded-full bg-gold/25 px-2 py-0.5 text-xs font-medium text-ink">
+                  <%= t("catalog.products.on_offer") %>
+                </span>
+              <% end %>
+            </dt>
+            <dd class="text-muted">
+              <%= variant.formatted_price %>
+              <span class="ml-2 text-sm"><%= variant.availability_label %></span>
+            </dd>
+          </div>
+        <% end %>
+      </dl>
+    <% end %>
+  </div>
+</div>
+
+<script type="application/ld+json">
+  <%= raw json_escape(product_structured_data(@product)) %>
+</script>

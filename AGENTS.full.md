@@ -266,7 +266,7 @@ Una tarea está terminada cuando:
 - los tests y linters relevantes pasan, o se informa claramente de la limitación;
 - el README, `CHANGELOG.md` o la documentación relacionada refleja cualquier
   cambio operativo o visible;
-- una versión o mini versión que se cierra (p. ej. `0.3.0`) ha pasado el code
-  review de superpowers (skill `requesting-code-review`), usando las reglas de
-  este documento y las skills y plugins disponibles como referencia.
+- una versión que se cierra (p. ej. `0.3.0`) ha pasado el code review de
+  superpowers (`requesting-code-review` / `receiving-code-review`) antes de
+  abrir su PR. No se revisa cada slice: solo la versión completa, al final.
 

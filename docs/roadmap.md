@@ -71,7 +71,8 @@ búsqueda para no ensuciar el controlador; vistas públicas con Tailwind;
 landing de la tienda: presentación, productos destacados, ofertas y carrusel
 de fotos, con acceso al catálogo por categorías. Nunca una pantalla de login:
 entrar en la web no exige cuenta. Los modelos del catálogo están terminados
-en la rama `feat/catalog`.
+en la rama `feat/catalog`, junto con las vistas públicas (back y front),
+la base de accesibilidad (WCAG 2.2 AA) y la base de SEO en página.
 
 ### ⬜ v0.4.0 — Carrito
 

@@ -71,13 +71,32 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
   las consultas de lectura del dominio — búsqueda por nombre/descripción
   tolerante a mayúsculas, acentos y caracteres comodín, productos por
   categoría y lookup por slug con las variantes precargadas — con specs.
+- Vistas públicas del catálogo, parte de back (slice 18a de v0.3.0): rutas
+  públicas `/`, `/products`, `/products/:slug` y `/categories/:slug` (la
+  búsqueda usa `/products?q=`), controllers del dominio `Catalog::` que
+  delegan en `Catalog::Search`, decorators de presentación en
+  `app/decorators` (formato de precio y disponibilidad) y vistas
+  funcionales con i18n + request specs. La home provisional se sustituye
+  por la landing.
+- Vistas públicas del catálogo, parte de front (slice 18b de v0.3.0):
+  diseño de la landing (hero, rail de categorías, destacados, ofertas y
+  carrusel de fotos), tarjetas de producto, detalle a dos columnas,
+  pie de página con enlaces internos y el enlace al catálogo en la
+  navegación. Accesibilidad (WCAG 2.2 AA): enlace de salto al contenido,
+  landmarks, un único `h1` por página, jerarquía de encabezados, textos
+  alternativos en las fotos, etiquetas de formulario, foco visible,
+  objetivos táctiles de 44 px y respeto de `prefers-reduced-motion`; los
+  bordes de los controles de formulario usan un tono con contraste 3:1.
+  SEO en página: título y meta descripción únicos por página, URL
+  canónica, etiquetas Open Graph, datos estructurados `Product` (JSON-LD),
+  `sitemap.xml` y `robots.txt` con la referencia al sitemap.
 
 ### Cambiado
 
 - Nueva regla de proceso (`AGENTS.md`, `AGENTS.full.md`, `docs/versioning.md`):
-  al cerrar cada versión o mini versión se pasa obligatoriamente el code
-  review de superpowers (`requesting-code-review`), apoyado en las reglas del
-  proyecto y en las skills y plugins disponibles, antes de publicar.
+  el code review de superpowers (`requesting-code-review` /
+  `receiving-code-review`) se pasa **al final de cada versión y antes de su
+  PR**, nunca por slice (porque ralentiza el flujo).
 - Documentación actualizada al estado real del proyecto (pendiente desde
   v0.2.0): `AGENTS.md` (estado del proyecto), `README.md` (estado y landing
   como portada), `AGENTS.full.md` (landing con productos, ofertas y carrusel

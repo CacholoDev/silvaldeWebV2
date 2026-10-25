@@ -1,0 +1,21 @@
+<article class="group">
+  <%= link_to product_path(product.slug), class: "block" do %>
+    <% if product.images.attached? %>
+      <%= image_tag product.images.first, alt: product.name,
+            class: "aspect-square w-full rounded-md object-cover" %>
+    <% else %>
+      <span class="flex aspect-square w-full items-center justify-center rounded-md bg-surface text-sm text-muted">
+        <%= t("catalog.products.no_image") %>
+      </span>
+    <% end %>
+  <% end %>
+
+  <h3 class="mt-3 font-serif text-lg font-semibold">
+    <%= link_to product.name, product_path(product.slug), class: "hover:text-sage" %>
+  </h3>
+
+  <p class="mt-1 text-ink"><%= product.formatted_price %></p>
+  <p class="mt-1 text-sm text-muted">
+    <%= product.availability_label %>
+  </p>
+</article>

@@ -1,6 +1,14 @@
 es:
   errors:
     format: "%{message}"
+  number:
+    currency:
+      format:
+        format: "%n %u"
+        separator: ","
+        delimiter: "."
+        precision: 2
+        unit: "€"
   authentication:
     flash:
       sign_in_required: "Inicia sesión para continuar."
@@ -26,13 +34,62 @@ es:
       have_account: "¿Ya tienes cuenta?"
   navigation:
     main: "Navegación"
+    catalog: "Catálogo"
+    skip_to_content: "Saltar al contenido"
     sign_in: "Iniciar sesión"
     sign_up: "Crear cuenta"
     sign_out: "Cerrar sesión"
     language: "Idioma"
     profile: "Perfil"
-  home:
-    welcome: "Bienvenida a Silvalde Web."
+  catalog:
+    landing:
+      title: "Bienvenida a Silvalde Hogar"
+      meta_description: "Decoración artesanal para el hogar: jarrones, velas, espejos y textil hecho a mano."
+      eyebrow: "Decoración artesanal"
+      headline: "Piezas hechas a mano para tu casa"
+      intro: "Elegimos objetos que duran: cerámica hecha a mano, velas de cera de soja, espejos con marco de latón y textiles de lino lavado."
+      cta_catalog: "Ver el catálogo"
+      cta_categories: "Explorar categorías"
+      categories_title: "Categorías"
+      featured_title: "Destacados"
+      all_products: "Ver todos los productos"
+      offers_title: "Ofertas"
+      offers_intro: "Algunas piezas tienen precio reducido en una de sus variantes."
+      gallery_title: "Del taller a tu casa"
+      gallery_previous: "Foto anterior"
+      gallery_next: "Foto siguiente"
+      shop_title: "Por qué comprar en Silvalde"
+      shop_handmade_title: "Hecho a mano"
+      shop_handmade_body: "Cada pieza la trabaja una persona, con materiales nobles y acabados a mano."
+      shop_shipping_title: "Envíos a toda España"
+      shop_shipping_body: "Preparamos tu pedido en 24-48 horas y te lo enviamos con seguimiento."
+      shop_advice_title: "Advice personalizado"
+      shop_advice_body: "Escríbenos y te ayudamos a elegir la pieza y el acabado que mejor encajan."
+    products:
+      title: "Productos"
+      meta_description: "Todos los productos de decoración de Silvalde Hogar: jarrones, velas, espejos y textil."
+      results: "Resultados para «%{query}»"
+      search_label: "Buscar productos"
+      search_submit: "Buscar"
+      available: "Disponible"
+      sold_out: "Agotado"
+      on_offer: "Oferta"
+      empty: "No hemos encontrado productos con ese criterio."
+      no_image: "Sin foto"
+    show:
+      variants_title: "Variantes"
+      breadcrumb: "Ruta de navegación"
+    categories:
+      meta_description: "Todos los productos de %{name} en Silvalde Hogar."
+    footer:
+      categories: "Categorías"
+      shop: "Tienda"
+      contact: "Contacto"
+      contact_body: "Escríbenos y te ayudamos con tu pedido."
+  app:
+    name: "Silvalde Hogar"
+    default_description: "Tienda online de decoración artesanal: jarrones, velas, espejos y textiles hechos a mano."
+    footer_tagline: "Decoración artesanal elegida para durar."
   passwords:
     flash:
       sent: "Si esa dirección de email está registrada, recibirás un enlace para restablecer tu contraseña."

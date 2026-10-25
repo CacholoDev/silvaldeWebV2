@@ -1,0 +1,30 @@
+<footer class="mt-20 border-t border-line bg-surface">
+  <div class="container mx-auto grid gap-8 px-5 py-12 sm:grid-cols-2 lg:grid-cols-4">
+    <div>
+      <p class="font-serif text-lg font-semibold"><%= t("app.name") %></p>
+      <p class="mt-2 text-sm text-muted"><%= t("app.footer_tagline") %></p>
+    </div>
+
+    <nav aria-label="<%= t("catalog.footer.categories") %>">
+      <h2 class="font-serif text-sm font-semibold"><%= t("catalog.footer.categories") %></h2>
+      <ul class="mt-3 space-y-2 text-sm">
+        <% @categories.each do |category| %>
+          <li><%= link_to category.name, category_path(category.slug), class: "text-muted hover:text-ink" %></li>
+        <% end %>
+      </ul>
+    </nav>
+
+    <nav aria-label="<%= t("catalog.footer.shop") %>">
+      <h2 class="font-serif text-sm font-semibold"><%= t("catalog.footer.shop") %></h2>
+      <ul class="mt-3 space-y-2 text-sm">
+        <li><%= link_to t("catalog.products.title"), products_path, class: "text-muted hover:text-ink" %></li>
+        <li><%= link_to t("catalog.landing.all_products"), products_path, class: "text-muted hover:text-ink" %></li>
+      </ul>
+    </nav>
+
+    <div>
+      <h2 class="font-serif text-sm font-semibold"><%= t("catalog.footer.contact") %></h2>
+      <p class="mt-3 text-sm text-muted"><%= t("catalog.footer.contact_body") %></p>
+    </div>
+  </div>
+</footer>

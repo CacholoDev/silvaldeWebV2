@@ -6,12 +6,16 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   # Render dynamic PWA files from app/views/pwa/* (remember to link manifest in application.html.erb)
-  # get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
-  # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
+  get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
+  get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
-  # Defines the root path route ("/")
-  # Temporary home until the public catalog/landing exists (see AGENTS.full.md).
-  root "home#index"
+  # Public catalog. The landing replaces the provisional home page.
+  root "catalog/landing#index"
+  get "products", to: "catalog/products#index", as: :products
+  get "products/:slug", to: "catalog/products#show", as: :product
+  get "categories/:slug", to: "catalog/categories#show", as: :category
+  get "sitemap", to: "catalog/sitemap#show", as: :sitemap, defaults: { format: :xml }
+  get "robots", to: "catalog/robots#show", as: :robots, defaults: { format: :text }
 
   # Authentication (login/logout)
   get "login", to: "auth/sessions#new", as: :login
