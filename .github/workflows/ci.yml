@@ -172,7 +172,9 @@ jobs:
           DATABASE_URL: mysql2://root@127.0.0.1:3306
           # RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
           # REDIS_URL: redis://localhost:6379/0
-        run: bin/rails db:test:prepare test:system
+        # The project uses RSpec (see AGENTS.md), so the system specs live in
+        # spec/system, not in the Rails default test/ directory.
+        run: bin/rails db:test:prepare && bundle exec rspec spec/system
 
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v4
