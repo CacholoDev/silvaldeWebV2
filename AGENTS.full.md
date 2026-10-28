@@ -27,7 +27,7 @@ La web es pública y el registro es opcional: la visitante ve primero el
 catálogo/landing, no una pantalla de login. El login aparece solo cuando una
 acción protegida lo requiere. Por tanto, la ruta raíz (`/`) apunta a la
 landing (catálogo), nunca a `sessions#new`. La landing es la presentación
-completa de la tienda: productos destacados, ofertas y rebajas, carrusel de
+completa de la tienda: productos destacados, ofertas y rebajas, galería de
 fotos y acceso al catálogo por categorías; el login es siempre opcional y
 nunca es la portada.
 

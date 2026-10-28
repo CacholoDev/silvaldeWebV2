@@ -1,12 +1,13 @@
 module ApplicationHelper
-  # Path of a brand icon living in public/ (not in the asset pipeline), with a
+  # Path of a brand icon living in public/icons or public/svg, with a
   # cache-busting token so browsers pick up a new logo instead of keeping the
   # previously cached one.
   def brand_icon_path(name)
-    file = Rails.root.join("public", name)
+    folder = File.extname(name) == ".svg" ? "svg" : "icons"
+    file = Rails.root.join("public", folder, name)
     token = File.exist?(file) ? File.mtime(file).to_i : 0
 
-    "/#{name}?v=#{token}"
+    "/#{folder}/#{name}?v=#{token}"
   end
 
   # Wraps a record in its presentation decorator (app/decorators).
@@ -16,10 +17,6 @@ module ApplicationHelper
     when Catalog::Variant then Catalog::VariantDecorator.new(record)
     else record
     end
-  end
-
-  def decorate_collection(records)
-    records.map { |record| decorate(record) }
   end
 
   # Absolute URL of the current page without query string, so search

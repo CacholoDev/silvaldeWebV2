@@ -15,8 +15,11 @@
 <div class="mt-6 grid gap-10 lg:grid-cols-2">
   <div class="space-y-4">
     <% if @product.images.attached? %>
-      <% @product.images.each do |image| %>
-        <%= image_tag image, alt: @product.name, class: "aspect-square w-full rounded-md object-cover" %>
+      <% @product.images.each_with_index do |image, index| %>
+        <%= image_tag image, alt: @product.name,
+              loading: index.zero? ? "eager" : "lazy",
+              fetchpriority: index.zero? ? "high" : "auto",
+              class: "aspect-square w-full rounded-md object-cover" %>
       <% end %>
     <% else %>
       <div class="flex aspect-square w-full items-center justify-center rounded-md bg-surface text-sm text-muted">

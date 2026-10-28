@@ -68,7 +68,7 @@ disponibilidad; navegación pública por categorías y búsqueda.
 validaciones; imágenes con Active Storage (ya incluido en Rails); servicio de
 búsqueda para no ensuciar el controlador; vistas públicas con Tailwind;
 `db/seeds.rb` con productos de ejemplo para trabajar. La raíz `/` será la
-landing de la tienda: presentación, productos destacados, ofertas y carrusel
+landing de la tienda: presentación, productos destacados, ofertas y galería
 de fotos, con acceso al catálogo por categorías. Nunca una pantalla de login:
 entrar en la web no exige cuenta. Los modelos del catálogo están terminados
 en la rama `feat/catalog`, junto con las vistas públicas (back y front),

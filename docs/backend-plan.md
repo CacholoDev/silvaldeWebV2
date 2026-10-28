@@ -40,7 +40,7 @@ versión la define el roadmap.
 - **En curso** (v0.3.0, rama `feat/catalog`): modelos del catálogo (slices
   12-14), imágenes (15), seed (16), búsqueda `Catalog::Search` (17) y las
   vistas públicas (18a back + 18b front) — landing, listado, detalle,
-  categoría, ofertas, carrusel, SEO y accesibilidad. **199 specs en verde**.
+  categoría, ofertas, galería, SEO y accesibilidad. **219 specs en verde**.
   Además, endurecimiento de auth (traducciones, revocación de sesiones en el
   reset, tokens, CI) aplicado sobre esta misma rama a raíz del code review
   del proyecto.
@@ -99,7 +99,7 @@ versión la define el roadmap.
     funcionales con i18n y request specs. URLs: `/` (landing), `/products`,
     `/products/:slug`, `/categories/:slug`; la búsqueda usa `/products?q=`.
 18b. ✅ **Vistas públicas — parte de front**: diseño con Tailwind — landing
-    con productos destacados, ofertas y carrusel de fotos, tarjetas de
+    con productos destacados, ofertas y galería de fotos, tarjetas de
     producto con imágenes, precios y disponibilidad, diseño responsive y
     accesibilidad visual (WCAG 2.2 AA) más la base de SEO en página
     (títulos, descripciones, canónicas, Open Graph, JSON-LD, sitemap).

@@ -40,6 +40,9 @@ es:
     sign_up: "Crear cuenta"
     sign_out: "Cerrar sesión"
     language: "Idioma"
+    toggle_theme: "Cambiar entre modo claro y oscuro"
+    toggle_theme_dark: "Cambiar a modo oscuro"
+    toggle_theme_light: "Cambiar a modo claro"
     profile: "Perfil"
   catalog:
     landing:
@@ -56,14 +59,18 @@ es:
       offers_title: "Ofertas"
       offers_intro: "Algunas piezas tienen precio reducido en una de sus variantes."
       gallery_title: "Del taller a tu casa"
-      gallery_previous: "Foto anterior"
-      gallery_next: "Foto siguiente"
+      gallery_edredon: "Edredón blanco"
+      gallery_habita: "Dormitorio acogedor"
+      gallery_center: "Textil para tu hogar"
+      gallery_habita_alt: "Rincón de descanso"
+      gallery_blanket: "Mantita suave"
+      gallery_cushions: "Cojines decorativos"
       shop_title: "Por qué comprar en Silvalde"
       shop_handmade_title: "Hecho a mano"
       shop_handmade_body: "Cada pieza la trabaja una persona, con materiales nobles y acabados a mano."
       shop_shipping_title: "Envíos a toda España"
-      shop_shipping_body: "Preparamos tu pedido en 24-48 horas y te lo enviamos con seguimiento."
-      shop_advice_title: "Advice personalizado"
+      shop_shipping_body: "Preparamos tu pedido en 24-72 horas y te lo enviamos con seguimiento."
+      shop_advice_title: "Asesoramiento personalizado"
       shop_advice_body: "Escríbenos y te ayudamos a elegir la pieza y el acabado que mejor encajan."
     products:
       title: "Productos"
@@ -85,11 +92,17 @@ es:
       categories: "Categorías"
       shop: "Tienda"
       contact: "Contacto"
-      contact_body: "Escríbenos y te ayudamos con tu pedido."
+      phone: "Teléfono"
+      email: "Correo electrónico"
+      instagram: "Instagram"
+      facebook: "Facebook"
   app:
     name: "Silvalde Hogar"
     default_description: "Tienda online de decoración artesanal: jarrones, velas, espejos y textiles hechos a mano."
     footer_tagline: "Decoración artesanal elegida para durar."
+  locales:
+    es: "Español"
+    en: "English"
   passwords:
     flash:
       sent: "Si esa dirección de email está registrada, recibirás un enlace para restablecer tu contraseña."

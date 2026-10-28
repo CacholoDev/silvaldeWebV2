@@ -1,23 +1,100 @@
 @import "tailwindcss";
 @import "tailwind-animations";
 
+/* Dark mode is toggled manually with the `.dark` class on <html>, not by the
+   operating system preference, so the visitor can choose. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Semantic palette. The values live in plain CSS variables so a single
+   `.dark` class on <html> flips the whole site; the @theme block below only
+   wires them to Tailwind utilities. */
+:root {
+  --paper: #ffffff;
+  --surface: #ffffff;
+  --ink: #23201a;
+  --muted: #6f6759;
+  --line: #e5ded0;
+  /* Stronger border for form controls: keeps a 3:1 contrast ratio against
+     both surfaces (WCAG 1.4.11), unlike the decorative hairline. */
+  --line-strong: #948a78;
+}
+
+.dark {
+  --paper: #14181a;
+  --surface: #1c2225;
+  --ink: #f2efe8;
+  --muted: #b3ada1;
+  --line: #333b3f;
+  --line-strong: #7d7568;
+}
+
 @theme {
+  /* Brand colors: identical in both modes. */
   --color-primary: #067886;
   --color-secondary: #ffffff;
   --color-tertiary: #4da08d;
   --color-gold: #e6b801;
 
-  --color-paper: var(--color-secondary);
-  --color-surface: var(--color-secondary);
-  --color-ink: #23201a;
-  --color-muted: #6f6759;
+  /* Semantic colors: resolved from the variables above, so they follow the
+     active theme (light or dark). */
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
   --color-sage: var(--color-primary);
   --color-sage-dark: #055c67;
-  --color-line: #e5ded0;
-  /* Stronger border for form controls: keeps a 3:1 contrast ratio against
-     both surfaces (WCAG 1.4.11), unlike the decorative hairline. */
-  --color-line-strong: #948a78;
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
   --color-error: #b42318;
+  --color-error-dark: #ff8a80;
+}
+
+.catalog-gallery {
+  display: flex;
+  width: min(100%, 600px);
+  height: 430px;
+  margin-inline: auto;
+  overflow: hidden;
+  list-style: none;
+  padding: 0;
+}
+
+.catalog-gallery__item {
+  display: flex;
+  min-width: 0;
+  flex-grow: 1;
+}
+
+.catalog-gallery__item > a {
+  display: flex;
+  min-width: 0;
+  flex-grow: 1;
+}
+
+.catalog-gallery__image {
+  display: block;
+  width: 0;
+  height: 100%;
+  flex-grow: 1;
+  object-fit: cover;
+  transition: 0.5s ease;
+}
+
+.catalog-gallery__item:hover .catalog-gallery__image,
+.catalog-gallery__item:focus-within .catalog-gallery__image {
+  width: 300px;
+  opacity: 1;
+  filter: contrast(120%);
+  border-radius: 4px;
+}
+
+/* Without hover (phones, tablets) the photos would stay as thin slivers,
+   so the first one is expanded and the rest remain tappable. */
+@media (hover: none) {
+  .catalog-gallery__item:first-child .catalog-gallery__image {
+    width: 300px;
+    opacity: 1;
+  }
 }
 
 /* Visible keyboard focus everywhere (WCAG 2.4.7 / 2.4.11). */

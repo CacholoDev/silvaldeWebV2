@@ -64,7 +64,7 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
   specs con fixtures reales en `spec/fixtures/files/images/` y fotos demo de
   ejemplo en `db/seeds/images/`.
 - Seed de demostración (slice 5 de v0.3.0): `db/seeds.rb` con 4 categorías,
-  8 productos y 12 variantes de ejemplo (incluye variantes sin stock y con
+  8 productos y 13 variantes de ejemplo (incluye variantes sin stock y con
   precio que sobrescribe al del producto), fotos demo adjuntas y specs que
   verifican que el seed es idempotente.
 - Búsqueda del catálogo (slice 6 de v0.3.0): service `Catalog::Search` con
@@ -80,8 +80,8 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
   por la landing.
 - Vistas públicas del catálogo, parte de front (slice 18b de v0.3.0):
   diseño de la landing (hero, rail de categorías, destacados, ofertas y
-  carrusel de fotos), tarjetas de producto, detalle a dos columnas,
-  pie de página con enlaces internos y el enlace al catálogo en la
+  galería de fotos en acordeón), tarjetas de producto, detalle a dos
+  columnas, pie de página con enlaces internos y el enlace al catálogo en la
   navegación. Accesibilidad (WCAG 2.2 AA): enlace de salto al contenido,
   landmarks, un único `h1` por página, jerarquía de encabezados, textos
   alternativos en las fotos, etiquetas de formulario, foco visible,
@@ -90,6 +90,22 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
   SEO en página: título y meta descripción únicos por página, URL
   canónica, etiquetas Open Graph, datos estructurados `Product` (JSON-LD),
   `sitemap.xml` y `robots.txt` con la referencia al sitemap.
+- Modo claro/oscuro con botón sol/luna: el tema se aplica con una clase
+  `dark` en `<html>` y las variables CSS semánticas (`--paper`, `--ink`,
+  `--muted`, `--line`…) cambian de valor, así que un solo botón oscurece
+  toda la web. La preferencia se guarda en `localStorage` y se aplica antes
+  de pintar la página (`app/javascript/theme.js`, cargado en el `<head>`)
+  para evitar el parpadeo del tema. **Modo claro por defecto.**
+- Selector de idioma desplegable con icono de globo: se abre al pasar el
+  ratón o con el teclado, se cierra con Escape, click fuera o al salir.
+- Pie de página compacto con los datos de contacto de la tienda (correo,
+  dos teléfonos y redes sociales) tomados de `app/lib/shop.rb`, en lugar de
+  cadenas fijas en la vista.
+- PWA activada: rutas de `manifest.json` y `service-worker.js`, enlace al
+  manifest en el layout y `short_name` en el manifest.
+- Iconos de marca reorganizados en `public/icons/` y `public/svg/`, con
+  versión en la URL (`?v=`) para que el navegador no sirva un logo
+  antiguo cacheado.
 
 ### Cambiado
 
@@ -99,7 +115,7 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
   PR**, nunca por slice (porque ralentiza el flujo).
 - Documentación actualizada al estado real del proyecto (pendiente desde
   v0.2.0): `AGENTS.md` (estado del proyecto), `README.md` (estado y landing
-  como portada), `AGENTS.full.md` (landing con productos, ofertas y carrusel
+  como portada), `AGENTS.full.md` (landing con productos, ofertas y galería
   de fotos; login opcional; decisiones de datos del catálogo; el stock solo se
   modifica en transacciones con bloqueo de fila), `docs/backend-plan.md`
   (slices del catálogo reordenados: modelos → imágenes → seed → búsqueda →

@@ -18,7 +18,27 @@
               class: "rounded-md bg-sage px-3 py-1.5 text-sm font-medium text-white hover:bg-sage-dark" %>
       <% end %>
 
-      <%= render "shared/locale_switcher" %>
+      <%# Icon buttons keep the same optical size as the text links; the
+          44px touch target comes from the padding, not from the box. %>
+      <div class="flex items-center gap-1">
+        <button type="button"
+                data-controller="theme"
+                data-theme-target="toggle"
+                data-action="theme#toggle"
+                data-label-dark="<%= t("navigation.toggle_theme_dark") %>"
+                data-label-light="<%= t("navigation.toggle_theme_light") %>"
+                aria-label="<%= t("navigation.toggle_theme") %>"
+                class="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-md text-muted hover:bg-surface hover:text-ink">
+          <%= image_tag brand_icon_path("moon.svg"), alt: "", aria: { hidden: true },
+                class: "h-5 w-5 fill-current", data: { theme_target: "iconDark" } %>
+          <%# The sun is the icon for the dark theme, so it starts hidden:
+              the default theme is light and the controller swaps them. %>
+          <%= image_tag brand_icon_path("sun.svg"), alt: "", aria: { hidden: true }, hidden: true,
+                class: "h-5 w-5 fill-current", data: { theme_target: "iconLight" } %>
+        </button>
+
+        <%= render "shared/locale_switcher" %>
+      </div>
     </div>
   </nav>
 </header>

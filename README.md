@@ -9,7 +9,7 @@ perder control sobre la experiencia de compra ni sobre la operación interna.
 - Catálogo de productos de decoración con imágenes, variantes y disponibilidad.
 - Navegación por categorías y búsqueda.
 - Landing pública como portada (`/`): presentación de la tienda, productos
-  destacados, ofertas y carrusel de fotos. El login es opcional y nunca es la
+  destacados, ofertas y galería de fotos. El login es opcional y nunca es la
   portada.
 - Carrito y proceso de compra.
 - Registro, inicio de sesión y gestión del perfil del cliente.

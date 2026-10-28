@@ -40,6 +40,9 @@ en:
     sign_up: "Sign up"
     sign_out: "Sign out"
     language: "Language"
+    toggle_theme: "Switch between light and dark mode"
+    toggle_theme_dark: "Switch to dark mode"
+    toggle_theme_light: "Switch to light mode"
     profile: "Profile"
   catalog:
     landing:
@@ -56,13 +59,17 @@ en:
       offers_title: "Offers"
       offers_intro: "Some pieces are priced lower in one of their variants."
       gallery_title: "From the workshop to your home"
-      gallery_previous: "Previous photo"
-      gallery_next: "Next photo"
+      gallery_edredon: "White duvet"
+      gallery_habita: "Cosy bedroom"
+      gallery_center: "Textiles for your home"
+      gallery_habita_alt: "Restful corner"
+      gallery_blanket: "Soft blanket"
+      gallery_cushions: "Decorative cushions"
       shop_title: "Why shop at Silvalde"
       shop_handmade_title: "Made by hand"
       shop_handmade_body: "Every piece is made by a person, with fine materials and hand-finished details."
       shop_shipping_title: "Shipping across Spain"
-      shop_shipping_body: "We prepare your order in 24-48 hours and ship it with tracking."
+      shop_shipping_body: "We prepare your order in 24-72 hours and ship it with tracking."
       shop_advice_title: "Personal advice"
       shop_advice_body: "Write to us and we will help you choose the piece and finish that fit best."
     products:
@@ -85,11 +92,17 @@ en:
       categories: "Categories"
       shop: "Shop"
       contact: "Contact"
-      contact_body: "Write to us and we will help with your order."
+      phone: "Phone"
+      email: "Email address"
+      instagram: "Instagram"
+      facebook: "Facebook"
   app:
     name: "Silvalde Hogar"
     default_description: "Online shop of handmade decor: vases, candles, mirrors and textiles made by hand."
     footer_tagline: "Handmade decor chosen to last."
+  locales:
+    es: "Español"
+    en: "English"
   passwords:
     flash:
       sent: "If that email address is registered, you will receive a link to reset your password."
