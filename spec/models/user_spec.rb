@@ -49,6 +49,26 @@ RSpec.describe Users::User, type: :model do
       user = create(:user, email: "MixedCase@Example.com")
       expect(user.email).to eq("mixedcase@example.com")
     end
+
+    it "requires a password of at least 8 characters" do
+      user = build(:user, password: "short1", password_confirmation: "short1")
+      expect(user).not_to be_valid
+      expect(user.errors[:password]).to include("La contraseña es demasiado corta (mínimo 8 caracteres).")
+    end
+
+    it "rejects passwords longer than 72 characters with a translated message" do
+      user = build(:user, password: "a" * 100, password_confirmation: "a" * 100)
+      expect(user).not_to be_valid
+      expect(user.errors[:password].join).not_to include("Translation missing")
+      expect(user.errors[:password]).to include("La contraseña es demasiado larga (máximo 72 caracteres).")
+    end
+
+    it "reports a translated message when the confirmation does not match" do
+      user = build(:user, password: "secret123", password_confirmation: "different")
+      expect(user).not_to be_valid
+      expect(user.errors[:password_confirmation].join).not_to include("Translation missing")
+      expect(user.errors[:password_confirmation]).to include("La confirmación de contraseña no coincide.")
+    end
   end
 
   describe "authentication (has_secure_password)" do

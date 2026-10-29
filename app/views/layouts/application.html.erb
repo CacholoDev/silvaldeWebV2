@@ -1,31 +1,57 @@
 <!DOCTYPE html>
 <html lang="<%= I18n.locale %>">
   <head>
-    <title><%= content_for(:title) || "Silvalde Web" %></title>
+    <title><%= content_for(:title) || t("app.name") %></title>
+    <meta name="description" content="<%= content_for(:meta_description) || t("app.default_description") %>">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="Silvalde Web">
+    <meta name="application-name" content="<%= t("app.name") %>">
+    <%= tag.link rel: "manifest", href: pwa_manifest_path %>
     <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
+    <%# Applies the stored colour theme before the page paints, so the
+        visitor never sees a flash of the wrong theme. Loaded as a classic
+        script (not a module) because modules are deferred and would run
+        after the body has already rendered. %>
+    <%= javascript_include_tag "theme", defer: false %>
+
+    <%= tag.link rel: "canonical", href: canonical_page_url %>
+    <meta property="og:site_name" content="<%= t("app.name") %>">
+    <meta property="og:title" content="<%= content_for(:title) || t("app.name") %>">
+    <meta property="og:description" content="<%= content_for(:meta_description) || t("app.default_description") %>">
+    <meta property="og:type" content="<%= content_for(:og_type) || "website" %>">
+    <meta property="og:url" content="<%= canonical_page_url %>">
+    <meta property="og:locale" content="<%= I18n.locale %>">
+    <% if content_for?(:og_image) %>
+      <meta property="og:image" content="<%= content_for(:og_image) %>">
+    <% end %>
+
     <%= yield :head %>
 
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
+    <link rel="icon" href="<%= brand_icon_path("logo.ico") %>" type="image/x-icon">
+    <link rel="icon" href="<%= brand_icon_path("logo.png") %>" type="image/png">
+    <link rel="icon" href="<%= brand_icon_path("logo.svg") %>" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="<%= brand_icon_path("logo.png") %>">
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="bg-paper text-ink antialiased">
+  <body class="bg-linear-to-br from-gold/80 via-paper to-tertiary/70 bg-fixed text-ink antialiased">
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-sage focus:px-4 focus:py-2 focus:text-sm focus:text-white">
+      <%= t("navigation.skip_to_content") %>
+    </a>
+
     <%= render "shared/navbar" %>
 
-    <main class="container mx-auto px-5 py-10">
+    <main id="main-content" class="container mx-auto animate-fade-in-up px-5 py-10 animate-duration-500">
       <%= render "shared/flash" %>
       <%= yield %>
     </main>
+
+    <%= render "shared/footer" %>
   </body>
 </html>

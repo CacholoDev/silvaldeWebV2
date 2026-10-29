@@ -15,6 +15,13 @@ FileUtils.chdir APP_ROOT do
   puts "== Installing dependencies =="
   system("bundle check") || system!("bundle install")
 
+  # The Tailwind build imports npm packages (tailwind-animations), so the
+  # JavaScript dependencies are needed before compiling the stylesheet.
+  if File.exist?("package.json")
+    puts "\n== Installing JavaScript dependencies =="
+    system("npm ci") || system!("npm install")
+  end
+
   # puts "\n== Copying sample files =="
   # unless File.exist?("config/database.yml")
   #   FileUtils.cp "config/database.yml.sample", "config/database.yml"

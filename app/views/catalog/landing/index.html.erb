@@ -1,0 +1,107 @@
+<% content_for :title, t("catalog.landing.title") %>
+<% content_for :meta_description, t("catalog.landing.meta_description") %>
+
+<section class="border-b border-line">
+  <div class="grid gap-10 py-12 lg:grid-cols-[1.2fr_1fr] lg:items-center lg:py-20">
+    <div>
+      <p class="text-sm text-muted"><%= t("catalog.landing.eyebrow") %></p>
+      <h1 class="mt-3 font-serif text-4xl leading-tight font-semibold tracking-tight sm:text-5xl"><%= t("catalog.landing.headline") %></h1>
+      <p class="mt-5 max-w-prose text-lg text-muted"><%= t("catalog.landing.intro") %></p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <%= link_to t("catalog.landing.cta_catalog"), products_path,
+              class: "inline-flex min-h-11 items-center rounded-md bg-sage px-5 py-2.5 text-sm font-medium text-white hover:bg-sage-dark" %>
+        <%= link_to t("catalog.landing.cta_categories"), "#categorias",
+              class: "inline-flex min-h-11 items-center rounded-md border border-line-strong bg-surface px-5 py-2.5 text-sm font-medium text-ink hover:border-sage" %>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4">
+      <% @featured_photos.each_with_index do |product, index| %>
+        <%= link_to product_path(product.slug), class: "group block" do %>
+          <%= image_tag product.images.first, alt: product.name,
+                loading: index.zero? ? "eager" : "lazy",
+                fetchpriority: index.zero? ? "high" : "auto",
+                class: "aspect-square w-full rounded-md object-cover #{index.odd? ? 'mt-8' : ''}" %>
+          <span class="mt-2 block font-serif text-sm font-medium"><%= product.name %></span>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<section id="categorias" class="py-12">
+  <h2 class="font-serif text-2xl font-semibold tracking-tight"><%= t("catalog.landing.categories_title") %></h2>
+  <ul class="mt-6 grid gap-x-8 gap-y-3 border-t border-line pt-6 sm:grid-cols-2 lg:grid-cols-4">
+    <% @categories.each do |category| %>
+      <li>
+        <%= link_to category.name, category_path(category.slug),
+              class: "flex min-h-11 items-center text-base text-ink hover:text-sage" %>
+      </li>
+    <% end %>
+  </ul>
+</section>
+
+<section class="py-12">
+  <div class="flex flex-wrap items-baseline justify-between gap-4">
+    <h2 class="font-serif text-2xl font-semibold tracking-tight"><%= t("catalog.landing.featured_title") %></h2>
+    <%= link_to t("catalog.landing.all_products"), products_path, class: "text-sm text-sage hover:text-sage-dark" %>
+  </div>
+
+  <ul class="mt-6 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+    <% @products.each do |product| %>
+      <li><%= render "catalog/products/card", product: decorate(product) %></li>
+    <% end %>
+  </ul>
+</section>
+
+<% if @offers.any? %>
+  <section class="border-y border-line bg-surface py-12">
+    <h2 class="font-serif text-2xl font-semibold tracking-tight"><%= t("catalog.landing.offers_title") %></h2>
+    <p class="mt-2 max-w-prose text-muted"><%= t("catalog.landing.offers_intro") %></p>
+    <ul class="mt-6 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+      <% @offers.each do |product| %>
+        <li><%= render "catalog/products/card", product: decorate(product) %></li>
+      <% end %>
+    </ul>
+  </section>
+<% end %>
+
+<% gallery_photos = [
+     ["edredonBlanco.webp", "gallery_edredon"],
+     ["habita.webp", "gallery_habita"],
+     ["centroCarousel.webp", "gallery_center"],
+     ["habita2.webp", "gallery_habita_alt"],
+     ["mantita.webp", "gallery_blanket"],
+     ["cojines.webp", "gallery_cushions"]
+   ] %>
+<section class="py-12" aria-labelledby="gallery-title">
+  <h2 id="gallery-title" class="font-serif text-2xl font-semibold tracking-tight">
+    <%= t("catalog.landing.gallery_title") %>
+  </h2>
+
+  <ul class="catalog-gallery mt-6">
+    <% gallery_photos.each_with_index do |(filename, alt_key), index| %>
+      <li class="catalog-gallery__item">
+        <%# The gallery shows the shop's atmosphere, not a product, so it
+            leads to the catalog instead of to the raw image file. %>
+        <%= link_to products_path, class: "block h-full w-full" do %>
+          <%= image_tag "/photos/#{filename}", alt: t("catalog.landing.#{alt_key}"),
+                loading: index.zero? ? "eager" : "lazy",
+                class: "catalog-gallery__image" %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</section>
+
+<section class="border-t border-line py-12">
+  <h2 class="font-serif text-2xl font-semibold tracking-tight"><%= t("catalog.landing.shop_title") %></h2>
+  <dl class="mt-6 grid gap-8 sm:grid-cols-3">
+    <% %w[shop_handmade shop_shipping shop_advice].each do |key| %>
+      <div>
+        <dt class="font-serif text-base font-semibold"><%= t("catalog.landing.#{key}_title") %></dt>
+        <dd class="mt-2 text-sm text-muted"><%= t("catalog.landing.#{key}_body") %></dd>
+      </div>
+    <% end %>
+  </dl>
+</section>

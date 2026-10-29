@@ -1,22 +1,23 @@
 {
-  "name": "SilvaldeWebV2",
+  "name": "<%= t("app.name") %>",
+  "short_name": "<%= t("app.name") %>",
   "icons": [
     {
-      "src": "/icon.png",
+      "src": "<%= brand_icon_path("logo.png") %>",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "256x256"
     },
     {
-      "src": "/icon.png",
+      "src": "<%= brand_icon_path("logo.png") %>",
       "type": "image/png",
-      "sizes": "512x512",
+      "sizes": "256x256",
       "purpose": "maskable"
     }
   ],
   "start_url": "/",
   "display": "standalone",
   "scope": "/",
-  "description": "SilvaldeWebV2.",
-  "theme_color": "red",
-  "background_color": "red"
+  "description": "<%= t("app.default_description") %>",
+  "theme_color": "#067886",
+  "background_color": "#ffffff"
 }

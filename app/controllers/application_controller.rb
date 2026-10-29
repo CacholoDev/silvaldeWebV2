@@ -8,6 +8,7 @@ class ApplicationController < ActionController::Base
   stale_when_importmap_changes
 
   before_action :set_locale
+  before_action :load_categories
 
   private
 
@@ -17,5 +18,12 @@ class ApplicationController < ActionController::Base
   def set_locale
     requested = cookies[:locale].presence_in(I18n.available_locales.map(&:to_s))
     I18n.locale = requested ? requested.to_sym : I18n.default_locale
+  end
+
+  # Load the catalog categories for the footer, which is rendered on every
+  # page. Views never query the database: the lookup is delegated to
+  # Catalog::Search here, in the controller layer.
+  def load_categories
+    @categories = Catalog::Search.categories
   end
 end

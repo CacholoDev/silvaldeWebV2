@@ -37,7 +37,15 @@ versión la define el roadmap.
   login/logout, signup, vistas, recuperación de contraseña, roles, perfil y
   consentimiento de comunicaciones). **103 specs en verde**. Publicado como
   `v0.2.0`.
-- **Siguiente**: v0.3.0 (catálogo) en la rama `feat/catalog`.
+- **En curso** (v0.3.0, rama `feat/catalog`): modelos del catálogo (slices
+  12-14), imágenes (15), seed (16), búsqueda `Catalog::Search` (17) y las
+  vistas públicas (18a back + 18b front) — landing, listado, detalle,
+  categoría, ofertas, galería, SEO y accesibilidad. **219 specs en verde**.
+  Además, endurecimiento de auth (traducciones, revocación de sesiones en el
+  reset, tokens, CI) aplicado sobre esta misma rama a raíz del code review
+  del proyecto.
+- **Siguiente**: revisión de la versión v0.3.0 completa (code review de
+  superpowers antes del PR) y publicación.
 
 ---
 
@@ -64,21 +72,37 @@ versión la define el roadmap.
 10. ✅ **Perfil del cliente** (ver/editar) + controller + vistas.
 11. ✅ **Consentimiento de comunicaciones** (columna + toggle + spec).
 
-## Catálogo: categorías y productos
+## Catálogo: modelos ✅
 
-12. ⬜ **Modelo `Category`** + migración + factory + spec.
-13. ⬜ **Modelo `Product`** + migración + factory + spec.
-14. ⬜ **Seed** de categorías y productos de ejemplo.
+12. ✅ **Modelo `Category`** + migración + factory + spec.
+13. ✅ **Modelo `Product`** + migración + factory + spec (slug automático,
+    precio en céntimos, categoría obligatoria).
+14. ✅ **Modelo `Variant`** + migración + factory + spec (stock y precio
+    opcional que sobrescribe al del producto).
 
-## Catálogo: variantes e imágenes
+## Catálogo: imágenes y datos de ejemplo
 
-15. ⬜ **Modelo `Variant`** + migración + factory + spec.
-16. ⬜ **Imágenes de producto** con Active Storage.
+15. ✅ **Imágenes de producto** con Active Storage (tipos JPEG/PNG/WebP,
+    5 MB por imagen, 10 imágenes por producto).
+16. ✅ **Seed** de categorías, productos y variantes de ejemplo (idempotente,
+    con fotos demo en `db/seeds/images/`).
 
 ## Catálogo: búsqueda y navegación
 
-17. ⬜ **Servicio de búsqueda** (`Catalog::Search`) + spec.
-18. ⬜ **Página pública de catálogo y búsqueda** + vistas.
+17. ✅ **Servicio de búsqueda** (`Catalog::Search`) + spec.
+
+## Catálogo: vistas públicas (18a back / 18b front)
+
+18a. ✅ **Vistas públicas — parte de back**: rutas, controllers del dominio
+    `Catalog::` (landing, productos, categorías), integración con
+    `Catalog::Search`, decorators para el formato de precios, vistas
+    funcionales con i18n y request specs. URLs: `/` (landing), `/products`,
+    `/products/:slug`, `/categories/:slug`; la búsqueda usa `/products?q=`.
+18b. ✅ **Vistas públicas — parte de front**: diseño con Tailwind — landing
+    con productos destacados, ofertas y galería de fotos, tarjetas de
+    producto con imágenes, precios y disponibilidad, diseño responsive y
+    accesibilidad visual (WCAG 2.2 AA) más la base de SEO en página
+    (títulos, descripciones, canónicas, Open Graph, JSON-LD, sitemap).
 
 ## Carrito: invitado
 
@@ -93,8 +117,13 @@ versión la define el roadmap.
 
 22. ⬜ **Modelos `Order` y `OrderItem`** + máquina de estados del pedido con
     **AASM** (`pending → confirmed → shipped → delivered`, o `cancelled`) +
-    migración + factories + specs.
-23. ⬜ **Servicio de checkout** con transacción + spec.
+    migración + factories + specs. Al conectar pedidos con variantes, revisar
+    el `dependent: :destroy` de `Product` → `Variant`: no se podrá borrar un
+    producto cuyas variantes aparezcan en pedidos confirmados.
+23. ⬜ **Servicio de checkout** con transacción + spec. El descuento de stock
+    se hace con bloqueo de fila (transacción + `with_lock`) y rollback
+    completo si falla: dos pedidos simultáneos no pueden vender la misma
+    unidad.
 
 ## Pedidos: email y detalle
 

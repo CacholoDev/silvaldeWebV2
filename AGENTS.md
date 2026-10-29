@@ -13,11 +13,15 @@ consulta [`README.md`](./README.md). El historial de cambios vive en
 
 ## Estado del proyecto
 
-Greenfield: scaffold de Rails 8.1 sin modelos, rutas ni migraciones de dominio
-(solo las tablas internas de solid_cache, solid_queue y solid_cable).
-`app/services` y `app/decorators` aún no existen: créalos cuando el primer
-caso de uso los necesite, aplicando la arquitectura obligatoria de abajo. No
-añadas estructura por adelantado.
+Publicada la v0.2.0 (autenticación y usuarios): modelo `Users::User`,
+sesiones y tokens de reset (`Auth::`), services en `app/services` (`Auth::`,
+`Users::`, con las consultas de lectura en `search.rb`) y rutas de registro,
+login/logout, recuperación de contraseña y perfil. En curso, v0.3.0
+(catálogo) en la rama `feat/catalog`: modelos `Catalog::Category`,
+`Catalog::Product` y `Catalog::Variant` (precios en céntimos, disponibilidad
+por stock de la variante). `app/decorators` aún no existe: créalo cuando el
+primer caso de uso lo necesite, aplicando la arquitectura obligatoria de
+abajo. No añadas estructura por adelantado.
 
 ## Reglas de trabajo
 
@@ -175,6 +179,13 @@ transiciones válidas y cómo se muestran al usuario.
   hasta el lanzamiento público, que será `1.0.0`. No subas la versión dentro
   de una rama `feat/*`. Proceso de publicación:
   [`docs/versioning.md`](./docs/versioning.md).
+- **Code review al final de cada versión, antes de su PR.** Los reviews **no
+  se hacen por slice** (ralentizan el flujo): se pasan una sola vez, al
+  terminar la versión completa (p. ej. `0.3.0`) y antes de abrir su pull
+  request, usando las skills de superpowers `requesting-code-review` y
+  `receiving-code-review`, apoyadas en las reglas de este documento y en las
+  skills y plugins disponibles. Los hallazgos se corrigen o se documentan
+  antes del PR.
 - Las fases del proyecto y su estado están en
   [`docs/roadmap.md`](./docs/roadmap.md); actualízalo al completar una fase.
 - Los agentes no hacen commits, push ni tags sin confirmación

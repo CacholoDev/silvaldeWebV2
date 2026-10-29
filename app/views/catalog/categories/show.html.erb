@@ -1,0 +1,24 @@
+<% content_for :title, "#{@category.name} — #{t("app.name")}" %>
+<% content_for :meta_description, t("catalog.categories.meta_description", name: @category.name) %>
+
+<nav aria-label="<%= t("catalog.show.breadcrumb") %>" class="text-sm text-muted">
+  <%= link_to t("catalog.products.title"), products_path, class: "hover:text-ink" %>
+  <span aria-hidden="true">/</span>
+  <span><%= @category.name %></span>
+</nav>
+
+<h1 class="mt-4 font-serif text-3xl font-semibold tracking-tight sm:text-4xl"><%= @category.name %></h1>
+
+<% if @products.any? %>
+  <ul class="mt-12 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+    <% @products.each do |product| %>
+      <li><%= render "catalog/products/card", product: decorate(product) %></li>
+    <% end %>
+  </ul>
+<% else %>
+  <p class="mt-12 text-muted"><%= t("catalog.products.empty") %></p>
+<% end %>
+
+<script type="application/ld+json">
+  <%= raw json_escape(product_list_structured_data(@products)) %>
+</script>

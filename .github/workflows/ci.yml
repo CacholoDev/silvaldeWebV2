@@ -95,13 +95,37 @@ jobs:
         with:
           bundler-cache: true
 
+      - name: Set up Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install JavaScript dependencies
+        run: npm ci
+
+      - name: Create .env for the test suite
+        run: |
+          cat > .env <<EOF
+          DB_HOST=127.0.0.1
+          DB_PORT=3306
+          MYSQL_DATABASE=silvalde_web_v2
+          MYSQL_USER=root
+          MYSQL_PASSWORD=
+          RAILS_MAX_THREADS=5
+          EOF
+
       - name: Run tests
         env:
           RAILS_ENV: test
           DATABASE_URL: mysql2://root@127.0.0.1:3306
-          # RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
-          # REDIS_URL: redis://localhost:6379/0
-        run: bin/rails db:test:prepare test
+        run: bin/rails db:test:prepare && bundle exec rspec
+
+      - name: Run seeds
+        env:
+          RAILS_ENV: test
+          DATABASE_URL: mysql2://root@127.0.0.1:3306
+        run: bin/rails db:seed:replant
 
   system-test:
     runs-on: ubuntu-latest
@@ -133,13 +157,24 @@ jobs:
         with:
           bundler-cache: true
 
+      - name: Set up Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install JavaScript dependencies
+        run: npm ci
+
       - name: Run System Tests
         env:
           RAILS_ENV: test
           DATABASE_URL: mysql2://root@127.0.0.1:3306
           # RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
           # REDIS_URL: redis://localhost:6379/0
-        run: bin/rails db:test:prepare test:system
+        # The project uses RSpec (see AGENTS.md), so the system specs live in
+        # spec/system, not in the Rails default test/ directory.
+        run: bin/rails db:test:prepare && bundle exec rspec spec/system
 
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v4

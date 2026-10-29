@@ -1,0 +1,30 @@
+<% content_for :title, t("catalog.products.title") %>
+<% content_for :meta_description, t("catalog.products.meta_description") %>
+
+<h1 class="font-serif text-3xl font-semibold tracking-tight sm:text-4xl">
+  <%= @query.present? ? t("catalog.products.results", query: @query) : t("catalog.products.title") %>
+</h1>
+
+<%= form_with url: products_path, method: :get, class: "mt-8 max-w-md" do |form| %>
+  <div class="flex gap-2">
+    <div class="flex-1">
+      <%= form.label :q, t("catalog.products.search_label"), class: "mb-1 block text-sm font-medium" %>
+      <%= form.search_field :q, value: @query, autocomplete: "off",
+            class: "block w-full rounded-md border border-line-strong bg-surface px-3 py-2.5 text-ink shadow-sm focus:border-sage focus:outline-none focus:ring-2 focus:ring-sage/30" %>
+    </div>
+    <div class="flex items-end">
+      <%= form.submit t("catalog.products.search_submit"),
+            class: "inline-flex min-h-11 items-center rounded-md bg-sage px-5 py-2.5 text-sm font-medium text-white hover:bg-sage-dark" %>
+    </div>
+  </div>
+<% end %>
+
+<% if @products.any? %>
+  <ul class="mt-12 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+    <% @products.each do |product| %>
+      <li><%= render "catalog/products/card", product: decorate(product) %></li>
+    <% end %>
+  </ul>
+<% else %>
+  <p class="mt-12 text-muted"><%= t("catalog.products.empty") %></p>
+<% end %>

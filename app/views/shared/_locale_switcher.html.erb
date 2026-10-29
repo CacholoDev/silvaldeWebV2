@@ -1,12 +1,29 @@
-<div class="flex items-center gap-1" aria-label="<%= t("navigation.language") %>">
-  <% %w[es en].each do |loc| %>
-    <% active = I18n.locale.to_s == loc %>
-    <%= button_to loc.upcase,
-          locale_path(locale: loc),
-          method: :post,
-          class: [
-            "rounded px-2 py-1 text-sm font-medium",
-            active ? "bg-sage text-white" : "text-muted hover:text-ink"
-          ].join(" ") %>
-  <% end %>
+<div class="relative"
+     data-controller="locale"
+     data-action="click->locale#closeOnOutsideClick keydown->locale#closeOnEscape focusout->locale#closeOnFocusOut mouseenter->locale#open mouseleave->locale#close">
+  <button type="button"
+          data-locale-target="toggle"
+          data-action="locale#toggle"
+          aria-expanded="false"
+          aria-haspopup="true"
+          aria-label="<%= t("navigation.language") %>"
+          class="inline-flex h-8 w-8 cursor-pointer items-center justify-center rounded-md text-muted hover:bg-surface hover:text-ink">
+    <%= image_tag brand_icon_path("world.svg"), alt: "", aria: { hidden: true }, class: "h-5 w-5 fill-current" %>
+  </button>
+
+  <div data-locale-target="menu"
+       hidden
+       class="absolute right-0 top-full z-20 min-w-40 rounded-md border border-line bg-surface p-1 shadow-lg">
+    <% %w[es en].each do |loc| %>
+      <% active = I18n.locale.to_s == loc %>
+      <%= button_to t("locales.#{loc}"),
+            locale_path(locale: loc),
+            method: :post,
+            class: [
+              "block w-full rounded px-3 py-2 text-left text-sm font-medium",
+              active ? "bg-sage text-white" : "text-ink hover:bg-paper"
+            ].join(" "),
+            "aria-current": active ? "true" : nil %>
+    <% end %>
+  </div>
 </div>
