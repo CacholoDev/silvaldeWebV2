@@ -10,7 +10,7 @@ vigente está en el archivo `VERSION` y el proceso de publicación en
 Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
 `Corregido`, `Seguridad`.
 
-## [Sin publicar]
+## [0.3.0] - 2026-11-01
 
 ### Seguridad
 
