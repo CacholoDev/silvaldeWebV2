@@ -205,3 +205,21 @@ en:
               not_a_number: "Price must be a number."
               not_an_integer: "Price must be an integer."
               greater_than_or_equal_to: "Price can't be negative."
+        cart_item:
+          attributes:
+            cart:
+              required: "Cart can't be blank."
+            variant:
+              required: "Variant can't be blank."
+            variant_id:
+              taken: "That variant is already in the cart."
+            quantity:
+              blank: "Quantity can't be blank."
+              not_a_number: "Quantity must be a number."
+              not_an_integer: "Quantity must be an integer."
+              greater_than_or_equal_to: "Quantity must be at least 1."
+            unit_price_cents:
+              blank: "Unit price can't be blank."
+              not_a_number: "Unit price must be a number."
+              not_an_integer: "Unit price must be an integer."
+              greater_than_or_equal_to: "Unit price can't be negative."

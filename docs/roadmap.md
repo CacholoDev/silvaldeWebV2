@@ -59,30 +59,28 @@ Registro, inicio/cierre de sesión y recuperación de contraseña; roles
 Construida por slices pequeños (11 slices, 103 specs en verde). Publicada el
 2026-10-24 con el tag `v0.2.0`.
 
-### 🚧 v0.3.0 — Catálogo
+### ✅ v0.3.0 — Catálogo
 
-**Qué se hace:** categorías y productos con variantes, imágenes y
-disponibilidad; navegación pública por categorías y búsqueda.
+Categorías y productos con variantes, imágenes y disponibilidad; navegación
+pública por categorías y búsqueda; landing como portada con productos
+destacados, ofertas y galería de fotos. Modelos `Catalog::Category`,
+`Catalog::Product` y `Catalog::Variant` (precios en céntimos, disponibilidad
+por stock de la variante), imágenes con Active Storage, `Catalog::Search`,
+vistas públicas con Tailwind, accesibilidad WCAG 2.2 AA y base de SEO en
+página. Publicada el 2026-11-01 con el tag `v0.3.0`.
 
-**Cómo se hará:** modelos `Category`, `Product` y `Variant` con sus índices y
-validaciones; imágenes con Active Storage (ya incluido en Rails); servicio de
-búsqueda para no ensuciar el controlador; vistas públicas con Tailwind;
-`db/seeds.rb` con productos de ejemplo para trabajar. La raíz `/` será la
-landing de la tienda: presentación, productos destacados, ofertas y galería
-de fotos, con acceso al catálogo por categorías. Nunca una pantalla de login:
-entrar en la web no exige cuenta. Los modelos del catálogo están terminados
-en la rama `feat/catalog`, junto con las vistas públicas (back y front),
-la base de accesibilidad (WCAG 2.2 AA) y la base de SEO en página.
-
-### ⬜ v0.4.0 — Carrito
+### 🚧 v0.4.0 — Carrito
 
 **Qué se hace:** carrito para visitantes y clientas registradas; cantidades y
 variantes; el carrito sobrevive al iniciar sesión.
 
-**Cómo se hará:** modelos `Cart` y `CartItem` (relación con datos propios:
-cantidad, precio en el momento de añadir). El carrito de invitada vive en la
-sesión y se fusiona con el de la cuenta al hacer login. Añadir/quitar con
-Turbo Frames para no recargar la página.
+**Cómo se hará:** modelos `Carts::Cart` y `Carts::CartItem` (precio congelado
+al añadir) con las consultas en `Carts::Search` y caducidad a los 6 meses de
+inactividad —ya terminados—; services `Carts::*` con el carrito de invitada
+en la sesión, UI con Turbo Frames (ficha de producto y página `/cart`) y
+fusión al login sumando cantidades. Un job recurrente purga los carritos
+caducados en silencio. El detalle por slices está en
+[`backend-plan.md`](./backend-plan.md).
 
 ### ⬜ v0.5.0 — Pedidos
 

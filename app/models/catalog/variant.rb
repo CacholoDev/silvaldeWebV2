@@ -2,12 +2,6 @@ module Catalog
   class Variant < ApplicationRecord
     self.table_name = "variants"
 
-    # Keep the model name as "Variant" (not "Catalog::Variant") so the i18n
-    # keys (activerecord.errors.models.variant.*) and form params stay clean.
-    def self.model_name
-      ActiveModel::Name.new(self, nil, "Variant")
-    end
-
     NAME_MAX_LENGTH = 100
 
     belongs_to :product, inverse_of: :variants

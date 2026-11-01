@@ -2,12 +2,6 @@ module Catalog
   class Product < ApplicationRecord
     self.table_name = "products"
 
-    # Keep the model name as "Product" (not "Catalog::Product") so the i18n
-    # keys (activerecord.errors.models.product.*) and form params stay clean.
-    def self.model_name
-      ActiveModel::Name.new(self, nil, "Product")
-    end
-
     NAME_MAX_LENGTH = 150
     SLUG_MAX_LENGTH = 200
 

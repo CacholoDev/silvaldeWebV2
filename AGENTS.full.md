@@ -92,6 +92,27 @@ consultar al usuario y actualizar esta sección y el changelog.
   (`utf8mb4_0900_ai_ci`) hace que «Jarrón» y «Jarron» cuenten como el mismo
   nombre tanto en la validación como en el índice único.
 
+**Decisiones del carrito (2026-11-01):**
+
+- **Namespace `Carts::`** para models y services del carrito (tablas `carts`
+  y `cart_items`), coherente con `Users::` y `Catalog::`. Zeitwerk no admite
+  la clase `Cart` junto al directorio `app/services/cart/`.
+- **Precio congelado al añadir** (`unit_price_cents` en `CartItem`, snapshot):
+  un cambio de precio posterior en el catálogo no reescribe los carritos
+  existentes.
+- **El stock no se toca en el carrito**: el carrito es intención de compra; el
+  stock se valida y descuenta en el checkout (v0.5.0), con transacción y
+  bloqueo de fila.
+- **Una línea por variante** (índice único `cart_id, variant_id`); repetir la
+  variante suma cantidades, no duplica líneas.
+- **Fusión al login**: el carrito de invitada se fusiona con el de la cuenta
+  sumando cantidades de las variantes comunes; nunca sobreescribiendo.
+- **Caducidad a los 6 meses de inactividad** (tope de retención por
+  seguridad): `Carts::Cart::MAX_INACTIVITY`. Las consultas viven en
+  `Carts::Search` y el purge será un job recurrente silencioso (sin avisos a
+  la clienta). El carrito de invitada vive en la sesión (cookie) y no necesita
+  tope.
+
 **Política de generadores:**
 
 - Nunca `rails generate scaffold`: crea código que no encaja con la
@@ -149,14 +170,20 @@ dominio agrupa sus controllers, models y services en
 ### Models
 
 - Mantén en el modelo asociaciones, validaciones, constraints de dominio y
-  comportamiento pequeño propio de la entidad.
-- No pongas métodos de consulta en el modelo (`find_by_xxx`, `lookup`, …): las
-  consultas viven en services de búsqueda (`search.rb`). El modelo guarda
-  asociaciones, validaciones y comportamiento propio (fábricas, hashing).
+  comportamiento pequeño propio de la entidad: **métodos sin parámetros** que
+  operan sobre su propio estado (`available?`, `expired?`, …).
+- **Nada de consultas en el modelo**: ni `where`, ni `find_by`, ni `lookup`, ni
+  scopes (`scope :x`, `default_scope`), ni métodos `find_by_xxx`. Las consultas
+  de lectura viven en el service `search.rb` del dominio
+  (`app/services/<contexto>/search.rb`, p. ej. `Carts::Search`); las escrituras
+  en services de caso de uso. Ejemplo real: los scopes `active`/`expired` que
+  nacieron en `Carts::Cart` se movieron a `Carts::Search`.
+- El nombre corto del modelo para i18n y formularios (`product`, no
+  `catalog_product`) lo define `ApplicationRecord.model_name` (demoduliza el
+  nombre). Es infraestructura de nombres: los modelos individuales **no**
+  declaran `ActiveModel::Name` ni sobreescriben `model_name`.
 - Añade índices y restricciones de base de datos para unicidad e integridad; una
   validación Ruby por sí sola no evita carreras.
-- Evita `default_scope` y scopes personalizados salvo que una decisión de dominio
-  documentada los haga imprescindibles.
 - Para eliminaciones o archivado, decide explícitamente si se necesita borrado
   lógico; no lo añadas automáticamente a todos los modelos.
 

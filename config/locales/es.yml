@@ -205,3 +205,21 @@ es:
               not_a_number: "El precio debe ser un número."
               not_an_integer: "El precio debe ser un número entero."
               greater_than_or_equal_to: "El precio no puede ser negativo."
+        cart_item:
+          attributes:
+            cart:
+              required: "El carrito no puede estar vacío."
+            variant:
+              required: "La variante no puede estar vacía."
+            variant_id:
+              taken: "Esa variante ya está en el carrito."
+            quantity:
+              blank: "La cantidad no puede estar vacía."
+              not_a_number: "La cantidad debe ser un número."
+              not_an_integer: "La cantidad debe ser un número entero."
+              greater_than_or_equal_to: "La cantidad debe ser al menos 1."
+            unit_price_cents:
+              blank: "El precio unitario no puede estar vacío."
+              not_a_number: "El precio unitario debe ser un número."
+              not_an_integer: "El precio unitario debe ser un número entero."
+              greater_than_or_equal_to: "El precio unitario no puede ser negativo."
