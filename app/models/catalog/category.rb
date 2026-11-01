@@ -2,12 +2,6 @@ module Catalog
   class Category < ApplicationRecord
     self.table_name = "categories"
 
-    # Keep the model name as "Category" (not "Catalog::Category") so the i18n
-    # keys (activerecord.errors.models.category.*) and form params stay clean.
-    def self.model_name
-      ActiveModel::Name.new(self, nil, "Category")
-    end
-
     NAME_MAX_LENGTH = 100
     SLUG_MAX_LENGTH = 150
 

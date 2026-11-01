@@ -2,12 +2,6 @@ module Users
   class User < ApplicationRecord
     self.table_name = "users"
 
-    # Keep the model name as "User" (not "Users::User") so the i18n keys
-    # (activerecord.errors.models.user.*) and form params (user[...]) stay clean.
-    def self.model_name
-      ActiveModel::Name.new(self, nil, "User")
-    end
-
     has_secure_password
 
     enum :role, { customer: 0, admin: 1 }, default: :customer
