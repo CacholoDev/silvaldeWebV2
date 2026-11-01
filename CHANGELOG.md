@@ -10,6 +10,18 @@ vigente está en el archivo `VERSION` y el proceso de publicación en
 Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
 `Corregido`, `Seguridad`.
 
+## [Sin publicar]
+
+### Seguridad
+
+- `rack` actualizado a 3.2.8: corrige GHSA-wvg4-6p58-3gh3 (bypass de
+  `header_rules` en `Rack::Static` con segmentos `.` sin normalizar) y
+  GHSA-p8x9-v4hv-2w4g (el guard de boundary multipart acepta parámetros
+  `boundary` vacíos o entrecomillados).
+- `addressable` actualizado a 2.9.2: corrige 7 advisories (ReDoS en
+  templates, hosts engañosos con caracteres bidi/Punycode y normalización
+  incorrecta de rutas con segmentos punteados).
+
 ## [0.3.0] - 2026-11-01
 
 ### Seguridad
