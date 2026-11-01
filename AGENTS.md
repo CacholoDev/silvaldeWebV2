@@ -13,15 +13,16 @@ consulta [`README.md`](./README.md). El historial de cambios vive en
 
 ## Estado del proyecto
 
-Publicada la v0.2.0 (autenticación y usuarios): modelo `Users::User`,
-sesiones y tokens de reset (`Auth::`), services en `app/services` (`Auth::`,
-`Users::`, con las consultas de lectura en `search.rb`) y rutas de registro,
-login/logout, recuperación de contraseña y perfil. En curso, v0.3.0
-(catálogo) en la rama `feat/catalog`: modelos `Catalog::Category`,
-`Catalog::Product` y `Catalog::Variant` (precios en céntimos, disponibilidad
-por stock de la variante). `app/decorators` aún no existe: créalo cuando el
-primer caso de uso lo necesite, aplicando la arquitectura obligatoria de
-abajo. No añadas estructura por adelantado.
+Publicadas v0.1.0, v0.2.0 (autenticación y usuarios) y v0.3.0 (catálogo:
+modelos, imágenes, seed, búsqueda y vistas públicas con accesibilidad y SEO).
+En curso, v0.4.0 (carrito) en la rama `feat/shopping-cart`: modelos
+`Carts::Cart` y `Carts::CartItem` (precio congelado al añadir; el carrito
+caduca a los 6 meses de inactividad) con las consultas de lectura en
+`Carts::Search`. Quedan los services de caso de uso, la UI del carrito, la
+página `/cart`, la fusión al login y el purge de carritos caducados.
+`app/decorators` existe desde v0.3.0 (`ApplicationDecorator` y decorators
+del catálogo): añade ahí la presentación cuando haga falta. No añadas
+estructura por adelantado.
 
 ## Reglas de trabajo
 
@@ -139,9 +140,15 @@ Usa MVC con **servicios** y **decorators**:
 - **Controllers**: orquestan la petición, autorización, servicio y respuesta.
   No contienen reglas de negocio ni acceso directo a la base de datos: no usan
   `Model.find`, `Model.create`, `Model.where` ni `authenticate_by`. Toda
-  interacción con ActiveRecord vive en services o en métodos del modelo.
+  interacción con ActiveRecord vive en services: las lecturas en `search.rb`
+  y las escrituras en los services de caso de uso.
 - **Models**: contienen asociaciones, validaciones, invariantes y comportamiento
-  propio de la entidad. Deben mantenerse delgados.
+  propio de la entidad (**métodos sin parámetros**, sobre su propio estado).
+  **Nunca consultas** (`where`, `find_by`, `lookup`, scopes…): las lecturas
+  viven en `app/services/<contexto>/search.rb` y las escrituras en los
+  services de caso de uso. El nombre para i18n y formularios lo resuelve
+  `ApplicationRecord` (infraestructura), no el modelo. Deben mantenerse
+  delgados.
 - **Services**: encapsulan casos de uso y operaciones con varios modelos. Cada
   servicio tiene una responsabilidad clara y debe fallar explícitamente ante
   errores inesperados.

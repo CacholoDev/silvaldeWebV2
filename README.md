@@ -35,21 +35,31 @@ motivación, límites y efecto sobre los flujos existentes antes de implementars
 
 ## Desarrollo local
 
-1. Copia o revisa las variables de [`.env.example`](./.env.example) y crea un
-   `.env` local con valores seguros.
-2. Arranca MySQL:
+Vale para cualquier PC nuevo: clona, configura `.env` y arranca.
+
+1. Clona el repositorio y sitúate en la rama de trabajo:
+
+   ```bash
+   git clone https://github.com/CacholoDev/silvaldeWebV2.git
+   cd silvaldeWebV2
+   git switch feat/shopping-cart   # o la rama que toque en cada momento
+   ```
+
+2. Copia [`.env.example`](./.env.example) a `.env` y pon valores seguros
+   (credenciales de MySQL locales; nunca lo subas al repositorio).
+3. Arranca MySQL:
 
    ```bash
    docker compose up -d db
    ```
 
-3. Instala dependencias y prepara la base de datos:
+4. Instala dependencias y prepara la base de datos:
 
    ```bash
    bin/setup
    ```
 
-4. Arranca la aplicación:
+5. Arranca la aplicación:
 
    ```bash
    bin/dev
@@ -63,19 +73,21 @@ arquitectura, seguridad, datos o UX.
 
 ## Estado y versionado
 
-El proyecto está en desarrollo temprano: la autenticación (usuarios y
-sesiones) ya está terminada y publicada. La versión publicada actual es
-**0.2.0** («autenticación y usuarios»). La versión en desarrollo es la
-**0.3.0** («catálogo»), en la rama `feat/catalog`: los modelos
-`Catalog::Category`, `Catalog::Product` y `Catalog::Variant` ya están
-terminados; quedan las imágenes, el seed, la búsqueda y las vistas públicas.
-La fuente única de verdad es el archivo [`VERSION`](./VERSION) y el
-historial de cambios vive en [`CHANGELOG.md`](./CHANGELOG.md).
+El proyecto está en desarrollo temprano. Publicadas: **0.1.0** (base del
+proyecto), **0.2.0** («autenticación y usuarios») y **0.3.0** («catálogo»:
+modelos, imágenes, seed, búsqueda y vistas públicas con accesibilidad y SEO).
+La versión en desarrollo es la **0.4.0** («carrito»), en la rama
+`feat/shopping-cart`: los modelos `Carts::Cart` y `Carts::CartItem` con sus
+consultas en `Carts::Search` y la caducidad a los 6 meses ya están
+terminados; quedan los services, la UI del carrito, la página `/cart`, la
+fusión al login y la limpieza de carritos caducados. La fuente única de
+verdad es el archivo [`VERSION`](./VERSION) y el historial de cambios vive
+en [`CHANGELOG.md`](./CHANGELOG.md).
 
 El desarrollo se organiza en ramas por funcionalidad (`feat/authentication`,
-`feat/catalog`, …) que se fusionan en `main` con el CI en verde.
-Las fases previstas están en [`docs/roadmap.md`](./docs/roadmap.md) y la
-convención completa de ramas y releases en [`AGENTS.md`](./AGENTS.md).
+`feat/catalog`, `feat/shopping-cart`, …) que se fusionan en `main` con el CI
+en verde. Las fases previstas están en [`docs/roadmap.md`](./docs/roadmap.md)
+y la convención completa de ramas y releases en [`AGENTS.md`](./AGENTS.md).
 
 ## Documentación del proyecto
 

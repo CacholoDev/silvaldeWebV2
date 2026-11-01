@@ -33,19 +33,16 @@ versión la define el roadmap.
 
 ## Estado actual
 
-- **Hecho** (slices 1-11): autenticación y usuarios completos (modelos,
-  login/logout, signup, vistas, recuperación de contraseña, roles, perfil y
-  consentimiento de comunicaciones). **103 specs en verde**. Publicado como
-  `v0.2.0`.
-- **En curso** (v0.3.0, rama `feat/catalog`): modelos del catálogo (slices
-  12-14), imágenes (15), seed (16), búsqueda `Catalog::Search` (17) y las
-  vistas públicas (18a back + 18b front) — landing, listado, detalle,
-  categoría, ofertas, galería, SEO y accesibilidad. **219 specs en verde**.
-  Además, endurecimiento de auth (traducciones, revocación de sesiones en el
-  reset, tokens, CI) aplicado sobre esta misma rama a raíz del code review
-  del proyecto.
-- **Siguiente**: revisión de la versión v0.3.0 completa (code review de
-  superpowers antes del PR) y publicación.
+- **Hecho** (slices 1-18b): autenticación, usuarios y catálogo completos
+  (modelos, login/logout, signup, recuperación de contraseña, roles, perfil,
+  consentimiento, imágenes, seed, búsqueda, vistas públicas con accesibilidad
+  y SEO, tema claro/oscuro e i18n). Publicado como `v0.2.0` y `v0.3.0`.
+- **En curso** (v0.4.0, rama `feat/shopping-cart`): carrito. El slice 19
+  (modelos `Carts::Cart`, `Carts::CartItem` y `Carts::Search`, con precio
+  congelado y caducidad de 6 meses) está **terminado**; siguen los services
+  (20), la UI (21-22), la fusión al login (23) y el purge de caducados (24).
+- **Siguiente**: slices 20-24 y, al terminar la versión, code review + PR +
+  publicación de `v0.4.0`.
 
 ---
 
@@ -104,42 +101,55 @@ versión la define el roadmap.
     accesibilidad visual (WCAG 2.2 AA) más la base de SEO en página
     (títulos, descripciones, canónicas, Open Graph, JSON-LD, sitemap).
 
-## Carrito: invitado
+## Carrito: modelos y services (v0.4.0)
 
-19. ⬜ **Modelos `Cart` y `CartItem`** + migración + factories + specs.
-20. ⬜ **Controller de carrito** (añadir/quitar) + Turbo Frames.
+19. ✅ **Modelos `Carts::Cart` y `Carts::CartItem`** + `Carts::Search` +
+    factories + specs (precio congelado al añadir, índice único
+    variante/carrito y caducidad a los 6 meses de inactividad).
+20. ⬜ **Services `Carts::AddItem`, `Carts::UpdateQuantity` y
+    `Carts::RemoveItem`** + carrito de invitada en la sesión (el `cart_id`
+    viaja en la cookie) + specs de cada service.
 
-## Carrito: registrado + fusión
+## Carrito: UI y fusión (v0.4.0)
 
-21. ⬜ **Asociar carrito a `User`** + fusión del carrito de invitada al login.
+21. ⬜ **Añadir al carrito desde la ficha de producto** (selector de variante
+    + cantidad + contador del carrito en el header con Turbo Frame) + request
+    specs.
+22. ⬜ **Página `/cart`** (líneas, cantidades, subtotales, total y estado
+    vacío) con Turbo Frames, sin recargar.
+23. ⬜ **Fusión al login**: carrito de invitada + carrito de cuenta = sumar
+    cantidades de las variantes comunes y vaciar el carrito de sesión. Specs
+    de integración (incluye el caso de conflicto).
+24. ⬜ **Purge de carritos caducados** (`Carts::PurgeExpired` + job recurrente
+    de Solid Queue, silencioso) + specs.
 
 ## Pedidos: checkout y estados
 
-22. ⬜ **Modelos `Order` y `OrderItem`** + máquina de estados del pedido con
+25. ⬜ **Modelos `Order` y `OrderItem`** + máquina de estados del pedido con
     **AASM** (`pending → confirmed → shipped → delivered`, o `cancelled`) +
     migración + factories + specs. Al conectar pedidos con variantes, revisar
     el `dependent: :destroy` de `Product` → `Variant`: no se podrá borrar un
     producto cuyas variantes aparezcan en pedidos confirmados.
-23. ⬜ **Servicio de checkout** con transacción + spec. El descuento de stock
+26. ⬜ **Servicio de checkout** con transacción + spec. El descuento de stock
     se hace con bloqueo de fila (transacción + `with_lock`) y rollback
     completo si falla: dos pedidos simultáneos no pueden vender la misma
     unidad.
 
 ## Pedidos: email y detalle
 
-24. ⬜ **Mailer de confirmación de pedido** + job.
-25. ⬜ **Detalle y listado de pedidos** del cliente + vistas.
+27. ⬜ **Mailer de confirmación de pedido** + job.
+28. ⬜ **Detalle y listado de pedidos** del cliente + vistas.
 
 ## Métricas
 
-26. ⬜ **Consultas/servicio de métricas** (ventas, productos, clientes) + specs.
-27. ⬜ **Vista de métricas** para el panel.
+29. ⬜ **Consultas/servicio de métricas** (ventas, productos, clientes) + specs.
+30. ⬜ **Vista de métricas** para el panel.
 
 ## Panel de administración
 
-28. ⬜ **Namespace `/admin`** + autorización por rol.
-29. ⬜ **CRUDs de productos, pedidos y usuarios** en admin.
+31. ⬜ **Namespace `/admin`** + autorización por rol.
+32. ⬜ **CRUDs de productos, pedidos y usuarios** en admin.
 
 ## Lanzamiento
 
-30. ⬜ Seguridad, contenidos legales y pasarela de pago (con especificación propia).
+33. ⬜ Seguridad, contenidos legales y pasarela de pago (con especificación propia).
