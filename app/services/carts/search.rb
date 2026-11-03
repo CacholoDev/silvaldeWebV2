@@ -8,6 +8,17 @@ module Carts
       Cart.where(updated_at: Cart::MAX_INACTIVITY.ago..)
     end
 
+    # The non-expired cart with this id (the session stores just the id), or
+    # nil when it is missing or already expired.
+    def self.find_active_cart(id)
+      active.find_by(id: id)
+    end
+
+    # The cart line for a variant, or nil.
+    def self.find_item_by_variant(cart, variant)
+      cart.cart_items.find_by(variant: variant)
+    end
+
     # Carts without activity for longer than the retention window.
     def self.expired
       Cart.where.not(updated_at: Cart::MAX_INACTIVITY.ago..)

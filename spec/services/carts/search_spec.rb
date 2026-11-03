@@ -23,6 +23,41 @@ RSpec.describe Carts::Search do
     end
   end
 
+  describe ".find_active_cart" do
+    it "returns the cart when it has recent activity" do
+      cart = create(:cart)
+
+      expect(described_class.find_active_cart(cart.id)).to eq(cart)
+    end
+
+    it "returns nil when there is no cart with that id" do
+      expect(described_class.find_active_cart(0)).to be_nil
+    end
+
+    it "returns nil when the cart is expired" do
+      cart = create(:cart)
+      cart.update_column(:updated_at, 7.months.ago)
+
+      expect(described_class.find_active_cart(cart.id)).to be_nil
+    end
+  end
+
+  describe ".find_item_by_variant" do
+    it "returns the cart line for the variant" do
+      cart = create(:cart)
+      item = create(:cart_item, cart: cart)
+
+      expect(described_class.find_item_by_variant(cart, item.variant)).to eq(item)
+    end
+
+    it "returns nil when the variant is not in the cart" do
+      cart = create(:cart)
+      variant = create(:variant)
+
+      expect(described_class.find_item_by_variant(cart, variant)).to be_nil
+    end
+  end
+
   describe ".expired" do
     it "includes a cart inactive for over six months" do
       cart = create(:cart)

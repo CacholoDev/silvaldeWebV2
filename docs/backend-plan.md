@@ -37,11 +37,13 @@ versión la define el roadmap.
   (modelos, login/logout, signup, recuperación de contraseña, roles, perfil,
   consentimiento, imágenes, seed, búsqueda, vistas públicas con accesibilidad
   y SEO, tema claro/oscuro e i18n). Publicado como `v0.2.0` y `v0.3.0`.
-- **En curso** (v0.4.0, rama `feat/shopping-cart`): carrito. El slice 19
+- **En curso** (v0.4.0, rama `feat/shopping-cart`): carrito. Los slices 19
   (modelos `Carts::Cart`, `Carts::CartItem` y `Carts::Search`, con precio
-  congelado y caducidad de 6 meses) está **terminado**; siguen los services
-  (20), la UI (21-22), la fusión al login (23) y el purge de caducados (24).
-- **Siguiente**: slices 20-24 y, al terminar la versión, code review + PR +
+  congelado y caducidad de 6 meses) y 20 (services `Carts::AddItem`,
+  `Carts::UpdateQuantity`, `Carts::RemoveItem` y carrito de invitada en la
+  sesión con el concern `CurrentCart`) están **terminados**; siguen la UI
+  (21-22), la fusión al login (23) y el purge de caducados (24).
+- **Siguiente**: slices 21-24 y, al terminar la versión, code review + PR +
   publicación de `v0.4.0`.
 
 ---
@@ -106,9 +108,11 @@ versión la define el roadmap.
 19. ✅ **Modelos `Carts::Cart` y `Carts::CartItem`** + `Carts::Search` +
     factories + specs (precio congelado al añadir, índice único
     variante/carrito y caducidad a los 6 meses de inactividad).
-20. ⬜ **Services `Carts::AddItem`, `Carts::UpdateQuantity` y
+20. ✅ **Services `Carts::AddItem`, `Carts::UpdateQuantity` y
     `Carts::RemoveItem`** + carrito de invitada en la sesión (el `cart_id`
-    viaja en la cookie) + specs de cada service.
+    viaja en la sesión y el carrito se crea al primer añadir) + specs de cada
+    service. `AddItem` suma cantidades cuando la variante ya está en el
+    carrito y congela el precio desde `variant.effective_price_cents`.
 
 ## Carrito: UI y fusión (v0.4.0)
 
