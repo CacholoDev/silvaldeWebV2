@@ -37,15 +37,11 @@ versión la define el roadmap.
   (modelos, login/logout, signup, recuperación de contraseña, roles, perfil,
   consentimiento, imágenes, seed, búsqueda, vistas públicas con accesibilidad
   y SEO, tema claro/oscuro e i18n). Publicado como `v0.2.0` y `v0.3.0`.
-- **En curso** (v0.4.0, rama `feat/shopping-cart`): carrito. Los slices 19
-  (modelos `Carts::Cart`, `Carts::CartItem` y `Carts::Search`, con precio
-  congelado y caducidad de 6 meses), 20 (services `Carts::AddItem`,
-  `Carts::UpdateQuantity`, `Carts::RemoveItem` y carrito de invitada en la
-  sesión con el concern `CurrentCart`), 21 (añadir al carrito desde la ficha
-  con contador Turbo Frame en el header) y 22 (página `/cart` con líneas,
-  cantidades, total y estado vacío) están **terminados**; siguen la fusión al
-  login (23) y el purge de caducados (24).
-- **Siguiente**: slices 23-24 y, al terminar la versión, code review + PR +
+- **En curso** (v0.4.0, rama `feat/shopping-cart`): carrito. Los slices 19-22
+  (modelos, services, añadir desde la ficha con contador y página `/cart`) y
+  23 (fusión del carrito de invitada al login) están **terminados**; queda el
+  purge de caducados (24).
+- **Siguiente**: slice 24 y, al terminar la versión, code review + PR +
   publicación de `v0.4.0`.
 
 ---
@@ -126,9 +122,11 @@ versión la define el roadmap.
     vacío) con Turbo Frames, sin recargas. El contador del header enlaza a la
     página y cada línea solo se puede tocar desde su propio carrito (404 si se
     intenta con una línea ajena).
-23. ⬜ **Fusión al login**: carrito de invitada + carrito de cuenta = sumar
-    cantidades de las variantes comunes y vaciar el carrito de sesión. Specs
-    de integración (incluye el caso de conflicto).
+23. ✅ **Fusión al login**: carrito de invitada + carrito de cuenta = sumar
+    cantidades de las variantes comunes (2 + 1 = 3), mover las líneas solo del
+    invitado con su precio congelado y borrar el carrito de invitada. Un
+    carrito de otra cuenta jamás se toca. Specs de servicio e integración
+    (incluye el caso de conflicto).
 24. ⬜ **Purge de carritos caducados** (`Carts::PurgeExpired` + job recurrente
     de Solid Queue, silencioso) + specs.
 

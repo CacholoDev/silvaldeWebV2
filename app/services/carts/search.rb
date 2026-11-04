@@ -49,6 +49,11 @@ module Carts
       item
     end
 
+    # The user's current cart (the most recently active one), or nil.
+    def self.find_cart_for_user(user)
+      active.where(user: user).order(updated_at: :desc).first
+    end
+
     # Carts without activity for longer than the retention window.
     def self.expired
       Cart.where.not(updated_at: Cart::MAX_INACTIVITY.ago..)

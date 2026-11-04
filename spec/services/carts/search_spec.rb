@@ -125,6 +125,30 @@ RSpec.describe Carts::Search do
     end
   end
 
+  describe ".find_cart_for_user" do
+    it "returns the active cart of the user" do
+      user = create(:user)
+      cart = create(:cart, user: user)
+      create(:cart)
+
+      expect(described_class.find_cart_for_user(user)).to eq(cart)
+    end
+
+    it "is nil when the user has no cart" do
+      user = create(:user)
+
+      expect(described_class.find_cart_for_user(user)).to be_nil
+    end
+
+    it "ignores expired carts" do
+      user = create(:user)
+      cart = create(:cart, user: user)
+      cart.update_column(:updated_at, 7.months.ago)
+
+      expect(described_class.find_cart_for_user(user)).to be_nil
+    end
+  end
+
   describe ".expired" do
     it "includes a cart inactive for over six months" do
       cart = create(:cart)
