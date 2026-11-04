@@ -77,10 +77,11 @@ El proyecto está en desarrollo temprano. Publicadas: **0.1.0** (base del
 proyecto), **0.2.0** («autenticación y usuarios») y **0.3.0** («catálogo»:
 modelos, imágenes, seed, búsqueda y vistas públicas con accesibilidad y SEO).
 La versión en desarrollo es la **0.4.0** («carrito»), en la rama
-`feat/shopping-cart`: los modelos `Carts::Cart` y `Carts::CartItem` con sus
-consultas en `Carts::Search` y la caducidad a los 6 meses ya están
-terminados; quedan los services, la UI del carrito, la página `/cart`, la
-fusión al login y la limpieza de carritos caducados. La fuente única de
+`feat/shopping-cart`: el código está completo —carrito de invitada en la
+sesión, añadir desde la ficha con contador Turbo, página `/cart` con
+cantidades y total, fusión al login sumando cantidades, precios congelados,
+caducidad a los 6 meses y purge recurrente— y queda cerrar la versión (code
+review, CHANGELOG y publicación). La fuente única de
 verdad es el archivo [`VERSION`](./VERSION) y el historial de cambios vive
 en [`CHANGELOG.md`](./CHANGELOG.md).
 

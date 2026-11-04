@@ -102,4 +102,21 @@ RSpec.describe Carts::CartItem, type: :model do
       expect(cart.reload.updated_at).to be > 1.hour.ago
     end
   end
+
+  describe "#subtotal_cents" do
+    it "multiplies the frozen unit price by the quantity" do
+      item = build(:cart_item, quantity: 3, unit_price_cents: 1200)
+
+      expect(item.subtotal_cents).to eq(3600)
+    end
+  end
+
+  describe "quantity bounds" do
+    it "rejects quantities above the maximum" do
+      item = build(:cart_item, quantity: Carts::CartItem::MAX_QUANTITY + 1)
+
+      expect(item).not_to be_valid
+      expect(item.errors[:quantity]).to be_present
+    end
+  end
 end

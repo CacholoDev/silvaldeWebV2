@@ -71,5 +71,11 @@ module Catalog
     def self.category_by_slug!(slug)
       Category.find_by!(slug: slug)
     end
+
+    # Finds a variant by its id, or raises ActiveRecord::RecordNotFound so
+    # the controller responds 404.
+    def self.variant_by_id!(id)
+      Variant.find_by!(id: id)
+    end
   end
 end

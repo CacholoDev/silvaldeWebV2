@@ -12,6 +12,21 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
 
 ## [Sin publicar]
 
+### Añadido
+
+- **Carrito de compra** para invitadas y clientas: añadir variantes desde la
+  ficha de producto (selector de variante y cantidad), contador en el header
+  que se actualiza sin recargas (Turbo) y página `/cart` con líneas,
+  precio unitario, subtotales, total, cambio de cantidad, borrado de líneas y
+  estado vacío.
+- El carrito de invitada vive en la sesión y **se fusiona al iniciar sesión**:
+  las variantes comunes suman cantidades (2 + 1 = 3) y las líneas propias se
+  conservan con su precio congelado. Un carrito de otra cuenta jamás se toca.
+- El precio de cada línea se **congela al añadirla** (los cambios de precio del
+  catálogo no la reescriben) y el carrito caduca a los 6 meses de inactividad.
+- Job recurrente `Carts::PurgeExpiredJob` (Solid Queue, diario) que purga en
+  silencio los carritos caducados con sus líneas.
+
 ### Seguridad
 
 - `rack` actualizado a 3.2.8: corrige GHSA-wvg4-6p58-3gh3 (bypass de

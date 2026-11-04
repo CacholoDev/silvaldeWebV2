@@ -18,6 +18,10 @@
               class: "rounded-md bg-sage px-3 py-1.5 text-sm font-medium text-white hover:bg-sage-dark" %>
       <% end %>
 
+      <turbo-frame id="cart_counter">
+        <%= render "shared/cart_counter", count: @cart_item_count %>
+      </turbo-frame>
+
       <%# Icon buttons keep the same optical size as the text links; the
           44px touch target comes from the padding, not from the box. %>
       <div class="flex items-center gap-1">

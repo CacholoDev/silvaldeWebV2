@@ -15,8 +15,15 @@ module ApplicationHelper
     case record
     when Catalog::Product then Catalog::ProductDecorator.new(record)
     when Catalog::Variant then Catalog::VariantDecorator.new(record)
+    when Carts::CartItem then Carts::CartItemDecorator.new(record)
     else record
     end
+  end
+
+  # Formats an amount in cents as euros, for values that are not wrapped in a
+  # decorator (same output as ApplicationDecorator#euros).
+  def format_cents(cents)
+    ActiveSupport::NumberHelper.number_to_currency(cents / 100.0)
   end
 
   # Absolute URL of the current page without query string, so search

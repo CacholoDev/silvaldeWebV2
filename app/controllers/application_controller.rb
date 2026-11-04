@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::Base
   include Authentication
+  include CurrentCart
 
   # Only allow modern browsers supporting webp images, web push, import maps, CSS nesting, and CSS :has.
   allow_browser versions: :modern
@@ -9,6 +10,7 @@ class ApplicationController < ActionController::Base
 
   before_action :set_locale
   before_action :load_categories
+  before_action :load_cart_counter
 
   private
 
@@ -25,5 +27,11 @@ class ApplicationController < ActionController::Base
   # Catalog::Search here, in the controller layer.
   def load_categories
     @categories = Catalog::Search.categories
+  end
+
+  # Units in the shopping cart for the header counter (zero when there is no
+  # cart yet). The lookup is delegated to Carts::Search, like every read.
+  def load_cart_counter
+    @cart_item_count = current_cart ? Carts::Search.total_quantity(current_cart) : 0
   end
 end

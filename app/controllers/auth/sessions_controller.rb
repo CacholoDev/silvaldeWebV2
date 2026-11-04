@@ -8,6 +8,7 @@ module Auth
 
       if user
         start_new_session_for user
+        merge_current_cart_into(user)
         redirect_to root_path, notice: I18n.t("authentication.flash.signed_in")
       else
         redirect_to login_path, alert: I18n.t("authentication.flash.invalid_credentials")

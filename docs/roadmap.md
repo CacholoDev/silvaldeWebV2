@@ -76,11 +76,12 @@ variantes; el carrito sobrevive al iniciar sesión.
 
 **Cómo se hará:** modelos `Carts::Cart` y `Carts::CartItem` (precio congelado
 al añadir) con las consultas en `Carts::Search` y caducidad a los 6 meses de
-inactividad —ya terminados—; services `Carts::*` con el carrito de invitada
-en la sesión, UI con Turbo Frames (ficha de producto y página `/cart`) y
-fusión al login sumando cantidades. Un job recurrente purga los carritos
-caducados en silencio. El detalle por slices está en
-[`backend-plan.md`](./backend-plan.md).
+inactividad; services `Carts::*` con el carrito de invitada en la sesión, UI
+con Turbo Frames (ficha de producto y página `/cart`) y fusión al login
+sumando cantidades. Un job recurrente purga los carritos caducados en
+silencio. **Código terminado** (slices 19-24 de
+[`backend-plan.md`](./backend-plan.md)); pendiente el cierre de la versión
+(code review, CHANGELOG, PR y publicación).
 
 ### ⬜ v0.5.0 — Pedidos
 

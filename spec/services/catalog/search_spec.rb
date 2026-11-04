@@ -139,4 +139,17 @@ RSpec.describe Catalog::Search do
         .to raise_error(ActiveRecord::RecordNotFound)
     end
   end
+
+  describe ".variant_by_id!" do
+    it "finds the variant" do
+      variant = create(:variant)
+
+      expect(described_class.variant_by_id!(variant.id)).to eq(variant)
+    end
+
+    it "raises RecordNotFound for an unknown id" do
+      expect { described_class.variant_by_id!(0) }
+        .to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
 end

@@ -60,6 +60,9 @@ module Authentication
   def terminate_session
     Current.session&.destroy
     cookies.delete(COOKIE_KEY)
+    # The cart lives in the Rails session: forget it too, so the next person
+    # using this browser never sees or writes the account's cart.
+    session.delete(:cart_id)
     Current.user = nil
     Current.session = nil
   end
