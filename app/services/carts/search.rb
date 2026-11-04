@@ -19,6 +19,12 @@ module Carts
       cart.cart_items.find_by(variant: variant)
     end
 
+    # Total units in the cart (the header counter): the sum of the line
+    # quantities, zero for an empty cart.
+    def self.total_quantity(cart)
+      cart.cart_items.sum(:quantity)
+    end
+
     # Carts without activity for longer than the retention window.
     def self.expired
       Cart.where.not(updated_at: Cart::MAX_INACTIVITY.ago..)

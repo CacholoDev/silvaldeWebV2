@@ -58,6 +58,22 @@ RSpec.describe Carts::Search do
     end
   end
 
+  describe ".total_quantity" do
+    it "sums the quantities of the cart lines" do
+      cart = create(:cart)
+      create(:cart_item, cart: cart, quantity: 2)
+      create(:cart_item, cart: cart, quantity: 3)
+
+      expect(described_class.total_quantity(cart)).to eq(5)
+    end
+
+    it "is zero for an empty cart" do
+      cart = create(:cart)
+
+      expect(described_class.total_quantity(cart)).to eq(0)
+    end
+  end
+
   describe ".expired" do
     it "includes a cart inactive for over six months" do
       cart = create(:cart)

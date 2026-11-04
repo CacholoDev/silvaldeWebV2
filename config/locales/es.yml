@@ -136,6 +136,16 @@ es:
       submit: "Guardar"
   communications_consent:
     label: "Quiero recibir ofertas y rebajas."
+  cart:
+    title: "Carrito"
+    items_count:
+      one: "1 artículo"
+      other: "%{count} artículos"
+    variant: "Variante"
+    quantity: "Cantidad"
+    add_to_cart: "Añadir al carrito"
+    added: "Añadido al carrito"
+    add_failed: "No se ha podido añadir al carrito"
   activerecord:
     errors:
       models:

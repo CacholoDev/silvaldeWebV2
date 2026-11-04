@@ -1,0 +1,7 @@
+<%# Inner content of the header cart counter: the turbo-frame in the navbar
+    wraps this, and Turbo Streams replace it after every add to the cart. %>
+<span class="inline-flex items-center gap-1.5 text-sm font-medium text-muted">
+  <%= t("cart.title") %>
+  <span class="rounded-full bg-surface px-2 py-0.5 text-xs font-medium text-ink" aria-hidden="true"><%= count %></span>
+  <span class="sr-only"><%= t("cart.items_count", count: count) %></span>
+</span>

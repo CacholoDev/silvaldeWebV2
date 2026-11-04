@@ -39,11 +39,12 @@ versión la define el roadmap.
   y SEO, tema claro/oscuro e i18n). Publicado como `v0.2.0` y `v0.3.0`.
 - **En curso** (v0.4.0, rama `feat/shopping-cart`): carrito. Los slices 19
   (modelos `Carts::Cart`, `Carts::CartItem` y `Carts::Search`, con precio
-  congelado y caducidad de 6 meses) y 20 (services `Carts::AddItem`,
+  congelado y caducidad de 6 meses), 20 (services `Carts::AddItem`,
   `Carts::UpdateQuantity`, `Carts::RemoveItem` y carrito de invitada en la
-  sesión con el concern `CurrentCart`) están **terminados**; siguen la UI
-  (21-22), la fusión al login (23) y el purge de caducados (24).
-- **Siguiente**: slices 21-24 y, al terminar la versión, code review + PR +
+  sesión con el concern `CurrentCart`) y 21 (añadir al carrito desde la ficha
+  con contador Turbo Frame en el header) están **terminados**; siguen la
+  página `/cart` (22), la fusión al login (23) y el purge de caducados (24).
+- **Siguiente**: slices 22-24 y, al terminar la versión, code review + PR +
   publicación de `v0.4.0`.
 
 ---
@@ -116,9 +117,10 @@ versión la define el roadmap.
 
 ## Carrito: UI y fusión (v0.4.0)
 
-21. ⬜ **Añadir al carrito desde la ficha de producto** (selector de variante
+21. ✅ **Añadir al carrito desde la ficha de producto** (selector de variante
     + cantidad + contador del carrito en el header con Turbo Frame) + request
-    specs.
+    specs. El contador se actualiza al instante con Turbo Streams (sin
+    recargar) y el formulario tiene fallback HTML sin JavaScript.
 22. ⬜ **Página `/cart`** (líneas, cantidades, subtotales, total y estado
     vacío) con Turbo Frames, sin recargar.
 23. ⬜ **Fusión al login**: carrito de invitada + carrito de cuenta = sumar
