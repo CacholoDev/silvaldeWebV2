@@ -16,8 +16,10 @@
           <% decorated = decorate(item) %>
           <tr id="<%= dom_id(item) %>">
             <td class="py-4 pr-4">
+              <%# _top: the link opens the product page in the whole window;
+                  inside the frame Turbo would fail with "Content missing". %>
               <%= link_to item.variant.product.name, product_path(item.variant.product.slug),
-                    class: "font-medium hover:text-ink" %>
+                    data: { turbo_frame: "_top" }, class: "font-medium hover:text-ink" %>
               <p class="mt-0.5 text-sm text-muted"><%= item.variant.name %></p>
             </td>
             <td class="py-4 pr-4 text-muted"><%= decorated.formatted_unit_price %></td>
@@ -49,6 +51,7 @@
   <div class="mt-10 text-center">
     <p class="text-lg"><%= t("cart.empty_title") %></p>
     <%= link_to t("cart.continue_shopping"), products_path,
+          data: { turbo_frame: "_top" },
           class: "mt-4 inline-block rounded-md bg-sage px-4 py-2 text-sm font-medium text-white hover:bg-sage-dark" %>
   </div>
 <% end %>

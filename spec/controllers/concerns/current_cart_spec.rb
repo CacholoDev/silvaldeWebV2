@@ -4,6 +4,7 @@ RSpec.describe CurrentCart, type: :controller do
   # Build an anonymous controller that includes the concern under test and
   # exposes the actions we want to drive.
   controller(ApplicationController) do
+    include Authentication
     include CurrentCart
 
     def show
@@ -27,6 +28,12 @@ RSpec.describe CurrentCart, type: :controller do
       get "attach" => "anonymous#attach"
       get "detach" => "anonymous#detach"
     end
+  end
+
+  def sign_in(user)
+    session_record, plaintext = Auth::Session.build_for(user)
+    session_record.save!
+    cookies.signed[:session_token] = plaintext
   end
 
   describe "#current_cart" do
@@ -60,6 +67,28 @@ RSpec.describe CurrentCart, type: :controller do
 
       get :attach, params: { cart_id: cart.id }
       cart.update_column(:updated_at, 7.months.ago)
+      get :show
+
+      expect(response.body).to eq("cart-none")
+    end
+
+    it "falls back to the user's cart when the session has none" do
+      user = create(:user)
+      cart = create(:cart, user: user)
+      sign_in(user)
+
+      get :show
+
+      expect(response.body).to eq("cart-#{cart.id}")
+    end
+
+    it "forgets a cart that belongs to another user" do
+      owner = create(:user)
+      foreign_cart = create(:cart, user: owner)
+      user = create(:user)
+      sign_in(user)
+
+      get :attach, params: { cart_id: foreign_cart.id }
       get :show
 
       expect(response.body).to eq("cart-none")

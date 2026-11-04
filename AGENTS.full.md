@@ -112,6 +112,17 @@ consultar al usuario y actualizar esta sección y el changelog.
   `Carts::Search` y el purge será un job recurrente silencioso (sin avisos a
   la clienta). El carrito de invitada vive en la sesión (cookie) y no necesita
   tope.
+- **La pertenencia se decide al resolver el carrito** (review de v0.4.0): el
+  carrito de la sesión solo se muestra y se escribe si es de invitada o de la
+  cuenta activa; un carrito de otra cuenta se olvida, no se toca.
+  `terminate_session` borra el `cart_id` de la sesión y signup y login
+  reclaman/fusionan el carrito de invitada igual (`merge_current_cart_into`).
+- **Riesgos aceptados (review de v0.4.0)**: la validación de unicidad
+  `cart_id + variant_id` no es segura ante carreras (dos pestañas añadiendo la
+  misma variante pueden disparar `RecordNotUnique` → error 500; sin corrupción
+  gracias a la transacción); el purge no usa batching (volumen diario bajo);
+  y el contador del header suma cantidades en cada petición (una consulta
+  indexada por página).
 
 **Política de generadores:**
 

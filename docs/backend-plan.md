@@ -37,12 +37,12 @@ versión la define el roadmap.
   (modelos, login/logout, signup, recuperación de contraseña, roles, perfil,
   consentimiento, imágenes, seed, búsqueda, vistas públicas con accesibilidad
   y SEO, tema claro/oscuro e i18n). Publicado como `v0.2.0` y `v0.3.0`.
-- **En curso** (v0.4.0, rama `feat/shopping-cart`): carrito. Los slices 19-22
-  (modelos, services, añadir desde la ficha con contador y página `/cart`) y
-  23 (fusión del carrito de invitada al login) están **terminados**; queda el
-  purge de caducados (24).
-- **Siguiente**: slice 24 y, al terminar la versión, code review + PR +
-  publicación de `v0.4.0`.
+- **En curso** (v0.4.0, rama `feat/shopping-cart`): carrito. Los slices 19-24
+  están **terminados** (modelos, services, añadir desde la ficha con contador,
+  página `/cart`, fusión al login y purge de caducados). El código de la
+  versión está completo.
+- **Siguiente**: cierre de v0.4.0 — code review de la versión, CHANGELOG,
+  `bin/ci` en verde, PR #14 y publicación.
 
 ---
 
@@ -127,8 +127,8 @@ versión la define el roadmap.
     invitado con su precio congelado y borrar el carrito de invitada. Un
     carrito de otra cuenta jamás se toca. Specs de servicio e integración
     (incluye el caso de conflicto).
-24. ⬜ **Purge de carritos caducados** (`Carts::PurgeExpired` + job recurrente
-    de Solid Queue, silencioso) + specs.
+24. ✅ **Purge de carritos caducados** (`Carts::PurgeExpired` + job recurrente
+    de Solid Queue, silencioso, diario a las 3am en producción) + specs.
 
 ## Pedidos: checkout y estados
 

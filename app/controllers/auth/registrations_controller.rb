@@ -9,6 +9,7 @@ module Auth
 
       if @user.persisted?
         start_new_session_for @user
+        merge_current_cart_into(@user)
         redirect_to root_path, notice: I18n.t("authentication.flash.signed_up")
       else
         render :new, status: :unprocessable_content

@@ -15,11 +15,15 @@ consulta [`README.md`](./README.md). El historial de cambios vive en
 
 Publicadas v0.1.0, v0.2.0 (autenticación y usuarios) y v0.3.0 (catálogo:
 modelos, imágenes, seed, búsqueda y vistas públicas con accesibilidad y SEO).
-En curso, v0.4.0 (carrito) en la rama `feat/shopping-cart`: modelos
-`Carts::Cart` y `Carts::CartItem` (precio congelado al añadir; el carrito
-caduca a los 6 meses de inactividad) con las consultas de lectura en
-`Carts::Search`. Quedan los services de caso de uso, la UI del carrito, la
-página `/cart`, la fusión al login y el purge de carritos caducados.
+En curso, v0.4.0 (carrito) en la rama `feat/shopping-cart`: el código está
+**completo** — modelos `Carts::Cart` y `Carts::CartItem` (precio congelado al
+añadir; el carrito caduca a los 6 meses de inactividad) con las lecturas en
+`Carts::Search`, services `Carts::*` (añadir, actualizar y borrar líneas,
+fusión al login sumando cantidades y purge de caducados con un job recurrente
+de Solid Queue), carrito de invitada en la sesión (concern `CurrentCart`) y UI
+con Turbo Frames (ficha de producto, contador en el header y página `/cart`).
+Pendiente solo el cierre de la versión: code review, CHANGELOG, PR #14 y
+publicación.
 `app/decorators` existe desde v0.3.0 (`ApplicationDecorator` y decorators
 del catálogo): añade ahí la presentación cuando haga falta. No añadas
 estructura por adelantado.

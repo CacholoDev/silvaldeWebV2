@@ -41,5 +41,21 @@ RSpec.describe "Cart page", type: :request do
 
       expect(response.body).to include(%(href="#{cart_path}"))
     end
+
+    it "opens the article links outside the cart frame" do
+      post cart_items_path, params: { variant_id: variant.id, quantity: 1 }
+
+      get cart_path
+      link = Nokogiri::HTML(response.body).at_css("#cart_contents a[href='#{product_path(variant.product.slug)}']")
+
+      expect(link["data-turbo-frame"]).to eq("_top")
+    end
+
+    it "opens the empty-state link outside the cart frame" do
+      get cart_path
+      link = Nokogiri::HTML(response.body).at_css("#cart_contents a[href='#{products_path}']")
+
+      expect(link["data-turbo-frame"]).to eq("_top")
+    end
   end
 end

@@ -8,9 +8,7 @@ module Auth
 
       if user
         start_new_session_for user
-        # The guest cart (if any) merges into the user's cart; the session
-        # keeps pointing at the resulting cart.
-        self.current_cart = Carts::Merge.call(user: user, cart: current_cart)
+        merge_current_cart_into(user)
         redirect_to root_path, notice: I18n.t("authentication.flash.signed_in")
       else
         redirect_to login_path, alert: I18n.t("authentication.flash.invalid_credentials")
