@@ -41,10 +41,11 @@ versión la define el roadmap.
   (modelos `Carts::Cart`, `Carts::CartItem` y `Carts::Search`, con precio
   congelado y caducidad de 6 meses), 20 (services `Carts::AddItem`,
   `Carts::UpdateQuantity`, `Carts::RemoveItem` y carrito de invitada en la
-  sesión con el concern `CurrentCart`) y 21 (añadir al carrito desde la ficha
-  con contador Turbo Frame en el header) están **terminados**; siguen la
-  página `/cart` (22), la fusión al login (23) y el purge de caducados (24).
-- **Siguiente**: slices 22-24 y, al terminar la versión, code review + PR +
+  sesión con el concern `CurrentCart`), 21 (añadir al carrito desde la ficha
+  con contador Turbo Frame en el header) y 22 (página `/cart` con líneas,
+  cantidades, total y estado vacío) están **terminados**; siguen la fusión al
+  login (23) y el purge de caducados (24).
+- **Siguiente**: slices 23-24 y, al terminar la versión, code review + PR +
   publicación de `v0.4.0`.
 
 ---
@@ -121,8 +122,10 @@ versión la define el roadmap.
     + cantidad + contador del carrito en el header con Turbo Frame) + request
     specs. El contador se actualiza al instante con Turbo Streams (sin
     recargar) y el formulario tiene fallback HTML sin JavaScript.
-22. ⬜ **Página `/cart`** (líneas, cantidades, subtotales, total y estado
-    vacío) con Turbo Frames, sin recargar.
+22. ✅ **Página `/cart`** (líneas, cantidades, subtotales, total y estado
+    vacío) con Turbo Frames, sin recargas. El contador del header enlaza a la
+    página y cada línea solo se puede tocar desde su propio carrito (404 si se
+    intenta con una línea ajena).
 23. ⬜ **Fusión al login**: carrito de invitada + carrito de cuenta = sumar
     cantidades de las variantes comunes y vaciar el carrito de sesión. Specs
     de integración (incluye el caso de conflicto).

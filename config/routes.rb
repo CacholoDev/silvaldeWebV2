@@ -37,7 +37,10 @@ Rails.application.routes.draw do
   resource :profile, only: %i[show edit update], controller: "users/profiles"
 
   # Shopping cart
+  get "cart", to: "carts/carts#show", as: :cart
   post "cart/items", to: "carts/items#create", as: :cart_items
+  patch "cart/items/:id", to: "carts/items#update", as: :cart_item
+  delete "cart/items/:id", to: "carts/items#destroy"
 
   # Locale switching
   post "locale", to: "locales#update", as: :locale

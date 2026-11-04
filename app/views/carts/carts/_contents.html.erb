@@ -1,0 +1,54 @@
+<% if items.any? %>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <caption class="sr-only"><%= t("cart.page_title") %></caption>
+      <thead>
+        <tr class="border-y border-line text-left text-muted">
+          <th scope="col" class="py-2 pr-4 font-medium"><%= t("cart.item") %></th>
+          <th scope="col" class="py-2 pr-4 font-medium"><%= t("cart.unit_price") %></th>
+          <th scope="col" class="py-2 pr-4 font-medium"><%= t("cart.quantity") %></th>
+          <th scope="col" class="py-2 pr-4 font-medium"><%= t("cart.subtotal") %></th>
+          <th scope="col" class="py-2 font-medium"><span class="sr-only"><%= t("cart.actions") %></span></th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-line">
+        <% items.each do |item| %>
+          <% decorated = decorate(item) %>
+          <tr id="<%= dom_id(item) %>">
+            <td class="py-4 pr-4">
+              <%= link_to item.variant.product.name, product_path(item.variant.product.slug),
+                    class: "font-medium hover:text-ink" %>
+              <p class="mt-0.5 text-sm text-muted"><%= item.variant.name %></p>
+            </td>
+            <td class="py-4 pr-4 text-muted"><%= decorated.formatted_unit_price %></td>
+            <td class="py-4 pr-4">
+              <%= form_with url: cart_item_path(item), method: :patch, class: "flex items-center gap-2" do |f| %>
+                <%= f.label :quantity, t("cart.quantity"), for: dom_id(item, :quantity), class: "sr-only" %>
+                <%= f.number_field :quantity, value: item.quantity, min: 1, id: dom_id(item, :quantity),
+                      class: "w-20 rounded-md border border-line bg-paper px-2 py-1.5" %>
+                <%= f.submit t("cart.update"),
+                      class: "cursor-pointer rounded-md border border-line px-3 py-1.5 text-sm font-medium hover:bg-surface" %>
+              <% end %>
+            </td>
+            <td class="py-4 pr-4 font-medium"><%= decorated.formatted_subtotal %></td>
+            <td class="py-4">
+              <%= button_to t("cart.remove"), cart_item_path(item), method: :delete,
+                    class: "cursor-pointer text-sm font-medium text-muted underline underline-offset-2 hover:text-ink" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="mt-6 flex items-baseline justify-between border-t border-line pt-4">
+    <span class="text-lg font-semibold"><%= t("cart.total") %></span>
+    <span class="text-lg font-semibold"><%= format_cents(total_cents) %></span>
+  </div>
+<% else %>
+  <div class="mt-10 text-center">
+    <p class="text-lg"><%= t("cart.empty_title") %></p>
+    <%= link_to t("cart.continue_shopping"), products_path,
+          class: "mt-4 inline-block rounded-md bg-sage px-4 py-2 text-sm font-medium text-white hover:bg-sage-dark" %>
+  </div>
+<% end %>

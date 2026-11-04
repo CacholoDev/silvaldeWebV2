@@ -74,6 +74,57 @@ RSpec.describe Carts::Search do
     end
   end
 
+  describe ".items_for" do
+    it "returns the lines of the cart, in insertion order" do
+      cart = create(:cart)
+      first_item = create(:cart_item, cart: cart)
+      second_item = create(:cart_item, cart: cart)
+      create(:cart_item)
+
+      expect(described_class.items_for(cart)).to eq([ first_item, second_item ])
+    end
+
+    it "is empty when there is no cart" do
+      expect(described_class.items_for(nil)).to eq([])
+    end
+  end
+
+  describe ".total_cents" do
+    it "sums the subtotals of the lines" do
+      cart = create(:cart)
+      create(:cart_item, cart: cart, quantity: 2, unit_price_cents: 1500)
+      create(:cart_item, cart: cart, quantity: 1, unit_price_cents: 500)
+
+      expect(described_class.total_cents(cart)).to eq(3500)
+    end
+
+    it "is zero when there is no cart" do
+      expect(described_class.total_cents(nil)).to eq(0)
+    end
+  end
+
+  describe ".find_item_by_id!" do
+    it "returns the line when it belongs to the cart" do
+      cart = create(:cart)
+      item = create(:cart_item, cart: cart)
+
+      expect(described_class.find_item_by_id!(cart, item.id)).to eq(item)
+    end
+
+    it "raises RecordNotFound for a line of another cart" do
+      cart = create(:cart)
+      item = create(:cart_item)
+
+      expect { described_class.find_item_by_id!(cart, item.id) }
+        .to raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    it "raises RecordNotFound when there is no cart" do
+      expect { described_class.find_item_by_id!(nil, 1) }
+        .to raise_error(ActiveRecord::RecordNotFound)
+    end
+  end
+
   describe ".expired" do
     it "includes a cart inactive for over six months" do
       cart = create(:cart)

@@ -146,6 +146,19 @@ es:
     add_to_cart: "Añadir al carrito"
     added: "Añadido al carrito"
     add_failed: "No se ha podido añadir al carrito"
+    page_title: "Tu carrito"
+    empty_title: "Tu carrito está vacío"
+    continue_shopping: "Seguir comprando"
+    item: "Artículo"
+    actions: "Acciones"
+    unit_price: "Precio unitario"
+    subtotal: "Subtotal"
+    total: "Total"
+    update: "Actualizar"
+    updated: "Carrito actualizado"
+    update_failed: "No se ha podido actualizar el carrito"
+    remove: "Eliminar"
+    removed: "Artículo eliminado"
   activerecord:
     errors:
       models:

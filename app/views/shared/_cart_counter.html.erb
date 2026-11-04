@@ -1,7 +1,10 @@
 <%# Inner content of the header cart counter: the turbo-frame in the navbar
-    wraps this, and Turbo Streams replace it after every add to the cart. %>
-<span class="inline-flex items-center gap-1.5 text-sm font-medium text-muted">
+    wraps this, and Turbo Streams replace it after every cart change. The
+    link opts out of the frame (turbo_frame: "_top") so it opens the cart
+    page in the whole window instead of inside the navbar. %>
+<%= link_to cart_path, data: { turbo_frame: "_top" },
+      class: "inline-flex items-center gap-1.5 text-sm font-medium text-muted hover:text-ink" do %>
   <%= t("cart.title") %>
   <span class="rounded-full bg-surface px-2 py-0.5 text-xs font-medium text-ink" aria-hidden="true"><%= count %></span>
   <span class="sr-only"><%= t("cart.items_count", count: count) %></span>
-</span>
+<% end %>

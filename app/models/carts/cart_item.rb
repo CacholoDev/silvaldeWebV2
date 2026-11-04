@@ -16,5 +16,10 @@ module Carts
 
     # One line per variant per cart (the unique index enforces it too).
     validates :variant_id, uniqueness: { scope: :cart_id }
+
+    # Subtotal of this line: the frozen unit price times the quantity.
+    def subtotal_cents
+      quantity * unit_price_cents
+    end
   end
 end

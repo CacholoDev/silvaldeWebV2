@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.describe "Cart items", type: :request do
   let(:variant) { create(:variant, price_cents: 1500) }
+  let(:turbo_stream_headers) { { "ACCEPT" => "text/vnd.turbo-stream.html" } }
 
   describe "POST /cart/items" do
     it "adds a line and redirects back to the product page" do
@@ -41,8 +42,6 @@ RSpec.describe "Cart items", type: :request do
   end
 
   describe "POST /cart/items with Turbo" do
-    let(:turbo_stream_headers) { { "ACCEPT" => "text/vnd.turbo-stream.html" } }
-
     it "updates the header counter without reloading" do
       post cart_items_path, params: { variant_id: variant.id, quantity: 2 }, headers: turbo_stream_headers
 
@@ -89,6 +88,86 @@ RSpec.describe "Cart items", type: :request do
       get product_path(variant.product.slug)
 
       expect(response.body).to include(I18n.t("cart.items_count", count: 2))
+    end
+  end
+
+  describe "PATCH /cart/items/:id" do
+    it "updates the quantity and refreshes the cart without reloading" do
+      post cart_items_path, params: { variant_id: variant.id, quantity: 1 }
+      item = Carts::CartItem.sole
+
+      patch cart_item_path(item), params: { quantity: 5 }, headers: turbo_stream_headers
+
+      expect(response.media_type).to eq("text/vnd.turbo-stream.html")
+      expect(item.reload.quantity).to eq(5)
+      expect(response.body).to include('target="cart_contents"')
+      expect(response.body).to include('target="cart_counter"')
+      expect(response.body).to include(I18n.t("cart.updated"))
+    end
+
+    it "reports the error and keeps the quantity when it is invalid" do
+      post cart_items_path, params: { variant_id: variant.id, quantity: 2 }
+      item = Carts::CartItem.sole
+
+      patch cart_item_path(item), params: { quantity: 0 }, headers: turbo_stream_headers
+
+      expect(response).to have_http_status(:unprocessable_content)
+      expect(item.reload.quantity).to eq(2)
+      expect(response.body).to include(I18n.t("cart.update_failed"))
+    end
+
+    it "falls back to redirect with flash without turbo" do
+      post cart_items_path, params: { variant_id: variant.id, quantity: 1 }
+      item = Carts::CartItem.sole
+
+      patch cart_item_path(item), params: { quantity: 5 }
+
+      expect(item.reload.quantity).to eq(5)
+      expect(response).to redirect_to(cart_path)
+      expect(flash[:notice]).to eq(I18n.t("cart.updated"))
+    end
+
+    it "returns 404 for a line of another cart" do
+      foreign_item = create(:cart_item)
+
+      patch cart_item_path(foreign_item), params: { quantity: 5 }
+
+      expect(response).to have_http_status(:not_found)
+      expect(foreign_item.reload.quantity).to eq(1)
+    end
+  end
+
+  describe "DELETE /cart/items/:id" do
+    it "removes the line and shows the empty state when it was the last" do
+      post cart_items_path, params: { variant_id: variant.id, quantity: 1 }
+      item = Carts::CartItem.sole
+
+      delete cart_item_path(item), headers: turbo_stream_headers
+
+      expect(Carts::CartItem.count).to eq(0)
+      expect(response.body).to include('target="cart_contents"')
+      expect(response.body).to include(I18n.t("cart.empty_title"))
+      expect(response.body).to include(I18n.t("cart.removed"))
+    end
+
+    it "falls back to redirect with flash without turbo" do
+      post cart_items_path, params: { variant_id: variant.id, quantity: 1 }
+      item = Carts::CartItem.sole
+
+      delete cart_item_path(item)
+
+      expect(Carts::CartItem.count).to eq(0)
+      expect(response).to redirect_to(cart_path)
+      expect(flash[:notice]).to eq(I18n.t("cart.removed"))
+    end
+
+    it "returns 404 for a line of another cart" do
+      foreign_item = create(:cart_item)
+
+      delete cart_item_path(foreign_item)
+
+      expect(response).to have_http_status(:not_found)
+      expect(Carts::CartItem.count).to eq(1)
     end
   end
 end

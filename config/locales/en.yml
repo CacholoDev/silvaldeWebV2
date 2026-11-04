@@ -146,6 +146,19 @@ en:
     add_to_cart: "Add to cart"
     added: "Added to cart"
     add_failed: "Could not add it to the cart"
+    page_title: "Your cart"
+    empty_title: "Your cart is empty"
+    continue_shopping: "Keep shopping"
+    item: "Item"
+    actions: "Actions"
+    unit_price: "Unit price"
+    subtotal: "Subtotal"
+    total: "Total"
+    update: "Update"
+    updated: "Cart updated"
+    update_failed: "Could not update the cart"
+    remove: "Remove"
+    removed: "Item removed"
   activerecord:
     errors:
       models:

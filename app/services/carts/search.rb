@@ -25,6 +25,30 @@ module Carts
       cart.cart_items.sum(:quantity)
     end
 
+    # The lines of a cart (variant and product preloaded), in insertion order.
+    # A nil cart (guest without a cart yet) has no lines.
+    def self.items_for(cart)
+      return [] if cart.nil?
+
+      cart.cart_items.includes(variant: :product).order(:id)
+    end
+
+    # Cart total in cents: the sum of the line subtotals, zero without cart.
+    def self.total_cents(cart)
+      return 0 if cart.nil?
+
+      cart.cart_items.sum("quantity * unit_price_cents")
+    end
+
+    # The line with this id inside the given cart (ownership check), or raises
+    # ActiveRecord::RecordNotFound so the controller responds 404.
+    def self.find_item_by_id!(cart, id)
+      item = cart&.cart_items&.find_by(id: id)
+      raise ActiveRecord::RecordNotFound if item.nil?
+
+      item
+    end
+
     # Carts without activity for longer than the retention window.
     def self.expired
       Cart.where.not(updated_at: Cart::MAX_INACTIVITY.ago..)
