@@ -16,7 +16,8 @@ services:
       # Grants the application user full privileges on any database
       # (including the *_test sibling created by `bin/rails db:create`).
       # Runs only on the first boot of a fresh MySQL volume.
-      - ./docker/mysql/init:/docker-entrypoint-initdb.d:ro
+      # `z` relabels the mount for SELinux (Fedora); harmless on Ubuntu.
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d:ro,z
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p${MYSQL_ROOT_PASSWORD}"]
       interval: 5s
