@@ -69,22 +69,17 @@ por stock de la variante), imágenes con Active Storage, `Catalog::Search`,
 vistas públicas con Tailwind, accesibilidad WCAG 2.2 AA y base de SEO en
 página. Publicada el 2026-11-01 con el tag `v0.3.0`.
 
-### 🚧 v0.4.0 — Carrito
+### ✅ v0.4.0 — Carrito
 
-**Qué se hace:** carrito para visitantes y clientas registradas; cantidades y
-variantes; el carrito sobrevive al iniciar sesión.
-
-**Cómo se hará:** modelos `Carts::Cart` y `Carts::CartItem` (precio congelado
-al añadir) con las consultas en `Carts::Search` y caducidad a los 6 meses de
-inactividad; services `Carts::*` con el carrito de invitada en la sesión, UI
-con Turbo Frames (ficha de producto y página `/cart`) y fusión al login
-sumando cantidades. Un job recurrente purga los carritos caducados en
-silencio. **Código terminado e integrado en `main`** (slices 19-24 de
-[`backend-plan.md`](./backend-plan.md); PRs #14 y #15), más el endurecimiento
-de la rama `chore/project-health` (carreras al añadir, memoización de
-`current_cart`, system spec y cops de arquitectura). Pendiente: review de la
-versión con `project-reviewer` y publicación de `v0.4.0` según
-[versioning.md](./versioning.md).
+Carrito para visitantes y clientas registradas, con cantidades y variantes,
+que sobrevive al iniciar sesión. Modelos `Carts::Cart` y `Carts::CartItem`
+(precio congelado al añadir), consultas en `Carts::Search` y caducidad a los
+6 meses de inactividad con purge recurrente silencioso. Carrito de invitada
+en la sesión, UI con Turbo Frames (ficha de producto, contador del header y
+página `/cart`) y fusión al login sumando cantidades. Endurecida antes de
+publicar: reintento ante carreras, validación de cantidades, memoización de
+`current_cart`, system spec, cops de arquitectura y Rails 8.1.4.1. Publicada
+el 2026-11-10 con el tag `v0.4.0`.
 
 ### ⬜ v0.5.0 — Pedidos
 

@@ -34,8 +34,9 @@ lanzamiento público de la tienda.
 3. Actualizar `CHANGELOG.md`: mover lo acumulado en «Sin publicar» a la nueva
    versión con su fecha.
 4. Actualizar el archivo `VERSION` (solo eso: la app lo lee sola).
-5. Commit en `main`: `chore: publica vX.Y.Z`.
-6. Crear el tag y subirlo junto con la rama:
+5. Commit `chore: publica vX.Y.Z`: directamente en `main` o, mejor, como
+   último commit del PR que cierra la versión (así pasa por el CI de GitHub).
+6. Con ese commit ya en `main`, crear el tag y subirlo junto con la rama:
 
    ```bash
    git tag -a vX.Y.Z -m "vX.Y.Z"

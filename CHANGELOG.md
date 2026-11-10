@@ -12,6 +12,8 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
 
 ## [Sin publicar]
 
+## [0.4.0] - 2026-11-10
+
 ### Añadido
 
 - **Carrito de compra** para invitadas y clientas: añadir variantes desde la
@@ -284,6 +286,8 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
 - Flujo de trabajo por ramas y Conventional Commits en
   `docs/git-workflow.md`, y plan de fases en `docs/roadmap.md`.
 
-[Sin publicar]: https://github.com/CacholoDev/silvaldeWebV2/compare/v0.2.0...HEAD
+[Sin publicar]: https://github.com/CacholoDev/silvaldeWebV2/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/CacholoDev/silvaldeWebV2/compare/v0.3.0...v0.4.0
+[0.3.0]: https://github.com/CacholoDev/silvaldeWebV2/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/CacholoDev/silvaldeWebV2/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/CacholoDev/silvaldeWebV2/releases/tag/v0.1.0
