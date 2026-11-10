@@ -18,7 +18,7 @@ module Auth
       token_lost = false
 
       ActiveRecord::Base.transaction do
-        consumed = PasswordResetToken.active.where(id: token.id).update_all(used_at: Time.current)
+        consumed = Search.active_password_reset_tokens.where(id: token.id).update_all(used_at: Time.current)
         if consumed != 1
           token_lost = true
           raise ActiveRecord::Rollback
@@ -28,7 +28,7 @@ module Auth
           raise ActiveRecord::Rollback
         end
 
-        PasswordResetToken.active.where(user: user).update_all(used_at: Time.current)
+        Search.active_password_reset_tokens.where(user: user).update_all(used_at: Time.current)
         Session.where(user: user).destroy_all
       end
 

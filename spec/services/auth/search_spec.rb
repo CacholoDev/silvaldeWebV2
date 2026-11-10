@@ -1,6 +1,47 @@
 require "rails_helper"
 
 RSpec.describe Auth::Search do
+  # Moved from the model scopes (Auth::Session.active and
+  # Auth::PasswordResetToken.active/expired/used): models never query.
+  describe ".active_sessions" do
+    let(:user) { create(:user) }
+
+    it "includes sessions that have not expired" do
+      session = create(:session, user: user, expires_at: 1.hour.from_now)
+
+      expect(described_class.active_sessions).to include(session)
+    end
+
+    it "excludes expired sessions" do
+      session = create(:session, user: user, expires_at: 1.minute.ago)
+
+      expect(described_class.active_sessions).not_to include(session)
+    end
+  end
+
+  describe ".active_password_reset_tokens" do
+    let(:user) { create(:user) }
+
+    it "includes a fresh token" do
+      token = create(:password_reset_token, user: user)
+
+      expect(described_class.active_password_reset_tokens).to include(token)
+    end
+
+    it "excludes an expired token" do
+      token = create(:password_reset_token, user: user, expires_at: 1.minute.ago)
+
+      expect(described_class.active_password_reset_tokens).not_to include(token)
+    end
+
+    it "excludes a used token" do
+      token = create(:password_reset_token, user: user)
+      token.mark_used!
+
+      expect(described_class.active_password_reset_tokens).not_to include(token)
+    end
+  end
+
   describe ".find_active_password_reset_token" do
     let(:user) { create(:user) }
 

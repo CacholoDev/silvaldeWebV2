@@ -14,9 +14,6 @@ module Auth
     validates :token_digest, presence: true, uniqueness: true
     validates :expires_at, presence: true
 
-    scope :active, -> { where("expires_at > ?", Time.current) }
-    scope :expired, -> { where("expires_at <= ?", Time.current) }
-
     # Hashes a plaintext token with SHA256 and returns the hex digest.
     # SHA256 is fast and sufficient for opaque session tokens (which
     # already have 256 bits of entropy); we don't need the brute-force
