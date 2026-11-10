@@ -13,7 +13,7 @@ Al abrir una sesión de trabajo:
 2. Lee este documento para saber en qué **slice** exacto vamos.
 3. Antes de empezar un slice, el agente lo explica en profundidad (qué entra,
    qué queda fuera y cómo se prueba a mano) y espera tu OK (regla de
-   `AGENTS.md`, «Ritmo de trabajo y modelo mental»).
+   `AGENTS.md`, «Cómo trabajamos»).
 
 Leyenda: ✅ hecho · 🚧 en curso · ⬜ pendiente
 

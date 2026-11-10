@@ -91,6 +91,11 @@ versión con `project-reviewer` y publicación de `v0.4.0` según
 **Qué se hace:** checkout (sin pasarela de pago de momento), pedidos con
 estados, detalle visible para la clienta y email de confirmación.
 
+**A tener en cuenta:** la FK `cart_items.variant_id` impide borrar una
+variante o un producto que esté en algún carrito (`InvalidForeignKey`).
+Decidir aquí o en el panel admin (v0.6.0) si se archiva en lugar de borrar o
+se limpian antes las líneas.
+
 **Cómo se hará:** modelos `Order` y `OrderItem` con los precios congelados en
 el momento de la compra; máquina de estados del pedido con **AASM** —estados
 `pending → confirmed → shipped → delivered`, o `cancelled` (en la UI:

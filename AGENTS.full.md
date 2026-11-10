@@ -109,8 +109,9 @@ consultar al usuario y actualizar esta sección y el changelog.
   sumando cantidades de las variantes comunes; nunca sobreescribiendo.
 - **Caducidad a los 6 meses de inactividad** (tope de retención por
   seguridad): `Carts::Cart::MAX_INACTIVITY`. Las consultas viven en
-  `Carts::Search` y el purge será un job recurrente silencioso (sin avisos a
-  la clienta). El carrito de invitada vive en la sesión (cookie) y no necesita
+  `Carts::Search` y el purge es un job recurrente silencioso
+  (`Carts::PurgeExpiredJob`, diario en `config/recurring.yml`; sin avisos a la
+  clienta). El carrito de invitada vive en la sesión (cookie) y no necesita
   tope.
 - **La pertenencia se decide al resolver el carrito** (review de v0.4.0): el
   carrito de la sesión solo se muestra y se escribe si es de invitada o de la
@@ -125,9 +126,19 @@ consultar al usuario y actualizar esta sección y el changelog.
 - **`current_cart` memoizado por petición (2026-11-10)**, con clave
   `[session[:cart_id], current_user.id]`: si cambia la sesión o el usuario en
   la misma petición, se resuelve de nuevo.
+- **Cantidades en el borde (review de v0.4.0)**: `Carts::AddItem` rechaza
+  cantidades menores que 1 antes de sumar (antes `-3` sobre una línea de 10 la
+  dejaba en 7) y el controller convierte el parámetro con `.to_s.to_i`, así
+  que un valor raro (`quantity[]=1`) es un 0 inválido, no un 500.
 - **Riesgos aceptados (review de v0.4.0)**: el purge no usa batching (volumen
-  diario bajo) y el contador del header suma cantidades en cada petición (una
-  consulta indexada por página).
+  diario bajo; sin índice en `carts.updated_at`, hace un scan diario
+  asumible) y el contador del header suma cantidades en cada petición (una
+  consulta indexada por página). **Carrera del primer añadido**: si una
+  visitante sin carrito hace doble clic o añade desde dos pestañas a la vez,
+  cada petición puede crear su propio carrito (no hay unicidad posible por
+  usuario); la sesión se queda con uno y el otro queda huérfano hasta que el
+  purge lo borra a los 6 meses. No da error ni mezcla datos de otras cuentas;
+  se revisará si aparece en la práctica.
 
 **Política de generadores:**
 
@@ -135,8 +146,8 @@ consultar al usuario y actualizar esta sección y el changelog.
   arquitectura de servicios y decorators.
 - Generadores pequeños (`model`, `migration`) están permitidos como punto de
   partida; controllers, servicios, decorators y vistas se escriben a mano.
-- La autenticación se escribe a mano, slice a slice (ver `AGENTS.md`, «Ritmo
-  de trabajo y modelo mental»); no se usa el generador oficial para hacerlo
+- La autenticación se escribe a mano, slice a slice (ver `AGENTS.md`, «Cómo
+  trabajamos»); no se usa el generador oficial para hacerlo
   todo de una vez.
 
 **Candidatos futuros (decidir cuando toque, no instalar ahora):**

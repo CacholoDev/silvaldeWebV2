@@ -8,7 +8,7 @@ module Carts
       item = Carts::AddItem.call(
         cart: current_cart,
         variant: variant,
-        quantity: params[:quantity].to_i,
+        quantity: params[:quantity].to_s.to_i,
         user: current_user
       )
       self.current_cart = item.cart if item.errors.empty?
@@ -21,7 +21,7 @@ module Carts
 
     def update
       item = Carts::Search.find_item_by_id!(current_cart, params[:id])
-      Carts::UpdateQuantity.call(item: item, quantity: params[:quantity].to_i)
+      Carts::UpdateQuantity.call(item: item, quantity: params[:quantity].to_s.to_i)
 
       if item.errors.empty?
         respond_to do |format|

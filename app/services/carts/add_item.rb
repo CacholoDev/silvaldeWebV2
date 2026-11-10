@@ -17,6 +17,15 @@ module Carts
   # retried once, and the retry finds the line and sums the quantity.
   class AddItem
     def self.call(cart:, variant:, quantity: 1, user: nil)
+      # Adding nothing or a negative amount is never valid, even when the
+      # sum with an existing line would still be positive (10 + -3 = 7).
+      # Rejected up front, without touching the database.
+      if quantity < 1
+        item = CartItem.new(cart: cart, variant: variant, quantity: quantity)
+        item.errors.add(:quantity, :greater_than_or_equal_to, count: 1)
+        return item
+      end
+
       attempts = 0
 
       begin

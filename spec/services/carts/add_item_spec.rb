@@ -109,4 +109,23 @@ RSpec.describe Carts::AddItem do
       }.to raise_error(ActiveRecord::RecordNotUnique)
     end
   end
+
+  context "with a quantity below 1" do
+    it "rejects a negative quantity on an existing line instead of subtracting" do
+      cart = create(:cart)
+      existing = create(:cart_item, cart: cart, variant: variant, quantity: 10)
+
+      result = described_class.call(cart: cart, variant: variant, quantity: -3)
+
+      expect(result.errors[:quantity]).to be_present
+      expect(existing.reload.quantity).to eq(10)
+    end
+
+    it "rejects zero without creating a cart" do
+      expect {
+        result = described_class.call(cart: nil, variant: variant, quantity: 0)
+        expect(result.errors[:quantity]).to be_present
+      }.not_to change(Carts::Cart, :count)
+    end
+  end
 end

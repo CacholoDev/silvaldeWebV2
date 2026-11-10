@@ -41,10 +41,11 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
 
 - `current_cart` se memoiza por petición (antes consultaba la base de datos
   en cada llamada: layout, contador y controller).
-- Las consultas de autenticación (`Auth::Session.active` y
-  `Auth::PasswordResetToken.active/expired/used`) salen de los modelos a
-  `Auth::Search` (`active_sessions`, `active_password_reset_tokens`),
-  coherente con la regla «los modelos no consultan».
+- Las consultas de autenticación salen de los modelos a `Auth::Search`
+  (`Auth::Session.active` → `active_sessions` y
+  `Auth::PasswordResetToken.active` → `active_password_reset_tokens`),
+  coherente con la regla «los modelos no consultan». Los scopes `expired` y
+  `used`, que no se usaban, se eliminan.
 - Dependabot agrupa las subidas minor/patch de gemas y las de GitHub Actions
   en un PR semanal cada una.
 - `AGENTS.md` reorganizado: sin reglas duplicadas ni contradictorias, el
@@ -60,9 +61,14 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
 
 ### Corregido
 
-- Añadir la misma variante a la vez desde dos pestañas ya no da un error 500:
-  `Carts::AddItem` reintenta una vez ante `RecordNotUnique` y suma la
-  cantidad a la línea existente.
+- Añadir la misma variante a la vez desde dos pestañas a un carrito que ya
+  existe ya no da un error 500: `Carts::AddItem` reintenta una vez ante
+  `RecordNotUnique` y suma la cantidad a la línea existente.
+- Añadir una cantidad negativa o cero a una línea existente ya no la reduce
+  en silencio con el mensaje «Añadido al carrito»: se rechaza.
+- Una cantidad malformada (`quantity[]=1`) ya no provoca un error 500.
+- Una visitante sin carrito ya no lanza una consulta inútil
+  (`carts.id IS NULL`) en cada página.
 - `Carts::Merge` destruye el carrito de invitada con `destroy!`: un fallo ya
   no pasa en silencio.
 

@@ -34,6 +34,13 @@ RSpec.describe "Cart items", type: :request do
       expect(flash[:alert]).to eq(I18n.t("cart.add_failed"))
     end
 
+    it "treats a malformed quantity (an array) as invalid instead of a 500" do
+      post cart_items_path, params: { variant_id: variant.id, quantity: [ "1" ] }
+
+      expect(Carts::CartItem.count).to eq(0)
+      expect(flash[:alert]).to eq(I18n.t("cart.add_failed"))
+    end
+
     it "returns 404 for an unknown variant" do
       post cart_items_path, params: { variant_id: 0, quantity: 1 }
 

@@ -10,7 +10,10 @@ module Carts
 
     # The non-expired cart with this id (the session stores just the id), or
     # nil when it is missing or already expired.
+    # A blank id (guest without a cart) returns nil without a query.
     def self.find_active_cart(id)
+      return nil if id.blank?
+
       active.find_by(id: id)
     end
 
