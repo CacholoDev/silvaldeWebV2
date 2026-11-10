@@ -26,6 +26,45 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
   catálogo no la reescriben) y el carrito caduca a los 6 meses de inactividad.
 - Job recurrente `Carts::PurgeExpiredJob` (Solid Queue, diario) que purga en
   silencio los carritos caducados con sus líneas.
+- System spec del carrito (`spec/system/shopping_cart_spec.rb`, Chrome
+  headless): añadir desde la ficha, contador del header vía Turbo y página
+  `/cart`.
+- Cops de RuboCop propios (`Silvalde/NoActiveRecordInControllers` y
+  `Silvalde/NoQueriesInModels`) que hacen cumplir en `bin/rubocop` y en el CI
+  las reglas de arquitectura de `AGENTS.md`.
+- Herramientas de agentes versionadas: `CLAUDE.md` (carga `AGENTS.md` en
+  Claude Code), permisos en `.claude/settings.json` y `opencode.json`
+  (commit, push, merge y tag siempre piden confirmación) y skill `commit`
+  (ver `docs/agent-tooling.md`).
+
+### Cambiado
+
+- `current_cart` se memoiza por petición (antes consultaba la base de datos
+  en cada llamada: layout, contador y controller).
+- Las consultas de autenticación (`Auth::Session.active` y
+  `Auth::PasswordResetToken.active/expired/used`) salen de los modelos a
+  `Auth::Search` (`active_sessions`, `active_password_reset_tokens`),
+  coherente con la regla «los modelos no consultan».
+- Dependabot agrupa las subidas minor/patch de gemas y las de GitHub Actions
+  en un PR semanal cada una.
+- `AGENTS.md` reorganizado: sin reglas duplicadas ni contradictorias, el
+  estado del proyecto se consulta en el roadmap y la confirmación de commits
+  acepta cualquier OK natural.
+- `.agents/` y `skills-lock.json` dejan de ignorarse en git para que las
+  skills del proyecto lleguen a cualquier PC.
+- `docker-compose.yml` monta el init de MySQL con `:z` (SELinux en Fedora).
+
+### Eliminado
+
+- Gema `jbuilder`: no hay API y no se usaba.
+
+### Corregido
+
+- Añadir la misma variante a la vez desde dos pestañas ya no da un error 500:
+  `Carts::AddItem` reintenta una vez ante `RecordNotUnique` y suma la
+  cantidad a la línea existente.
+- `Carts::Merge` destruye el carrito de invitada con `destroy!`: un fallo ya
+  no pasa en silencio.
 
 ### Seguridad
 

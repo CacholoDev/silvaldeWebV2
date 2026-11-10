@@ -42,7 +42,7 @@ Vale para cualquier PC nuevo: clona, configura `.env` y arranca.
    ```bash
    git clone https://github.com/CacholoDev/silvaldeWebV2.git
    cd silvaldeWebV2
-   git switch feat/shopping-cart   # o la rama que toque en cada momento
+   git switch main   # o la rama de trabajo que toque
    ```
 
 2. Copia [`.env.example`](./.env.example) a `.env` y pon valores seguros
@@ -52,6 +52,11 @@ Vale para cualquier PC nuevo: clona, configura `.env` y arranca.
    ```bash
    docker compose up -d db
    ```
+
+   En Fedora sin permisos para el socket de Docker (tu usuario no está en el
+   grupo `docker`), Podman funciona igual sin sudo: `podman-compose up -d db`.
+   El volumen de init lleva `:z` para que SELinux deje leerlo. Si el puerto
+   3306 ya está ocupado por otro MySQL, pon `DB_PORT=3307` en `.env`.
 
 4. Instala dependencias y prepara la base de datos:
 
@@ -66,7 +71,8 @@ Vale para cualquier PC nuevo: clona, configura `.env` y arranca.
    ```
 
 Los comandos de validación y las convenciones de implementación están definidos
-en [`AGENTS.md`](./AGENTS.md). Las directrices ampliadas están en
+en [`AGENTS.md`](./AGENTS.md) (Claude Code lo carga a través de
+[`CLAUDE.md`](./CLAUDE.md)). Las directrices ampliadas están en
 [`AGENTS.full.md`](./AGENTS.full.md). Los agentes deben leer `AGENTS.md` antes
 de modificar código y consultar la versión completa cuando la tarea afecte a
 arquitectura, seguridad, datos o UX.
@@ -74,16 +80,12 @@ arquitectura, seguridad, datos o UX.
 ## Estado y versionado
 
 El proyecto está en desarrollo temprano. Publicadas: **0.1.0** (base del
-proyecto), **0.2.0** («autenticación y usuarios») y **0.3.0** («catálogo»:
-modelos, imágenes, seed, búsqueda y vistas públicas con accesibilidad y SEO).
-La versión en desarrollo es la **0.4.0** («carrito»), en la rama
-`feat/shopping-cart`: el código está completo —carrito de invitada en la
-sesión, añadir desde la ficha con contador Turbo, página `/cart` con
-cantidades y total, fusión al login sumando cantidades, precios congelados,
-caducidad a los 6 meses y purge recurrente— y queda cerrar la versión (code
-review, CHANGELOG y publicación). La fuente única de
-verdad es el archivo [`VERSION`](./VERSION) y el historial de cambios vive
-en [`CHANGELOG.md`](./CHANGELOG.md).
+proyecto), **0.2.0** («autenticación y usuarios») y **0.3.0** («catálogo»).
+La **0.4.0** («carrito») está integrada en `main` y pendiente de publicar. El
+estado al día de cada fase está en [`docs/roadmap.md`](./docs/roadmap.md) y
+lo que entrará en la próxima versión, en la sección «Sin publicar» de
+[`CHANGELOG.md`](./CHANGELOG.md). La fuente única de verdad de la versión es
+el archivo [`VERSION`](./VERSION).
 
 El desarrollo se organiza en ramas por funcionalidad (`feat/authentication`,
 `feat/catalog`, `feat/shopping-cart`, …) que se fusionan en `main` con el CI
@@ -96,6 +98,8 @@ y la convención completa de ramas y releases en [`AGENTS.md`](./AGENTS.md).
   una feature.
 - [`docs/versioning.md`](./docs/versioning.md): cómo se versiona la web.
 - [`docs/roadmap.md`](./docs/roadmap.md): fases previstas y control del avance.
+- [`docs/agent-tooling.md`](./docs/agent-tooling.md): skills, permisos de
+  los agentes, cops propios, Dependabot y cómo tener lo mismo en varios PCs.
 - [`CHANGELOG.md`](./CHANGELOG.md): historial de cambios por versión.
 
 ## Variables de entorno y seguridad

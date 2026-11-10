@@ -37,12 +37,13 @@ versión la define el roadmap.
   (modelos, login/logout, signup, recuperación de contraseña, roles, perfil,
   consentimiento, imágenes, seed, búsqueda, vistas públicas con accesibilidad
   y SEO, tema claro/oscuro e i18n). Publicado como `v0.2.0` y `v0.3.0`.
-- **En curso** (v0.4.0, rama `feat/shopping-cart`): carrito. Los slices 19-24
-  están **terminados** (modelos, services, añadir desde la ficha con contador,
-  página `/cart`, fusión al login y purge de caducados). El código de la
-  versión está completo.
-- **Siguiente**: cierre de v0.4.0 — code review de la versión, CHANGELOG,
-  `bin/ci` en verde, PR #14 y publicación.
+- **Hecho, sin publicar** (v0.4.0): carrito. Los slices 19-24 están
+  terminados e integrados en `main` (PRs #14 y #15): modelos, services, añadir
+  desde la ficha con contador, página `/cart`, fusión al login y purge de
+  caducados. Endurecido después en `chore/project-health` (reintento ante
+  carreras, memoización de `current_cart` y system spec).
+- **Siguiente**: publicar v0.4.0 (review con `project-reviewer`, CHANGELOG,
+  `VERSION` y tag) y empezar v0.5.0 (pedidos).
 
 ---
 

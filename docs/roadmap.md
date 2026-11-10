@@ -79,9 +79,12 @@ al añadir) con las consultas en `Carts::Search` y caducidad a los 6 meses de
 inactividad; services `Carts::*` con el carrito de invitada en la sesión, UI
 con Turbo Frames (ficha de producto y página `/cart`) y fusión al login
 sumando cantidades. Un job recurrente purga los carritos caducados en
-silencio. **Código terminado** (slices 19-24 de
-[`backend-plan.md`](./backend-plan.md)); pendiente el cierre de la versión
-(code review, CHANGELOG, PR y publicación).
+silencio. **Código terminado e integrado en `main`** (slices 19-24 de
+[`backend-plan.md`](./backend-plan.md); PRs #14 y #15), más el endurecimiento
+de la rama `chore/project-health` (carreras al añadir, memoización de
+`current_cart`, system spec y cops de arquitectura). Pendiente: review de la
+versión con `project-reviewer` y publicación de `v0.4.0` según
+[versioning.md](./versioning.md).
 
 ### ⬜ v0.5.0 — Pedidos
 

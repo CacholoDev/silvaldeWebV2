@@ -54,6 +54,23 @@ Formato [Conventional Commits](https://www.conventionalcommits.org/) con
 - `refactor: extract product search service`
 - `chore: bump gems`
 
+## Confirmación de commits con agentes
+
+El agente propone el mensaje y la lista de archivos que entran (sin pegar el
+diff: se revisa en el panel Source Control de VS Code) y espera un OK.
+Cualquier afirmativa natural vale («dale», «ok», «venga», «vamos», «sí»…).
+El push siempre es una confirmación aparte. Claude Code y opencode piden
+confirmación para `git commit`, `git push`, `git merge` y `git tag` por
+configuración (ver [agent-tooling.md](./agent-tooling.md)). Atajo: skill
+`/commit`.
+
+## Ramas de Dependabot
+
+Dependabot abre cada semana un PR agrupado para las subidas *minor* y *patch*
+de gemas y otro para GitHub Actions; las *major* llegan sueltas. Se revisan
+como cualquier PR: CI en verde y, si son majors, leer el changelog de la gema.
+Al cerrar o mergear un PR, borra su rama `dependabot/*`.
+
 ## Reglas
 
 - Un commit = un cambio coherente. No mezclar refactors con features.

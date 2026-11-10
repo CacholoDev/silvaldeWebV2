@@ -24,10 +24,11 @@ lanzamiento público de la tienda.
 ## Cómo publicar una nueva versión
 
 1. Al terminar la versión y antes de abrir su pull request — **no al final de
-   cada slice** — pasar el code review de superpowers (skills
-   `requesting-code-review` y `receiving-code-review`) sobre el trabajo de la
-   versión, usando las reglas de `AGENTS.md` y las skills y plugins
-   disponibles; corregir o documentar los hallazgos antes de seguir.
+   cada slice** — pasar el code review con el agente `project-reviewer` (ver
+   [agent-tooling.md](./agent-tooling.md)) o, si no está disponible, con las
+   skills de superpowers `requesting-code-review` y `receiving-code-review`,
+   usando las reglas de `AGENTS.md`; corregir o documentar los hallazgos
+   antes de seguir.
 2. Asegurarse de que `main` está verde: `bin/ci` (o, como mínimo,
    `bundle exec rspec`, `bin/rubocop`, `bin/brakeman` y `bin/bundler-audit`).
 3. Actualizar `CHANGELOG.md`: mover lo acumulado en «Sin publicar» a la nueva
