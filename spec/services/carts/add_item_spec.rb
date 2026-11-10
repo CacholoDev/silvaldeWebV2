@@ -72,4 +72,41 @@ RSpec.describe Carts::AddItem do
     expect(result.errors[:quantity]).to be_present
     expect(item.reload.quantity).to eq(2)
   end
+
+  context "when a concurrent request inserts the same line first" do
+    it "retries once and sums into the line the other request created" do
+      cart = create(:cart)
+      existing = create(:cart_item, cart: cart, variant: variant, quantity: 2)
+
+      # First attempt: misses the line (the other request has not committed
+      # yet) and the unique index rejects the insert.
+      lookups = 0
+      allow(Carts::Search).to receive(:find_item_by_variant).and_wrap_original do |original, *args|
+        lookups += 1
+        lookups == 1 ? nil : original.call(*args)
+      end
+      saves = 0
+      allow_any_instance_of(Carts::CartItem).to receive(:save).and_wrap_original do |original, *args|
+        saves += 1
+        raise ActiveRecord::RecordNotUnique, "Duplicate entry" if saves == 1
+
+        original.call(*args)
+      end
+
+      item = described_class.call(cart: cart, variant: variant, quantity: 1)
+
+      expect(item).to eq(existing)
+      expect(existing.reload.quantity).to eq(3)
+      expect(cart.cart_items.count).to eq(1)
+    end
+
+    it "gives up after the retry instead of looping" do
+      cart = create(:cart)
+      allow_any_instance_of(Carts::CartItem).to receive(:save).and_raise(ActiveRecord::RecordNotUnique)
+
+      expect {
+        described_class.call(cart: cart, variant: variant, quantity: 1)
+      }.to raise_error(ActiveRecord::RecordNotUnique)
+    end
+  end
 end

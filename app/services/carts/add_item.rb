@@ -10,8 +10,26 @@ module Carts
   # Returns the CartItem. When the resulting line is invalid (for example a
   # quantity below 1) nothing is persisted and the item carries the errors.
   # `quantity` must be an Integer; controllers coerce form input at the edge.
+  #
+  # Two requests adding the same variant at once (two tabs, a double click)
+  # can both miss the existing line and both insert it: the unique index
+  # rejects the second with RecordNotUnique. That attempt is rolled back and
+  # retried once, and the retry finds the line and sums the quantity.
   class AddItem
     def self.call(cart:, variant:, quantity: 1, user: nil)
+      attempts = 0
+
+      begin
+        attempts += 1
+        add(cart: cart, variant: variant, quantity: quantity, user: user)
+      rescue ActiveRecord::RecordNotUnique
+        raise if attempts > 1
+
+        retry
+      end
+    end
+
+    def self.add(cart:, variant:, quantity:, user:)
       item = nil
 
       ActiveRecord::Base.transaction do
