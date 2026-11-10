@@ -29,6 +29,11 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
 
 ### Seguridad
 
+- Rails actualizado a 8.1.4.1 (parche de seguridad: advisories en Active
+  Storage —uno crítico—, Action Pack, Action View, Active Support y Action
+  Mailbox), junto con `loofah` 2.25.3, `nokogiri` 1.19.7 y
+  `rails-html-sanitizer` 1.7.2 (ReDoS y XSS en el sanitizador).
+  `bin/bundler-audit` vuelve a verde.
 - `rack` actualizado a 3.2.8: corrige GHSA-wvg4-6p58-3gh3 (bypass de
   `header_rules` en `Rack::Static` con segmentos `.` sin normalizar) y
   GHSA-p8x9-v4hv-2w4g (el guard de boundary multipart acepta parámetros
