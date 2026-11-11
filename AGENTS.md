@@ -126,9 +126,13 @@ Flujo completo en [`docs/git-workflow.md`](./docs/git-workflow.md) y
   mensajes de commit y contenido de los PRs. En español: documentación,
   comentarios extensos y la conversación con el usuario. Detalle en
   `AGENTS.full.md`, «Idioma de código y documentación».
-- **i18n obligatoria desde el inicio.** Español e inglés; el idioma lo elige
-  la usuaria con un selector visible en la UI. Nada de cadenas hardcodeadas en
-  vistas, mailers ni controllers: todo va en `config/locales/{es,en}.yml`. No
+- **i18n obligatoria desde el inicio.** Español (por defecto), gallego e
+  inglés (`config.i18n.available_locales`); el idioma lo elige la usuaria con
+  un selector visible en la UI. Nada de cadenas hardcodeadas en vistas,
+  mailers ni controllers: **toda clave nueva va en los tres**
+  `config/locales/{es,gl,en}.yml` (lo comprueban `spec/i18n` y el barrido de
+  `/project-review`). El contenido del catálogo (nombres y descripciones de
+  productos) está solo en español. No
   se deduce el idioma de la URL ni de `Accept-Language` hasta que se defina.
 - **No toques tests existentes para ocultar un fallo.** Corrige el código de
   producción o añade cobertura. Si un contrato cambia de verdad (p. ej. una

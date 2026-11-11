@@ -1,0 +1,334 @@
+gl:
+  errors:
+    format: "%{message}"
+    # Generic validation messages (Rails only ships them in English). The
+    # format above shows just the message, so each one names the attribute.
+    # Model-specific messages under activerecord.errors.models take priority.
+    messages:
+      accepted: "%{attribute} debe ser aceptado."
+      blank: "%{attribute} non pode estar baleiro."
+      confirmation: "%{attribute} non coincide."
+      empty: "%{attribute} non pode estar baleiro."
+      equal_to: "%{attribute} debe ser igual a %{count}."
+      even: "%{attribute} debe ser un número par."
+      exclusion: "%{attribute} non está dispoñible."
+      greater_than: "%{attribute} debe ser maior que %{count}."
+      greater_than_or_equal_to: "%{attribute} debe ser maior ou igual que %{count}."
+      in: "%{attribute} debe estar en %{count}."
+      inclusion: "%{attribute} non está na lista."
+      invalid: "%{attribute} non é válido."
+      less_than: "%{attribute} debe ser menor que %{count}."
+      less_than_or_equal_to: "%{attribute} debe ser menor ou igual que %{count}."
+      model_invalid: "A validación fallou: %{errors}"
+      not_a_number: "%{attribute} non é un número."
+      not_an_integer: "%{attribute} debe ser un número enteiro."
+      odd: "%{attribute} debe ser un número impar."
+      other_than: "%{attribute} debe ser distinto de %{count}."
+      password_too_long: "%{attribute} é demasiado longo."
+      present: "%{attribute} debe estar baleiro."
+      required: "%{attribute} ten que existir."
+      taken: "%{attribute} xa está en uso."
+      too_long:
+        one: "%{attribute} é demasiado longo (máximo 1 carácter)."
+        other: "%{attribute} é demasiado longo (máximo %{count} caracteres)."
+      too_short:
+        one: "%{attribute} é demasiado curto (mínimo 1 carácter)."
+        other: "%{attribute} é demasiado curto (mínimo %{count} caracteres)."
+      wrong_length:
+        one: "%{attribute} non ten a lonxitude correcta (1 carácter exacto)."
+        other: "%{attribute} non ten a lonxitude correcta (%{count} caracteres exactos)."
+  number:
+    currency:
+      format:
+        format: "%n %u"
+        separator: ","
+        delimiter: "."
+        precision: 2
+        unit: "€"
+  authentication:
+    flash:
+      sign_in_required: "Inicia sesión para continuar."
+      signed_in: "Iniciaches sesión."
+      signed_out: "Pechaches sesión."
+      invalid_credentials: "Correo ou contrasinal incorrectos."
+      rate_limited: "Demasiados intentos seguidos. Agarda uns minutos e volve tentalo."
+      signed_up: "Conta creada. Benvida!"
+    errors_title: "Non se puido completar:"
+    login:
+      title: "Iniciar sesión"
+      email: "Correo electrónico"
+      password: "Contrasinal"
+      submit: "Entrar"
+      no_account: "Non tes conta?"
+      forgot_password: "Esqueciches o contrasinal?"
+    signup:
+      title: "Crear conta"
+      name: "Nome"
+      email: "Correo electrónico"
+      password: "Contrasinal"
+      password_confirmation: "Confirmar contrasinal"
+      submit: "Rexistrarse"
+      have_account: "Xa tes conta?"
+  navigation:
+    main: "Navegación"
+    catalog: "Catálogo"
+    skip_to_content: "Saltar ao contido"
+    sign_in: "Iniciar sesión"
+    sign_up: "Crear conta"
+    sign_out: "Pechar sesión"
+    language: "Idioma"
+    toggle_theme: "Cambiar entre modo claro e escuro"
+    toggle_theme_dark: "Cambiar a modo escuro"
+    toggle_theme_light: "Cambiar a modo claro"
+    profile: "Perfil"
+  catalog:
+    landing:
+      title: "Benvida a Silvalde Hogar"
+      meta_description: "Decoración artesanal para o fogar: floreiros, velas, espellos e téxtil feito a man."
+      eyebrow: "Decoración artesanal"
+      headline: "Pezas feitas a man para a túa casa"
+      intro: "Eliximos obxectos que duran: cerámica feita a man, velas de cera de soia, espellos con marco de latón e téxtiles de liño lavado."
+      cta_catalog: "Ver o catálogo"
+      cta_categories: "Explorar categorías"
+      categories_title: "Categorías"
+      featured_title: "Destacados"
+      all_products: "Ver todos os produtos"
+      offers_title: "Ofertas"
+      offers_intro: "Algunhas pezas teñen o prezo rebaixado nunha das súas variantes."
+      gallery_title: "Do obradoiro á túa casa"
+      gallery_edredon: "Edredón branco"
+      gallery_habita: "Dormitorio acolledor"
+      gallery_center: "Téxtil para o teu fogar"
+      gallery_habita_alt: "Recuncho de descanso"
+      gallery_blanket: "Mantiña suave"
+      gallery_cushions: "Coxíns decorativos"
+      shop_title: "Por que mercar en Silvalde"
+      shop_handmade_title: "Feito a man"
+      shop_handmade_body: "Cada peza tráballa unha persoa, con materiais nobres e acabados a man."
+      shop_shipping_title: "Envíos a toda España"
+      shop_shipping_body: "Preparamos o teu pedido en 24-72 horas e enviámoscho con seguimento."
+      shop_advice_title: "Asesoramento personalizado"
+      shop_advice_body: "Escríbenos e axudámosche a escoller a peza e o acabado que mellor encaixan."
+    products:
+      title: "Produtos"
+      meta_description: "Todos os produtos de decoración de Silvalde Hogar: floreiros, velas, espellos e téxtil."
+      results: "Resultados para «%{query}»"
+      search_label: "Buscar produtos"
+      search_submit: "Buscar"
+      available: "Dispoñible"
+      sold_out: "Esgotado"
+      on_offer: "Oferta"
+      empty: "Non atopamos produtos con ese criterio."
+      no_image: "Sen foto"
+    show:
+      variants_title: "Variantes"
+      breadcrumb: "Ruta de navegación"
+    categories:
+      meta_description: "Todos os produtos de %{name} en Silvalde Hogar."
+    footer:
+      categories: "Categorías"
+      shop: "Tenda"
+      contact: "Contacto"
+      phone: "Teléfono"
+      email: "Correo electrónico"
+      instagram: "Instagram"
+      facebook: "Facebook"
+  app:
+    name: "Silvalde Hogar"
+    default_description: "Tenda en liña de decoración artesanal: floreiros, velas, espellos e téxtiles feitos a man."
+    footer_tagline: "Decoración artesanal escollida para durar."
+  locales:
+    es: "Español"
+    gl: "Galego"
+    en: "English"
+  passwords:
+    flash:
+      sent: "Se ese enderezo de correo está rexistrado, recibirás unha ligazón para restablecer o teu contrasinal."
+      invalid_token: "A ligazón non é válida ou caducou."
+      reset_success: "Contrasinal actualizado. Xa podes iniciar sesión."
+    new:
+      title: "Restablecer contrasinal"
+      email: "Correo electrónico"
+      submit: "Enviar instrucións"
+    edit:
+      title: "Novo contrasinal"
+      password: "Contrasinal"
+      password_confirmation: "Confirmar contrasinal"
+      submit: "Gardar contrasinal"
+    mailer:
+      subject: "Restablece o teu contrasinal"
+      instruction: "Ola, %{name}: recibimos unha solicitude para restablecer o teu contrasinal."
+      link_text: "Restablecer contrasinal"
+  profiles:
+    flash:
+      updated: "Perfil actualizado."
+    show:
+      title: "O teu perfil"
+      name: "Nome"
+      email: "Correo electrónico"
+      edit: "Editar perfil"
+    edit:
+      title: "Editar perfil"
+      name: "Nome"
+      email: "Correo electrónico"
+      current_password: "Contrasinal actual"
+      current_password_hint: "Só fai falta se cambias o correo."
+      submit: "Gardar"
+  communications_consent:
+    label: "Quero recibir ofertas e rebaixas."
+  cart:
+    title: "Carriño"
+    items_count:
+      one: "1 artigo"
+      other: "%{count} artigos"
+    variant: "Variante"
+    quantity: "Cantidade"
+    add_to_cart: "Engadir ao carriño"
+    added: "Engadido ao carriño"
+    add_failed: "Non se puido engadir ao carriño"
+    page_title: "O teu carriño"
+    empty_title: "O teu carriño está baleiro"
+    continue_shopping: "Seguir mercando"
+    item: "Artigo"
+    actions: "Accións"
+    unit_price: "Prezo unitario"
+    subtotal: "Subtotal"
+    total: "Total"
+    update: "Actualizar"
+    update_item: "Actualizar a cantidade de %{item}"
+    updated: "Carriño actualizado"
+    update_failed: "Non se puido actualizar o carriño"
+    remove: "Eliminar"
+    remove_item: "Eliminar %{item} do carriño"
+    removed: "Artigo eliminado"
+  activerecord:
+    models:
+      user: "Conta"
+      category: "Categoría"
+      product: "Produto"
+      variant: "Variante"
+      cart: "Carriño"
+      cart_item: "Liña do carriño"
+    attributes:
+      user:
+        name: "Nome"
+        email: "Correo electrónico"
+        password: "Contrasinal"
+        password_confirmation: "Confirmación do contrasinal"
+        current_password: "Contrasinal actual"
+        role: "Rol"
+        communications_consent: "Consentimento de comunicacións"
+      category:
+        name: "Nome"
+        slug: "Slug"
+      product:
+        category: "Categoría"
+        name: "Nome"
+        slug: "Slug"
+        description: "Descrición"
+        price_cents: "Prezo"
+        images: "Imaxes"
+      variant:
+        product: "Produto"
+        name: "Nome"
+        stock: "Stock"
+        price_cents: "Prezo"
+      cart:
+        user: "Conta"
+      cart_item:
+        cart: "Carriño"
+        variant: "Variante"
+        quantity: "Cantidade"
+        unit_price_cents: "Prezo unitario"
+    errors:
+      messages:
+        record_invalid: "A validación fallou: %{errors}"
+        restrict_dependent_destroy:
+          has_one: "Non se pode eliminar o rexistro porque existe un %{record} dependente."
+          has_many: "Non se pode eliminar o rexistro porque existen %{record} dependentes."
+      models:
+        user:
+          attributes:
+            email:
+              blank: "O correo non pode estar baleiro."
+              invalid: "O formato do correo non é válido."
+              taken: "Ese correo xa está rexistrado."
+              too_long: "O correo é demasiado longo (máximo %{count} caracteres)."
+              current_password_invalid: "Para cambiar o correo, escribe o teu contrasinal actual correcto."
+            name:
+              blank: "O nome non pode estar baleiro."
+              too_long: "O nome é demasiado longo (máximo %{count} caracteres)."
+            password:
+              blank: "O contrasinal non pode estar baleiro."
+              too_short: "O contrasinal é demasiado curto (mínimo %{count} caracteres)."
+              password_too_long: "O contrasinal é demasiado longo (máximo 72 caracteres)."
+            password_confirmation:
+              confirmation: "A confirmación do contrasinal non coincide."
+        category:
+          attributes:
+            name:
+              blank: "O nome non pode estar baleiro."
+              too_long: "O nome é demasiado longo (máximo %{count} caracteres)."
+              taken: "Ese nome xa está en uso."
+            slug:
+              blank: "O slug non pode estar baleiro."
+              too_long: "O slug é demasiado longo (máximo %{count} caracteres)."
+              taken: "Ese slug xa está en uso."
+        product:
+          attributes:
+            category:
+              required: "A categoría non pode estar baleira."
+            name:
+              blank: "O nome non pode estar baleiro."
+              too_long: "O nome é demasiado longo (máximo %{count} caracteres)."
+              taken: "Ese nome xa está en uso."
+            slug:
+              blank: "O slug non pode estar baleiro."
+              too_long: "O slug é demasiado longo (máximo %{count} caracteres)."
+              taken: "Ese slug xa está en uso."
+            description:
+              blank: "A descrición non pode estar baleira."
+            price_cents:
+              blank: "O prezo non pode estar baleiro."
+              not_a_number: "O prezo debe ser un número."
+              not_an_integer: "O prezo debe ser un número enteiro."
+              greater_than_or_equal_to: "O prezo non pode ser negativo."
+            images:
+              unsupported_type: "Só se admiten imaxes JPEG, PNG ou WebP."
+              too_large: "A imaxe pesa demasiado (máximo %{count} MB)."
+              too_many: "Só podes subir ata %{count} imaxes."
+        variant:
+          attributes:
+            product:
+              required: "O produto non pode estar baleiro."
+            name:
+              blank: "O nome non pode estar baleiro."
+              too_long: "O nome é demasiado longo (máximo %{count} caracteres)."
+              taken: "Ese nome xa está en uso."
+            stock:
+              blank: "O stock non pode estar baleiro."
+              not_a_number: "O stock debe ser un número."
+              not_an_integer: "O stock debe ser un número enteiro."
+              greater_than_or_equal_to: "O stock non pode ser negativo."
+            price_cents:
+              not_a_number: "O prezo debe ser un número."
+              not_an_integer: "O prezo debe ser un número enteiro."
+              greater_than_or_equal_to: "O prezo non pode ser negativo."
+        cart_item:
+          attributes:
+            cart:
+              required: "O carriño non pode estar baleiro."
+            variant:
+              required: "A variante non pode estar baleira."
+            variant_id:
+              taken: "Esa variante xa está no carriño."
+            quantity:
+              blank: "A cantidade non pode estar baleira."
+              not_a_number: "A cantidade debe ser un número."
+              not_an_integer: "A cantidade debe ser un número enteiro."
+              greater_than_or_equal_to: "A cantidade debe ser polo menos 1."
+            unit_price_cents:
+              blank: "O prezo unitario non pode estar baleiro."
+              not_a_number: "O prezo unitario debe ser un número."
+              not_an_integer: "O prezo unitario debe ser un número enteiro."
+              greater_than_or_equal_to: "O prezo unitario non pode ser negativo."

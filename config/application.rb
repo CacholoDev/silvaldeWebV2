@@ -27,6 +27,9 @@ module SilvaldeWebV2
 
     # Default UI locale is Spanish; English stays as the fallback locale.
     config.i18n.default_locale = :es
+    # Languages offered in the UI, in menu order: Spanish, Galician, English.
+    # Each needs a full config/locales/<locale>.yml (spec/i18n checks it).
+    config.i18n.available_locales = %i[es gl en]
     config.i18n.fallbacks = true
   end
 end
