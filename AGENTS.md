@@ -96,8 +96,10 @@ Flujo completo en [`docs/git-workflow.md`](./docs/git-workflow.md) y
 - **Push, merge, tags y PRs.** El agente no hace commit, push, merge ni tags
   sin confirmación explícita. El push es una acción aparte: aunque el usuario
   haya aprobado el commit, espera un OK específico para el push. Un merge en
-  `main` necesita su propia confirmación dedicada. El agente puede abrir una
-  pull request cuando el usuario se lo pida, nunca por su cuenta. (Claude
+  `main` necesita su propia confirmación dedicada. **Abrir un PR también
+  necesita el OK explícito del usuario**: que el trabajo esté terminado no lo
+  autoriza. Con la rama lista, el agente dice qué commits tiene y pregunta
+  «¿abro el PR?». (Claude
   Code y opencode lo refuerzan: piden confirmación para esos comandos, ver
   `docs/agent-tooling.md`.)
 - **Versiones.** La versión vigente vive en [`VERSION`](./VERSION) (fuente
