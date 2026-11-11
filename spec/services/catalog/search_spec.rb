@@ -60,6 +60,17 @@ RSpec.describe Catalog::Search do
       expect(described_class.products_on_offer).to contain_exactly(producto)
     end
 
+    it "loads every variant of an offer, not only the discounted one" do
+      producto = create(:product, name: "Cojín de lino", price_cents: 3000)
+      create(:variant, product: producto, name: "Oferta agotada", price_cents: 2000, stock: 0)
+      create(:variant, product: producto, name: "Normal", stock: 5)
+
+      oferta = described_class.products_on_offer.first
+
+      expect(oferta.variants.map(&:name)).to contain_exactly("Oferta agotada", "Normal")
+      expect(oferta).to be_available
+    end
+
     it "ignores variants priced above the product price" do
       producto = create(:product, name: "Maceta de barro", price_cents: 3200)
       create(:variant, product: producto, name: "Grande", price_cents: 3900)

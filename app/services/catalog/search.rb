@@ -25,13 +25,17 @@ module Catalog
     end
 
     # Products with a variant priced below the product price (offers).
+    # The offer condition picks the product ids in a subquery: filtering the
+    # preloaded relation itself would also filter the loaded variants, and a
+    # product would look sold out when only its discounted variant is.
     def self.products_on_offer(limit: 6)
-      products
+      on_offer = Product
         .joins(:variants)
         .where.not(variants: { price_cents: nil })
         .where("variants.price_cents < products.price_cents")
-        .distinct
-        .limit(limit)
+        .select(:id)
+
+      products.where(id: on_offer).limit(limit)
     end
 
     # Products whose name or description match the query. Matching is case
