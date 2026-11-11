@@ -8,6 +8,9 @@ module Auth
     # belt-and-braces).
     REMEMBER_ME_DURATION = 30.days
     DEFAULT_DURATION = 1.day
+    # Size of the user_agent column: the header comes from the client and can
+    # be longer, which made MySQL reject the insert and the login fail.
+    USER_AGENT_MAX_LENGTH = 255
 
     belongs_to :user, class_name: "Users::User"
 
@@ -32,7 +35,7 @@ module Auth
         user: user,
         token_digest: digest_for(plaintext),
         ip_address: ip_address,
-        user_agent: user_agent,
+        user_agent: user_agent&.truncate(USER_AGENT_MAX_LENGTH, omission: ""),
         expires_at: duration.from_now
       )
       [ session, plaintext ]
