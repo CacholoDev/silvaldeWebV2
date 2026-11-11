@@ -10,6 +10,17 @@ RSpec.describe "Navigation", type: :request do
       expect(response.body).not_to include("Cerrar sesión")
     end
 
+    it "signs out with a real form, so it also works without JavaScript" do
+      user = create(:user)
+      post login_path, params: { email: user.email, password: "secret123" }
+
+      get root_path
+
+      form = Nokogiri::HTML(response.body).at_css(%(form[action="#{logout_path}"]))
+      expect(form).to be_present
+      expect(form.at_css('input[name="_method"]')["value"]).to eq("delete")
+    end
+
     it "shows a sign out link when logged in" do
       user = create(:user)
       post login_path, params: { email: user.email, password: "secret123" }
