@@ -20,7 +20,7 @@ esas tiendas para la recogida.
 
 ### Lo que podrá hacer una clienta
 
-- Usar la web en **español, gallego o inglés**. ✅
+- Usar la web en **español, gallego o inglés**.
 - Ver el **catálogo** por categorías, con fotos, precios (IVA incluido),
   variantes y disponibilidad, y **buscar** productos. ✅
 - **Registrarse**, iniciar/cerrar sesión y recuperar la contraseña. ✅
