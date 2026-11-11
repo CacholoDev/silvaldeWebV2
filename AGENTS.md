@@ -63,7 +63,7 @@ demasiada superficie en una sesión y dejar al usuario sin contexto.
   3. **Propuesta de commit** (ver «Git, ramas, commits y versiones»).
 
   La review **no** es un paso automático: la lanza el usuario cuando quiere
-  (normalmente al cerrar un slice) con `/silweb-review`. Si la pide, se hace
+  (normalmente al cerrar un slice) con `/project-review`. Si la pide, se hace
   antes del commit y sus hallazgos se corrigen o se documentan como riesgo
   aceptado en `AGENTS.full.md`.
 
@@ -105,9 +105,9 @@ Flujo completo en [`docs/git-workflow.md`](./docs/git-workflow.md) y
   en `CHANGELOG.md`. SemVer en `0.x.y` hasta el lanzamiento público
   (`1.0.0`). No se sube la versión dentro de una rama `feat/*`.
 - **Code review: la lanza el usuario**, nunca el agente por iniciativa
-  propia. Se hace con la skill del proyecto `/silweb-review` (o, en opencode,
-  `@project-reviewer`), adaptada de la review que se usa en los proyectos del
-  trabajo. Modos: `slice` (lo que no se ha commiteado), `rama` o `version`
+  propia. Se hace con la skill global `/project-review` (repo
+  `agent-dotfiles`; en opencode, `@project-reviewer`) y el **perfil de silWeb**
+  en `.claude/review/` (checklist, ejemplos reales y comprobaciones propias). Modos: `slice` (lo que no se ha commiteado), `rama` o `version`
   (desde el último tag).
   - Al cerrar una versión, antes de abrir su PR, el agente **recuerda** que
     toca la review de versión y espera a que el usuario la lance.
@@ -236,12 +236,14 @@ Detalle, instalación y sincronización entre PCs en
 [`docs/agent-tooling.md`](./docs/agent-tooling.md).
 
 - **Skills del proyecto** (versionadas en git): `.claude/skills/`, las
-  propias de silWeb, como `commit` y `silweb-review`. Las leen tanto Claude
-  Code como opencode.
+  propias de silWeb, como `commit`. Las leen tanto Claude Code como opencode.
+- **Perfil de review** (versionado): `.claude/review/` — `rules.md`,
+  `examples.md` y `checks.tsv`, que usa `/project-review`.
 - **Skills de terceros** (globales, desde el repo `agent-dotfiles`):
   `frontend-design`, `accessibility`, `seo-audit`, `tailwind-animations`,
-  `find-docs`… Están instaladas en todos tus PCs, así que no van en este
-  repo.
+  `find-docs`, `rails-test-coverage` (qué tests faltan según lo crítico),
+  `rails-architecture-review` (blueprint antes de decisiones delicadas como el
+  checkout)… Están instaladas en todos tus PCs, así que no van en este repo.
 
   Antes de empezar una tarea, revisa las skills disponibles y carga las que
   apliquen.
@@ -251,11 +253,11 @@ Detalle, instalación y sincronización entre PCs en
   `systematic-debugging` (ante un bug o test en rojo), `test-driven-development`,
   `writing-plans`/`executing-plans` (tareas multi-paso) y
   `verification-before-completion` (antes de afirmar que algo está en verde).
-  Para el code review se usa `/silweb-review` (ver abajo) en lugar de
+  Para el code review se usa `/project-review` (ver abajo) en lugar de
   `requesting-code-review`, y solo cuando el usuario lo pide.
-- **`/silweb-review`** (skill del proyecto, `.claude/skills/silweb-review/`):
-  la review de silWeb. Se ejecuta en el subagente global `project-reviewer`
-  (de tu repo de dotfiles), que es de solo lectura.
+- **`/project-review`** (skill global, repo `agent-dotfiles`): la review, con
+  el perfil de `.claude/review/`. Se ejecuta en el subagente global
+  `project-reviewer`, que es de solo lectura.
 
 Si el archivo de directrices crece demasiado, mueve temas a `docs/` y
 enlázalos desde aquí, pero mantén en este archivo las reglas críticas para que

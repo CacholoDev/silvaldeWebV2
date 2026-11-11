@@ -1,0 +1,9 @@
+# Comprobaciones propias de silWeb para /project-review (rails_checks.sh).
+# Formato: LEVEL<TAB>RUTA_REGEX<TAB>EXCLUIR_REGEX|-<TAB>PATRON_GREP_E<TAB>NOMBRE
+VIOLATION	^app/controllers/.*\.rb$	concerns/authentication\.rb$	\b[A-Z][A-Za-z]*(::[A-Z][A-Za-z]*)*\.(find|find_by!?|where|all|create!?|update!?|destroy_all|delete_all|exists\?|pluck|count|first|last|authenticate_by)\b	Controllers sin consultas ni escrituras de ActiveRecord (Silvalde/NoActiveRecordInControllers)
+VIOLATION	^app/models/.*\.rb$	application_record\.rb$	^\s*(scope|default_scope)\b	Modelos sin scopes ni default_scope (Silvalde/NoQueriesInModels)
+AVISO	^app/services/.*\.rb$	/search\.rb$	\b[A-Z][A-Za-z]*(::[A-Z][A-Za-z]*)*\.(where|find_by!?|find|all|exists\?|pluck|order|joins|count|first|last)\b	Services de caso de uso que consultan sin pasar por <Dominio>::Search
+AVISO	^app/models/.*\.rb$	application_record\.rb$	^\s+def (\w+[!?]?)\(	Métodos de modelo con parámetros (la regla: métodos sin parámetros sobre su estado)
+VIOLATION	^app/(views|decorators|helpers)/	-	\.(where|find_by!?|find|pluck|joins|includes)\(	Vistas, decorators y helpers sin consultas
+AVISO	^app/(views|decorators|helpers)/	-	Search\.	Vistas, decorators y helpers que llaman a un Search (los datos deberían llegar del controller)
+AVISO	^db/migrate/	active_storage	\bt\.decimal\b|, *:decimal\b	Dinero como decimal (silWeb guarda céntimos en integer)

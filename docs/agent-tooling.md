@@ -11,7 +11,7 @@ en lugar de depender de que alguien se acuerde.
 | Directrices del proyecto | `AGENTS.md` (+ `AGENTS.full.md`) | opencode y Codex lo leen directamente; Claude Code vía `CLAUDE.md` (`@AGENTS.md`). |
 | Específico de Claude Code | `CLAUDE.md` | Claude Code |
 | Permisos del proyecto | `.claude/settings.json` (Claude Code) y `opencode.json` (opencode) | Ver «Reglas configuradas» |
-| Skills propias del proyecto | `.claude/skills/<nombre>/SKILL.md` (`commit`, `silweb-review`) | Claude Code y opencode (los dos leen `.claude/skills/`) |
+| Skills propias del proyecto | `.claude/skills/<nombre>/SKILL.md` (`commit`); perfil de review en `.claude/review/` | Claude Code y opencode (los dos leen `.claude/skills/`) |
 | Skills de terceros (frontend-design, accessibility, seo-audit, tailwind-animations…) | Globales: `~/.agents/skills/` + `~/.claude/skills/`, instaladas desde `agent-dotfiles` (`skill-lock.json` + `sync-skills.sh`) | Todos los proyectos y PCs; no van en este repo |
 | Ajustes personales de Claude Code | `.claude/settings.local.json` | Solo tu PC (ignorado por git) |
 | Reviewer, reglas y skills globales | Repo privado `agent-dotfiles` (`~/Documentos/agent-dotfiles`) | Todos tus proyectos y PCs |
@@ -64,46 +64,40 @@ recuerde. Una regla **configurada** la aplica la herramienta siempre:
 3. Acepta cualquier OK natural («dale», «ok», «venga»…).
 4. Nunca hace push sin un OK aparte.
 
-## Code review: `/silweb-review`
+## Code review: `/project-review`
 
 **La lanzas tú**, cuando quieras (normalmente al cerrar un slice o antes del
 PR de una versión). El agente nunca la lanza por su cuenta: la skill lleva
 `disable-model-invocation: true`.
 
 ```text
-/silweb-review slice      # lo que no has commiteado (o el último commit)
-/silweb-review rama       # todo desde que la rama salió de main
-/silweb-review version    # desde el último tag, con bin/ci completo
-/silweb-review full       # auditoría de todo el código (deuda acumulada)
-/silweb-review app/services/carts   # solo esas rutas
+/project-review slice      # lo que no has commiteado (o el último commit)
+/project-review rama       # todo desde que la rama salió de main
+/project-review version    # desde el último tag, con bin/ci completo
+/project-review full       # auditoría de todo el código (deuda acumulada)
+/project-review app/services/carts   # solo esas rutas
 ```
 
-Está adaptada de la review de los proyectos Rails del trabajo (everest,
-recyclia…: skill `rails-code-review`, agente `validator` y
-`review-context.md`). Mantiene su estructura y cambia las reglas por las de
-silWeb:
+Tiene dos piezas:
 
-| Pieza | En el trabajo | En silWeb |
+| Pieza | Dónde | Qué aporta |
 | --- | --- | --- |
-| Barrido automático | `validate_rules.sh` (Discard, AASM, privados…) | `.claude/skills/silweb-review/scripts/validate_rules.sh`: AR en controllers, scopes, lecturas fuera de `Search`, rescue genérico, `permit!`, SQL interpolado, `html_safe`, ids a mano, texto sin `t()`, migraciones peligrosas, dinero en float, tests desactivados |
-| i18n | Claves en `.yml` (a mano) | `check_i18n.rb`: claves usadas que faltan y paridad `es`/`en` |
-| Checklist por tipo de archivo | Pundit, Draper, ViewComponent, BaseService | Controllers, services/`Search`, models, decorators, vistas/Turbo, jobs, migraciones, specs de silWeb |
-| Entre capas | Campo de migración a vista, bang/no bang, i18n | Igual, con la estrategia de errores de silWeb (`errors` + `:unprocessable_content`) y Turbo (ids de `turbo_stream`) |
-| Pasadas | Validator + Codex (lógica/seguridad) + pasada frontend/i18n | Las tres, hechas por el mismo subagente con foco separado |
-| Ejemplos | `violation_examples.md` del template | `references/violation_examples.md` con casos reales de silWeb |
+| Skill global `/project-review` | Repo `agent-dotfiles` (`skills/project-review/`) | El método, igual en todos tus proyectos: tres pasadas (reglas; lógica y seguridad; frontend, i18n y accesibilidad), comprobación entre capas, hallazgos verificados con escenario e informe por severidad. Barrido automático con `rails_checks.sh` (rescue genérico, `permit!`, SQL interpolado, `html_safe`, *open redirect*, ids a mano, texto sin `t()`, migraciones peligrosas, tests desactivados) y `check_i18n.rb` (claves que faltan y paridad `es`/`en`). |
+| Perfil de silWeb | `.claude/review/` (este repo) | `rules.md`: checklist de silWeb por tipo de archivo (`Search`, propiedad por `current_cart`, Turbo, céntimos…), que manda sobre el genérico. `examples.md`: violaciones reales, varias de la review de la 0.4.0. `checks.tsv`: comprobaciones automáticas propias (consultas en controllers, scopes, lecturas fuera de `Search`…). |
 
-Se ejecuta en el subagente global **`project-reviewer`** (de solo lectura; vive
-en tu repo `agent-dotfiles`), así que no llena tu conversación con lecturas de
-archivos. Devuelve un veredicto, hallazgos verificados por severidad
-(🔴/🟠/🟡/🟢), la tabla entre capas y qué comprobaciones ejecutó. Respeta los
+El método viene de la review de los proyectos Rails del trabajo (skill de
+code review, agente validator y contexto de review), reescrito en genérico y
+sin nada específico de la empresa.
+
+Se ejecuta en el subagente global **`project-reviewer`** (de solo lectura),
+así que no llena tu conversación con lecturas de archivos. Respeta los
 «riesgos aceptados» de `AGENTS.full.md`.
 
-En opencode no hay `/silweb-review`: pide «pasa la review con la skill
-silweb-review» o usa `@project-reviewer`. El agente sigue la skill del
-proyecto si existe.
+En opencode no hay `/project-review`: pide «pasa la review» o usa
+`@project-reviewer`; el agente lee y sigue la misma skill.
 
-El script también se puede lanzar a mano:
-`.claude/skills/silweb-review/scripts/validate_rules.sh [archivos]`.
+El barrido también se puede lanzar a mano desde la raíz del proyecto:
+`~/.claude/skills/project-review/scripts/rails_checks.sh [archivos]`.
 
 ## Un PC nuevo, paso a paso
 

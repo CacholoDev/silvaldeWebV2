@@ -24,7 +24,7 @@ lanzamiento público de la tienda.
 ## Cómo publicar una nueva versión
 
 1. Al terminar la versión y antes de abrir su pull request, el usuario lanza
-   el code review de versión: `/silweb-review version` (ver
+   el code review de versión: `/project-review version` (ver
    [agent-tooling.md](./agent-tooling.md)) o, si no está disponible, con las
    skills de superpowers `requesting-code-review` y `receiving-code-review`,
    usando las reglas de `AGENTS.md`; corregir o documentar los hallazgos
