@@ -83,8 +83,8 @@ arquitectura, seguridad, datos o UX.
 
 El proyecto está en desarrollo temprano. Publicadas: **0.1.0** (base del
 proyecto), **0.2.0** («autenticación y usuarios»), **0.3.0** («catálogo») y
-**0.4.0** («carrito»); la **0.4.1** («endurecimiento») está en revisión. La
-siguiente fase es la **0.5.0** («pedidos»). El
+**0.4.0** («carrito») y **0.4.1** («endurecimiento»). La siguiente fase es la
+**0.5.0** («pedidos»). El
 estado al día de cada fase está en [`docs/roadmap.md`](./docs/roadmap.md) y
 lo que entrará en la próxima versión, en la sección «Sin publicar» de
 [`CHANGELOG.md`](./CHANGELOG.md). La fuente única de verdad de la versión es

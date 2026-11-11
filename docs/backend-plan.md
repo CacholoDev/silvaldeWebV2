@@ -47,8 +47,8 @@ versión la define el roadmap.
   desde la ficha con contador, página `/cart`, fusión al login y purge de
   caducados. Endurecido después en `chore/project-health` (reintento ante
   carreras, memoización de `current_cart` y system spec).
-- **En curso** (`v0.4.1`): endurecimiento tras la auditoría completa
-  (PR #25).
+- **Hecho y publicado** (`v0.4.1`, 2026-11-11): endurecimiento tras la
+  auditoría completa (PR #25).
 - **Siguiente**: v0.5.0 (pedidos).
 
 ---

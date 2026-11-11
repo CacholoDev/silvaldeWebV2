@@ -98,14 +98,14 @@ publicar: reintento ante carreras, validación de cantidades, memoización de
 `current_cart`, system spec, cops de arquitectura y Rails 8.1.4.1. Publicada
 el 2026-11-10 con el tag `v0.4.0`.
 
-### 🚧 v0.4.1 — Endurecimiento
+### ✅ v0.4.1 — Endurecimiento
 
 Arreglos de la auditoría completa con `/project-review full`: reset de
 contraseña en blanco, límite de intentos en login/registro/reset, contraseña
 para cambiar el email, HTTPS y dominio en producción, fusión de carritos,
 ofertas, mensajes de validación en los dos idiomas, purga de sesiones y
-otros detalles (ver `CHANGELOG.md`). PR #25; se publica con el tag
-`v0.4.1` al mergearlo.
+otros detalles (ver `CHANGELOG.md`). Publicada el 2026-11-11 con el tag
+`v0.4.1`.
 
 ---
 
@@ -229,6 +229,11 @@ solo con pagos offline. Ver «Guía de despliegue» abajo.
   disco con copia de seguridad), y **tamaños de imagen** optimizados
   (`ruby-vips` + variantes de Active Storage) en lugar de servir originales
   de hasta 5 MB.
+- **Variables de producción en `config/deploy.yml`:** `APP_HOST`,
+  `MAILER_FROM` y `SMTP_*` (las claves, como secretos de Kamal). Hacer que la
+  app **no arranque** en producción si falta `APP_HOST`: sin él, la
+  protección contra cabeceras `Host` falsas queda desactivada en silencio y
+  los emails apuntan a `example.com` (aviso de la review de la v0.4.1).
 - **Email transaccional** con un proveedor (SMTP), dominio verificado
   (SPF, DKIM y DMARC) para que no acabe en spam. La app ya lee `SMTP_*`
   desde la v0.4.1.
