@@ -14,6 +14,9 @@
       <tbody class="divide-y divide-line">
         <% items.each do |item| %>
           <% decorated = decorate(item) %>
+          <%# Every row has the same two buttons: the accessible name says
+              which product each one acts on (WCAG 2.4.6). %>
+          <% item_label = "#{item.variant.product.name} (#{item.variant.name})" %>
           <tr id="<%= dom_id(item) %>">
             <td class="py-4 pr-4">
               <%# _top: the link opens the product page in the whole window;
@@ -28,13 +31,14 @@
                 <%= f.label :quantity, t("cart.quantity"), for: dom_id(item, :quantity), class: "sr-only" %>
                 <%= f.number_field :quantity, value: item.quantity, min: 1, id: dom_id(item, :quantity),
                       class: "w-20 rounded-md border border-line bg-paper px-2 py-1.5" %>
-                <%= f.submit t("cart.update"),
+                <%= f.submit t("cart.update"), "aria-label": t("cart.update_item", item: item_label),
                       class: "cursor-pointer rounded-md border border-line px-3 py-1.5 text-sm font-medium hover:bg-surface" %>
               <% end %>
             </td>
             <td class="py-4 pr-4 font-medium"><%= decorated.formatted_subtotal %></td>
             <td class="py-4">
               <%= button_to t("cart.remove"), cart_item_path(item), method: :delete,
+                    "aria-label": t("cart.remove_item", item: item_label),
                     class: "cursor-pointer text-sm font-medium text-muted underline underline-offset-2 hover:text-ink" %>
             </td>
           </tr>

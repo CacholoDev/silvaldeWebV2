@@ -158,9 +158,11 @@ en:
     subtotal: "Subtotal"
     total: "Total"
     update: "Update"
+    update_item: "Update the quantity of %{item}"
     updated: "Cart updated"
     update_failed: "Could not update the cart"
     remove: "Remove"
+    remove_item: "Remove %{item} from the cart"
     removed: "Item removed"
   activerecord:
     errors:

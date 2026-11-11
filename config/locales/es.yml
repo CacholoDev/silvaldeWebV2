@@ -158,9 +158,11 @@ es:
     subtotal: "Subtotal"
     total: "Total"
     update: "Actualizar"
+    update_item: "Actualizar la cantidad de %{item}"
     updated: "Carrito actualizado"
     update_failed: "No se ha podido actualizar el carrito"
     remove: "Eliminar"
+    remove_item: "Eliminar %{item} del carrito"
     removed: "Artículo eliminado"
   activerecord:
     errors:
