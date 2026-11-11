@@ -37,7 +37,8 @@ implementes campañas, pagos reales, facturación fiscal o integraciones externa
 sin una especificación aprobada para esa tarea.
 
 El panel administrativo debe aplicar autorización por rol y limitar el acceso a
-usuarios, catálogo, pedidos, facturas y métricas según la necesidad operativa.
+usuarios, catálogo, pedidos (con justificante, no factura fiscal) y métricas
+según la necesidad operativa.
 Nunca expongas datos administrativos en respuestas públicas ni confíes en
 ocultar botones como mecanismo de autorización.
 
@@ -63,11 +64,37 @@ consultar al usuario y actualizar esta sección y el changelog.
 - **Web HTML con Hotwire**: no hay API pública; por tanto nada de Grape,
   Swagger, JWT ni Jbuilder (se quitó del Gemfile el 2026-11-10). Si algún día se necesita una API, se especifica aparte
   (sección «Cambios y documentación»).
-- **AASM para la máquina de estados de los pedidos** (`Order`): estados
-  `pending → confirmed → shipped → delivered` (o `cancelled`), con transiciones
-  definidas y documentadas (ver `docs/roadmap.md`, fase v0.5.0). La gema se
-  añade a la `Gemfile` cuando lleguemos a esa fase; la decisión se registra
-  ahora para no improvisar una máquina de estados a mano.
+- **AASM para la máquina de estados de los pedidos** (`Orders::Order`).
+  Estados del pedido (2026-11-11): `pending` → `confirmed` →
+  `ready_for_pickup` → `picked_up`, o `cancelled` desde `pending` o
+  `confirmed`; la v0.7.0 añade `shipped` → `delivered` para el envío. El
+  pago va aparte (`payment_method` y `payment_status`). AASM solo valida y
+  cambia el estado; los efectos (stock, emails, registro) van en services, no
+  en callbacks. La gema se añade en la v0.5.0. Razonamiento y alternativa
+  descartada en `docs/roadmap.md` («Por qué AASM»).
+
+**Decisiones de pedidos (2026-11-11):**
+
+- **Se puede comprar sin cuenta** (como invitada, con email); con cuenta el
+  pedido queda en «Mis pedidos». Sin cuenta, el pedido se consulta con un
+  enlace firmado del email.
+- **Entrega:** recogida en tienda (**Bertamirans** o **Noia**, A Coruña) en
+  la v0.5.0; envío a domicilio en la v0.7.0. Un único stock por variante
+  para las dos tiendas.
+- **Pago:** transferencia o Bizum (confirmación manual de la tienda) y pago
+  al recoger en la v0.5.0; **Stripe** (tarjeta) y **PayPal** en la v0.9.0,
+  tras la puesta en producción. Bizum integrado (Redsys) queda fuera de la
+  v1.0.0.
+- **Número de pedido público** no consecutivo (nunca el id en la URL ni en
+  los emails).
+- **Precios con IVA incluido**, como hoy en el catálogo.
+- **Despliegue:** VPS con Kamal (v0.8.0); proveedores por decidir.
+- **Idiomas del contenido (2026-11-11):** la interfaz va en español, gallego
+  e inglés (`config/locales`). Los productos y categorías tendrán nombre y
+  descripción por idioma desde la v0.6.0: español obligatorio, gallego e
+  inglés opcionales, con respaldo al español (opción B). La traducción
+  automática (opción C) queda para después de la v1.0.0. i18n (YAML) es solo
+  para textos fijos de la interfaz, nunca para datos.
 
 **Decisiones de datos del catálogo (2026-10-24):**
 
