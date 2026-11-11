@@ -37,7 +37,7 @@ module Auth
         end
 
         Search.active_password_reset_tokens.where(user: user).update_all(used_at: Time.current)
-        Session.where(user: user).destroy_all
+        Search.sessions_for(user).destroy_all
       end
 
       return nil if token_lost

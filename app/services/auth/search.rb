@@ -23,6 +23,11 @@ module Auth
       PasswordResetToken.where.not(used_at: nil).or(PasswordResetToken.where(expires_at: ..Time.current))
     end
 
+    # Every session of a user (revoked all at once after a password reset).
+    def self.sessions_for(user)
+      Session.where(user: user)
+    end
+
     # Finds an active session by its plaintext token (from the cookie).
     def self.find_session_by_plaintext(plaintext)
       return nil if plaintext.blank?
