@@ -3,9 +3,11 @@ module Catalog
   # and controllers delegate their lookups here instead of querying models
   # directly (same pattern as Auth::Search).
   class Search
-    # Every product with variants preloaded, ordered by name.
+    # Every product with its variants and photos preloaded (the cards show
+    # availability and the first photo: without this, one query per card),
+    # ordered by name.
     def self.products
-      Product.includes(:variants).order(:name)
+      Product.includes(:variants).with_attached_images.order(:name)
     end
 
     # Every category, ordered by name.
