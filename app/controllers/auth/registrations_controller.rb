@@ -1,5 +1,9 @@
 module Auth
   class RegistrationsController < ApplicationController
+    # Spam protection: 5 sign-ups per IP every hour.
+    rate_limit to: 5, within: 1.hour, only: :create,
+               with: -> { redirect_to signup_path, alert: I18n.t("authentication.flash.rate_limited") }
+
     def new
       @user = Users::User.new
     end

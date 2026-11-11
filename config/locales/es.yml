@@ -15,6 +15,7 @@ es:
       signed_in: "Has iniciado sesión."
       signed_out: "Has cerrado sesión."
       invalid_credentials: "Email o contraseña incorrectos."
+      rate_limited: "Demasiados intentos seguidos. Espera unos minutos y vuelve a probar."
       signed_up: "Cuenta creada. ¡Bienvenida!"
     errors_title: "No se pudo completar:"
     login:

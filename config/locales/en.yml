@@ -15,6 +15,7 @@ en:
       signed_in: "You have signed in."
       signed_out: "You have signed out."
       invalid_credentials: "Email or password is incorrect."
+      rate_limited: "Too many attempts in a row. Wait a few minutes and try again."
       signed_up: "Account created. Welcome!"
     errors_title: "There were problems:"
     login:
