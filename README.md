@@ -108,7 +108,16 @@ Los secretos y credenciales se cargan desde `.env` en desarrollo y nunca deben
 subirse al repositorio. No introduzcas contraseñas, claves, tokens ni datos
 personales reales en código, fixtures, documentación o commits.
 
-Antes de desplegar hay que configurar el correo: `APP_HOST` (dominio real
-para los enlaces de los emails) y `MAILER_FROM` (remitente), además del SMTP.
+Antes de desplegar hay que configurar en producción:
+
+- `APP_HOST`: el dominio real. Se usa en los enlaces de los emails (siempre
+  `https`) y es el único `Host` que acepta la app (más su `www.`).
+- `MAILER_FROM`: el remitente de los emails.
+- `SMTP_ADDRESS`, `SMTP_PORT`, `SMTP_USERNAME` y `SMTP_PASSWORD`: el servidor
+  de correo (contrato en `.env.example`; el proveedor se elige en la fase de
+  puesta en producción del roadmap).
+
 Sin ellos, los emails de recuperación de contraseña no funcionan en
-producción (ver `config/environments/production.rb` y `app/mailers/`).
+producción: el job de envío falla y queda como job fallido en Solid Queue.
+La app fuerza HTTPS (`force_ssl`) y asume que un proxy (kamal-proxy) termina
+el TLS delante (ver `config/environments/production.rb`).
