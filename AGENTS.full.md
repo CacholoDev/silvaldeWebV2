@@ -89,6 +89,12 @@ consultar al usuario y actualizar esta sección y el changelog.
   los emails).
 - **Precios con IVA incluido**, como hoy en el catálogo.
 - **Despliegue:** VPS con Kamal (v0.8.0); proveedores por decidir.
+- **Idiomas del contenido (2026-11-11):** la interfaz va en español, gallego
+  e inglés (`config/locales`). Los productos y categorías tendrán nombre y
+  descripción por idioma desde la v0.6.0: español obligatorio, gallego e
+  inglés opcionales, con respaldo al español (opción B). La traducción
+  automática (opción C) queda para después de la v1.0.0. i18n (YAML) es solo
+  para textos fijos de la interfaz, nunca para datos.
 
 **Decisiones de datos del catálogo (2026-10-24):**
 

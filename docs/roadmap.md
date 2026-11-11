@@ -188,6 +188,12 @@ productos y usuarias.
 - **Productos:** crear, editar, fotos, variantes y stock. **Archivar** en
   lugar de borrar (`archived_at`): un producto archivado desaparece de la
   tienda, pero los pedidos antiguos lo siguen mostrando.
+- **Productos en varios idiomas (opción B):** el nombre y la descripción de
+  productos y categorías se guardan por idioma (gema Mobility o una columna
+  por idioma; decidir aquí). En el admin, el **español es obligatorio** y el
+  **gallego y el inglés son opcionales**. Si falta una traducción, la web
+  muestra la española (respaldo), así que la tienda no tiene que escribir
+  tres veces. Las URLs (slugs) siguen en español para todos los idiomas.
 - **Usuarias:** listado, rol y bloqueo.
 - **Métricas básicas:** ventas por periodo, pedidos por estado y productos
   más vendidos. La versión de la app en el pie del panel.
@@ -333,6 +339,16 @@ pago en tienda), y devolver el dinero cuando se cancela un pedido pagado.
   el admin.
 
 ---
+
+## Después de la v1.0.0
+
+- ❓ **Traducción automática de productos (opción C):** al guardar un
+  producto en español, un job pide la traducción a un servicio externo y
+  rellena el gallego y el inglés que estén vacíos; la tienda las revisa y
+  corrige en el admin, y una traducción escrita a mano nunca se pisa. Se
+  monta encima de los campos por idioma de la v0.6.0. Antes, decidir el
+  servicio: que traduzca **bien al gallego** (no todos lo soportan), su coste
+  o límite gratuito y dónde va la clave.
 
 ## Por qué AASM para los pedidos
 

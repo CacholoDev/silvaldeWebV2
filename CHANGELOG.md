@@ -23,6 +23,9 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
   desglosa los slices 25-49 y `AGENTS.full.md` registra las decisiones de
   pedidos.
 - `AGENTS.md`: abrir un PR necesita el OK explícito del usuario.
+- Idiomas del contenido: productos y categorías por idioma en la v0.6.0
+  (español obligatorio, gallego e inglés opcionales con respaldo) y traducción
+  automática después de la v1.0.0.
 
 ## [0.4.1] - 2026-11-11
 

@@ -173,7 +173,9 @@ versión la define el roadmap.
 33. ⬜ **Pedidos en admin:** listado con filtros y acciones por estado +
     justificante imprimible.
 34. ⬜ **Productos en admin:** CRUD, fotos, variantes, stock y archivado
-    (`archived_at`) en lugar de borrado.
+    (`archived_at`) en lugar de borrado. Nombre y descripción por idioma
+    (español obligatorio; gallego e inglés opcionales con respaldo al
+    español).
 35. ⬜ **Usuarias en admin** y **métricas básicas**.
 
 ## Envío a domicilio (v0.7.0)
