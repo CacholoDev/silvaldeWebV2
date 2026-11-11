@@ -1,5 +1,12 @@
 module Auth
   class PasswordsController < ApplicationController
+    # Reset emails can flood anyone's inbox and tokens can be guessed: limit
+    # requests and submissions per IP.
+    rate_limit to: 5, within: 15.minutes, only: :create, name: "request",
+               with: -> { redirect_to new_password_path, alert: I18n.t("authentication.flash.rate_limited") }
+    rate_limit to: 10, within: 15.minutes, only: :update, name: "update",
+               with: -> { redirect_to new_password_path, alert: I18n.t("authentication.flash.rate_limited") }
+
     def new
     end
 

@@ -1,6 +1,42 @@
 es:
   errors:
     format: "%{message}"
+    # Generic validation messages (Rails only ships them in English). The
+    # format above shows just the message, so each one names the attribute.
+    # Model-specific messages under activerecord.errors.models take priority.
+    messages:
+      accepted: "%{attribute} debe ser aceptado."
+      blank: "%{attribute} no puede estar vacío."
+      confirmation: "%{attribute} no coincide."
+      empty: "%{attribute} no puede estar vacío."
+      equal_to: "%{attribute} debe ser igual a %{count}."
+      even: "%{attribute} debe ser un número par."
+      exclusion: "%{attribute} no está disponible."
+      greater_than: "%{attribute} debe ser mayor que %{count}."
+      greater_than_or_equal_to: "%{attribute} debe ser mayor o igual que %{count}."
+      in: "%{attribute} debe estar en %{count}."
+      inclusion: "%{attribute} no está en la lista."
+      invalid: "%{attribute} no es válido."
+      less_than: "%{attribute} debe ser menor que %{count}."
+      less_than_or_equal_to: "%{attribute} debe ser menor o igual que %{count}."
+      model_invalid: "La validación ha fallado: %{errors}"
+      not_a_number: "%{attribute} no es un número."
+      not_an_integer: "%{attribute} debe ser un número entero."
+      odd: "%{attribute} debe ser un número impar."
+      other_than: "%{attribute} debe ser distinto de %{count}."
+      password_too_long: "%{attribute} es demasiado larga."
+      present: "%{attribute} debe estar vacío."
+      required: "%{attribute} tiene que existir."
+      taken: "%{attribute} ya está en uso."
+      too_long:
+        one: "%{attribute} es demasiado largo (máximo 1 carácter)."
+        other: "%{attribute} es demasiado largo (máximo %{count} caracteres)."
+      too_short:
+        one: "%{attribute} es demasiado corto (mínimo 1 carácter)."
+        other: "%{attribute} es demasiado corto (mínimo %{count} caracteres)."
+      wrong_length:
+        one: "%{attribute} no tiene la longitud correcta (1 carácter exactos)."
+        other: "%{attribute} no tiene la longitud correcta (%{count} caracteres exactos)."
   number:
     currency:
       format:
@@ -15,6 +51,7 @@ es:
       signed_in: "Has iniciado sesión."
       signed_out: "Has cerrado sesión."
       invalid_credentials: "Email o contraseña incorrectos."
+      rate_limited: "Demasiados intentos seguidos. Espera unos minutos y vuelve a probar."
       signed_up: "Cuenta creada. ¡Bienvenida!"
     errors_title: "No se pudo completar:"
     login:
@@ -133,6 +170,8 @@ es:
       title: "Editar perfil"
       name: "Nombre"
       email: "Email"
+      current_password: "Contraseña actual"
+      current_password_hint: "Solo hace falta si cambias el email."
       submit: "Guardar"
   communications_consent:
     label: "Quiero recibir ofertas y rebajas."
@@ -155,12 +194,57 @@ es:
     subtotal: "Subtotal"
     total: "Total"
     update: "Actualizar"
+    update_item: "Actualizar la cantidad de %{item}"
     updated: "Carrito actualizado"
     update_failed: "No se ha podido actualizar el carrito"
     remove: "Eliminar"
+    remove_item: "Eliminar %{item} del carrito"
     removed: "Artículo eliminado"
   activerecord:
+    models:
+      user: "Cuenta"
+      category: "Categoría"
+      product: "Producto"
+      variant: "Variante"
+      cart: "Carrito"
+      cart_item: "Línea del carrito"
+    attributes:
+      user:
+        name: "Nombre"
+        email: "Email"
+        password: "Contraseña"
+        password_confirmation: "Confirmación de contraseña"
+        current_password: "Contraseña actual"
+        role: "Rol"
+        communications_consent: "Consentimiento de comunicaciones"
+      category:
+        name: "Nombre"
+        slug: "Slug"
+      product:
+        category: "Categoría"
+        name: "Nombre"
+        slug: "Slug"
+        description: "Descripción"
+        price_cents: "Precio"
+        images: "Imágenes"
+      variant:
+        product: "Producto"
+        name: "Nombre"
+        stock: "Stock"
+        price_cents: "Precio"
+      cart:
+        user: "Cuenta"
+      cart_item:
+        cart: "Carrito"
+        variant: "Variante"
+        quantity: "Cantidad"
+        unit_price_cents: "Precio unitario"
     errors:
+      messages:
+        record_invalid: "La validación ha fallado: %{errors}"
+        restrict_dependent_destroy:
+          has_one: "No se puede eliminar el registro porque existe un %{record} dependiente."
+          has_many: "No se puede eliminar el registro porque existen %{record} dependientes."
       models:
         user:
           attributes:
@@ -169,6 +253,7 @@ es:
               invalid: "El formato del email no es válido."
               taken: "Ese email ya está registrado."
               too_long: "El email es demasiado largo (máximo %{count} caracteres)."
+              current_password_invalid: "Para cambiar el email, escribe tu contraseña actual correcta."
             name:
               blank: "El nombre no puede estar vacío."
               too_long: "El nombre es demasiado largo (máximo %{count} caracteres)."

@@ -27,6 +27,17 @@ RSpec.describe "Cart page", type: :request do
       expect(response.body).to include(I18n.t("cart.remove"))
     end
 
+    it "names the product in the accessible label of each line's buttons" do
+      post cart_items_path, params: { variant_id: variant.id, quantity: 1 }
+
+      get cart_path
+
+      item = "#{variant.product.name} (#{variant.name})"
+      page = Nokogiri::HTML(response.body)
+      expect(page.at_css(%(input[type="submit"][aria-label="#{I18n.t("cart.update_item", item: item)}"]))).to be_present
+      expect(page.at_css(%(button[aria-label="#{I18n.t("cart.remove_item", item: item)}"]))).to be_present
+    end
+
     it "shows the total of the lines" do
       post cart_items_path, params: { variant_id: variant.id, quantity: 2 }
       post cart_items_path, params: { variant_id: other_variant.id, quantity: 1 }

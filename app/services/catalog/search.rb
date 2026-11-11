@@ -3,9 +3,11 @@ module Catalog
   # and controllers delegate their lookups here instead of querying models
   # directly (same pattern as Auth::Search).
   class Search
-    # Every product with variants preloaded, ordered by name.
+    # Every product with its variants and photos preloaded (the cards show
+    # availability and the first photo: without this, one query per card),
+    # ordered by name.
     def self.products
-      Product.includes(:variants).order(:name)
+      Product.includes(:variants).with_attached_images.order(:name)
     end
 
     # Every category, ordered by name.
@@ -25,13 +27,17 @@ module Catalog
     end
 
     # Products with a variant priced below the product price (offers).
+    # The offer condition picks the product ids in a subquery: filtering the
+    # preloaded relation itself would also filter the loaded variants, and a
+    # product would look sold out when only its discounted variant is.
     def self.products_on_offer(limit: 6)
-      products
+      on_offer = Product
         .joins(:variants)
         .where.not(variants: { price_cents: nil })
         .where("variants.price_cents < products.price_cents")
-        .distinct
-        .limit(limit)
+        .select(:id)
+
+      products.where(id: on_offer).limit(limit)
     end
 
     # Products whose name or description match the query. Matching is case

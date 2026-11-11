@@ -1,5 +1,9 @@
 module Auth
   class SessionsController < ApplicationController
+    # Brute force protection: 10 login attempts per IP every 3 minutes.
+    rate_limit to: 10, within: 3.minutes, only: :create,
+               with: -> { redirect_to login_path, alert: I18n.t("authentication.flash.rate_limited") }
+
     def new
     end
 

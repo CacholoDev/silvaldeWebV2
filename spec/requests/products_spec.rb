@@ -24,6 +24,17 @@ RSpec.describe "Products pages", type: :request do
   end
 
   describe "GET /products/:slug" do
+    it "keeps the meta description short enough for search results" do
+      product = create(:product, description: "Jarrón de cerámica hecho a mano. " * 20)
+      create(:variant, product: product)
+
+      get product_path(product.slug)
+
+      meta = response.body[/name="description" content="([^"]*)"/, 1]
+      expect(meta.length).to be <= 160
+      expect(meta).to start_with("Jarrón de cerámica")
+    end
+
     it "shows the product with its variants, price and availability" do
       product = create(:product, name: "Jarrón artesanal", price_cents: 4500)
       create(:variant, product: product, name: "Única", stock: 3)

@@ -12,23 +12,68 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
 
 ## [Sin publicar]
 
-### Cambiado
+## [0.4.1] - 2026-11-11
 
-- `AGENTS.md` deja explícito el orden de cierre de un slice (TDD →
-  validaciones → commit) y que las lecturas de los services también pasan por
-  el `Search` del dominio.
-- Las skills de terceros (frontend-design, accessibility, seo-audit,
-  tailwind-animations) pasan a ser globales, instaladas desde el repo
-  `agent-dotfiles`; `.agents/` y `skills-lock.json` vuelven a `.gitignore`.
+Versión de endurecimiento tras la auditoría completa del código con
+`/project-review full`.
+
+### Seguridad
+
+- El reset de contraseña rechaza una contraseña vacía antes de gastar el
+  token: antes daba por buena la operación sin cambiar nada, gastaba el token
+  y cerraba todas las sesiones.
+- Límite de intentos por IP (`rate_limit` de Rails 8) en el login (10 cada
+  3 min), el registro (5 por hora) y el reset de contraseña (5 peticiones y
+  10 envíos cada 15 min).
+- Cambiar el email del perfil exige la contraseña actual: con solo una cookie
+  robada ya no se puede cambiar el email y quedarse la cuenta con un reset.
+- Producción fuerza HTTPS (`force_ssl`, `assume_ssl`), solo acepta el dominio
+  de `APP_HOST` (una cabecera `Host` falsa ya no llega a las URLs canónicas,
+  Open Graph, el sitemap ni los emails) y los enlaces de los emails van
+  siempre por `https`.
+- La cookie de idioma es `httponly` y `SameSite=Lax`.
+
+### Corregido
+
+- Error 500 al iniciar sesión cuando la fusión de carritos superaba 999
+  unidades en una línea: ahora se limita al máximo.
+- Las ofertas de la portada decían «Agotado» cuando la variante en oferta no
+  tenía stock pero otra sí.
+- El login fallaba con un `User-Agent` de más de 255 caracteres.
+- El cierre de sesión no funcionaba sin JavaScript: ahora es un formulario.
+- Los mensajes de validación genéricos de Rails salían como «Translation
+  missing» en español y sin el nombre del campo en inglés; se añaden en los
+  dos idiomas, con los nombres de modelos y atributos.
+- El idioma elegido se perdía al cerrar el navegador: la cookie dura un año.
+- La meta description de la ficha de producto se recorta a 160 caracteres.
+- Accesibilidad: los botones «Actualizar» y «Eliminar» de cada línea del
+  carrito nombran el producto (WCAG 2.4.6).
 
 ### Añadido
 
+- Purga diaria de sesiones caducadas y tokens de reset usados o caducados
+  (`Auth::PurgeExpiredJob`).
+- Configuración SMTP de producción por variables de entorno (`SMTP_*`, ver
+  `.env.example`) y `raise_delivery_errors`: un email que falla queda como
+  job fallido en Solid Queue.
 - Code review con `/project-review` (skill global del repo `agent-dotfiles`,
   adaptada de la review de los proyectos Rails del trabajo: tres pasadas,
   comprobación entre capas, barrido con script de reglas y de i18n) y el
   perfil de silWeb en `.claude/review/` (`rules.md`, `examples.md`,
   `checks.tsv`). Solo se ejecuta cuando la lanza el usuario. Sustituye a la
   skill de proyecto `/silweb-review`.
+
+### Cambiado
+
+- Las fotos de las tarjetas de producto se precargan (`with_attached_images`):
+  una consulta fija en lugar de una por tarjeta.
+- Las lecturas de sesiones de `Auth::Reset` pasan por `Auth::Search`.
+- `AGENTS.md` deja explícito el orden de cierre de un slice (TDD →
+  validaciones → commit) y que las lecturas de los services también pasan por
+  el `Search` del dominio.
+- Las skills de terceros (frontend-design, accessibility, seo-audit,
+  tailwind-animations) pasan a ser globales, instaladas desde el repo
+  `agent-dotfiles`; `.agents/` y `skills-lock.json` vuelven a `.gitignore`.
 
 ## [0.4.0] - 2026-11-10
 
@@ -304,7 +349,8 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
 - Flujo de trabajo por ramas y Conventional Commits en
   `docs/git-workflow.md`, y plan de fases en `docs/roadmap.md`.
 
-[Sin publicar]: https://github.com/CacholoDev/silvaldeWebV2/compare/v0.4.0...HEAD
+[Sin publicar]: https://github.com/CacholoDev/silvaldeWebV2/compare/v0.4.1...HEAD
+[0.4.1]: https://github.com/CacholoDev/silvaldeWebV2/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/CacholoDev/silvaldeWebV2/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/CacholoDev/silvaldeWebV2/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/CacholoDev/silvaldeWebV2/compare/v0.1.0...v0.2.0

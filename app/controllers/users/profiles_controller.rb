@@ -23,7 +23,7 @@ module Users
     private
 
     def profile_params
-      params.require(:user).permit(:name, :email, :communications_consent)
+      params.require(:user).permit(:name, :email, :communications_consent, :current_password)
     end
   end
 end

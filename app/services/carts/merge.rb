@@ -22,7 +22,9 @@ module Carts
         cart.cart_items.each do |line|
           existing = Search.find_item_by_variant(target, line.variant)
           if existing
-            existing.update!(quantity: existing.quantity + line.quantity)
+            # Two carts can each be near the per-line maximum; merging them
+            # must not fail the login, so the sum is capped at the maximum.
+            existing.update!(quantity: [ existing.quantity + line.quantity, CartItem::MAX_QUANTITY ].min)
           else
             line.update!(cart: target)
           end

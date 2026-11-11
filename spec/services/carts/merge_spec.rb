@@ -28,6 +28,18 @@ RSpec.describe Carts::Merge do
     expect(user_item.reload.quantity).to eq(3)
   end
 
+  it "caps a summed quantity at the maximum per line instead of failing" do
+    user_cart = create(:cart, user: user)
+    user_item = create(:cart_item, cart: user_cart, variant: variant, quantity: 600)
+    guest_cart = create(:cart)
+    create(:cart_item, cart: guest_cart, variant: variant, quantity: 600)
+
+    result = described_class.call(user: user, cart: guest_cart)
+
+    expect(result).to eq(user_cart)
+    expect(user_item.reload.quantity).to eq(Carts::CartItem::MAX_QUANTITY)
+  end
+
   it "moves the guest-only lines to the user cart" do
     user_cart = create(:cart, user: user)
     create(:cart_item, cart: user_cart, variant: variant, quantity: 1)

@@ -81,6 +81,15 @@ publicar: reintento ante carreras, validación de cantidades, memoización de
 `current_cart`, system spec, cops de arquitectura y Rails 8.1.4.1. Publicada
 el 2026-11-10 con el tag `v0.4.0`.
 
+### ✅ v0.4.1 — Endurecimiento
+
+Arreglos de la auditoría completa con `/project-review full`: reset de
+contraseña en blanco, límite de intentos en login/registro/reset, contraseña
+para cambiar el email, HTTPS y dominio en producción, fusión de carritos,
+ofertas, mensajes de validación en los dos idiomas, purga de sesiones y
+otros detalles (ver `CHANGELOG.md`). Publicada el 2026-11-11 con el tag
+`v0.4.1`.
+
 ### ⬜ v0.5.0 — Pedidos
 
 **Qué se hace:** checkout (sin pasarela de pago de momento), pedidos con

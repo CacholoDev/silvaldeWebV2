@@ -33,6 +33,18 @@ RSpec.describe "Sessions", type: :request do
     end
   end
 
+  describe "POST /login with an unusual User-Agent" do
+    it "signs in even when the User-Agent is longer than the column" do
+      user = create(:user)
+
+      post login_path, params: { email: user.email, password: "secret123" },
+                       headers: { "User-Agent" => "Mozilla/5.0 #{"x" * 600}" }
+
+      expect(response).to redirect_to(root_path)
+      expect(Auth::Session.find_by(user: user).user_agent.length).to be <= 255
+    end
+  end
+
   describe "DELETE /logout" do
     it "terminates the session and redirects to the home page" do
       post login_path, params: { email: user.email, password: "secret123" }

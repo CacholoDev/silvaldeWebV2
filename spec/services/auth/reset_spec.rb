@@ -29,6 +29,20 @@ RSpec.describe Auth::Reset do
       end
     end
 
+    context "with a blank password" do
+      it "rejects it without consuming the token or revoking sessions" do
+        create(:session, user: user)
+        plaintext = build_plaintext
+
+        result = described_class.call(plaintext: plaintext, password: "", password_confirmation: "")
+
+        expect(result.errors[:password]).to be_present
+        expect(Auth::Search.find_active_password_reset_token(plaintext)).to be_present
+        expect(Auth::Session.where(user: user).count).to eq(1)
+        expect(user.reload.authenticate("secret123")).to be_truthy
+      end
+    end
+
     context "when the token was already consumed" do
       it "returns nil and leaves the password unchanged" do
         plaintext = build_plaintext
