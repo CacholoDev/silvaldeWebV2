@@ -328,6 +328,7 @@ Una tarea está terminada cuando:
   cambio operativo o visible;
 - una versión que se cierra (p. ej. `0.3.0`) ha pasado el code review con el
   agente `project-reviewer` (o las skills de superpowers
-  `requesting-code-review` / `receiving-code-review`) antes de abrir su PR. No
-  se revisa cada slice: solo la versión completa, al final.
+  `requesting-code-review` / `receiving-code-review`) antes de abrir su PR.
+  La review la lanza el usuario con `/silweb-review version`; el agente solo
+  la recuerda.
 

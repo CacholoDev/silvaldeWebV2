@@ -55,6 +55,17 @@ demasiada superficie en una sesión y dejar al usuario sin contexto.
   `feat/user-model`: migración, modelo, validaciones, factory, test). Son
   unidades para mantener el orden; por defecto todos se commitean juntos al
   cerrar el slice, salvo que el usuario pida separarlos.
+- **Cómo se cierra un slice, siempre en este orden:**
+  1. **TDD**: primero el spec que fija el comportamiento, y se ve fallar
+     (rojo); después el código mínimo que lo pone en verde, y por último se
+     limpia (skill `test-driven-development`).
+  2. **Validaciones**: `bin/rubocop` y los specs afectados (o `bin/ci`).
+  3. **Propuesta de commit** (ver «Git, ramas, commits y versiones»).
+
+  La review **no** es un paso automático: la lanza el usuario cuando quiere
+  (normalmente al cerrar un slice) con `/silweb-review`. Si la pide, se hace
+  antes del commit y sus hallazgos se corrigen o se documentan como riesgo
+  aceptado en `AGENTS.full.md`.
 
 ## Git, ramas, commits y versiones
 
@@ -93,12 +104,15 @@ Flujo completo en [`docs/git-workflow.md`](./docs/git-workflow.md) y
   única; la app la expone como `SilvaldeWebV2::APP_VERSION`) y el historial
   en `CHANGELOG.md`. SemVer en `0.x.y` hasta el lanzamiento público
   (`1.0.0`). No se sube la versión dentro de una rama `feat/*`.
-- **Code review al final de cada versión, no por slice.** Antes de abrir el
-  PR de una versión completa (p. ej. `0.4.0`) se pasa una única review con el
-  agente `project-reviewer` (o, si no está disponible, las skills de
-  superpowers `requesting-code-review` / `receiving-code-review`), apoyada en
-  las reglas de este documento. Los hallazgos se corrigen o se documentan
-  (como riesgo aceptado en `AGENTS.full.md`) antes del PR.
+- **Code review: la lanza el usuario**, nunca el agente por iniciativa
+  propia. Se hace con la skill del proyecto `/silweb-review` (o, en opencode,
+  `@project-reviewer`), adaptada de la review que se usa en los proyectos del
+  trabajo. Modos: `slice` (lo que no se ha commiteado), `rama` o `version`
+  (desde el último tag).
+  - Al cerrar una versión, antes de abrir su PR, el agente **recuerda** que
+    toca la review de versión y espera a que el usuario la lance.
+  - Los hallazgos se corrigen, o se documentan como riesgo aceptado en
+    `AGENTS.full.md`, antes del commit o del PR.
 - Al completar una fase, actualiza [`docs/roadmap.md`](./docs/roadmap.md).
 
 ## Reglas de trabajo
@@ -184,6 +198,12 @@ RuboCop (`Silvalde/NoActiveRecordInControllers` y
   uso. Construir un objeto vacío para un formulario (`Users::User.new`) sí
   está permitido. Excepción: la infraestructura de sesión (concern
   `Authentication`).
+- **Lecturas, siempre por el `Search` del dominio**, también desde un
+  service de caso de uso. Ni `Model.where`/`find_by` en un service, ni
+  `Model.scope_x` (los scopes no existen, ver Models). Ejemplo: no
+  `PasswordResetToken.active.find_by(...)`, sino
+  `Auth::Search.active_password_reset_tokens.find_by(...)`. El cop solo vigila
+  controllers y models, así que en services esto lo comprueba la review.
 - **Models**: asociaciones, validaciones, invariantes y comportamiento propio
   de la entidad (**métodos sin parámetros** sobre su propio estado:
   `available?`, `expired?`). **Nunca consultas**: ni `where`, ni `find_by`, ni
@@ -215,11 +235,13 @@ transiciones válidas y cómo se muestran al usuario.
 Detalle, instalación y sincronización entre PCs en
 [`docs/agent-tooling.md`](./docs/agent-tooling.md).
 
-- **Skills del proyecto** (versionadas en git):
-  - `.claude/skills/`: las propias del proyecto, como `commit`. Las leen
-    tanto Claude Code como opencode.
-  - `.agents/skills/` + `skills-lock.json`: las instaladas con
-    `npx skills`, como frontend, accesibilidad o SEO.
+- **Skills del proyecto** (versionadas en git): `.claude/skills/`, las
+  propias de silWeb, como `commit` y `silweb-review`. Las leen tanto Claude
+  Code como opencode.
+- **Skills de terceros** (globales, desde el repo `agent-dotfiles`):
+  `frontend-design`, `accessibility`, `seo-audit`, `tailwind-animations`,
+  `find-docs`… Están instaladas en todos tus PCs, así que no van en este
+  repo.
 
   Antes de empezar una tarea, revisa las skills disponibles y carga las que
   apliquen.
@@ -229,10 +251,11 @@ Detalle, instalación y sincronización entre PCs en
   `systematic-debugging` (ante un bug o test en rojo), `test-driven-development`,
   `writing-plans`/`executing-plans` (tareas multi-paso) y
   `verification-before-completion` (antes de afirmar que algo está en verde).
-  La excepción del proyecto: el code review no se hace por slice, solo al
-  cerrar la versión (ver arriba).
-- **`project-reviewer`** (agente global, en tu repo de dotfiles): hace la
-  review de fin de versión aplicando este archivo y `AGENTS.full.md`.
+  Para el code review se usa `/silweb-review` (ver abajo) en lugar de
+  `requesting-code-review`, y solo cuando el usuario lo pide.
+- **`/silweb-review`** (skill del proyecto, `.claude/skills/silweb-review/`):
+  la review de silWeb. Se ejecuta en el subagente global `project-reviewer`
+  (de tu repo de dotfiles), que es de solo lectura.
 
 Si el archivo de directrices crece demasiado, mueve temas a `docs/` y
 enlázalos desde aquí, pero mantén en este archivo las reglas críticas para que

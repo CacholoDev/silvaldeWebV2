@@ -11,10 +11,14 @@
 /.env*
 !/.env.example
 
-# Editor tooling (not part of the repo). Agent skills (.agents/,
-# skills-lock.json and .claude/skills/) ARE versioned so every PC gets them;
-# see docs/agent-tooling.md.
+# Editor tooling (not part of the repo).
 /.ruby-lsp/
+
+# Third-party agent skills are global (agent-dotfiles repo); a project-level
+# `npx skills add` would only duplicate them. Project skills live in
+# .claude/skills/ and ARE versioned. See docs/agent-tooling.md.
+/.agents/
+/skills-lock.json
 
 # Personal Claude Code overrides (the shared .claude/settings.json is versioned).
 /.claude/settings.local.json

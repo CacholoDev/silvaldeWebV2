@@ -12,5 +12,6 @@ opencode y cualquier otro agente). Esta línea las carga en cada sesión:
   preguntar y `git commit`, `git push`, `git merge`, `git tag` y similares
   **siempre** piden confirmación.
 - Skill del proyecto: `/commit` (`.claude/skills/commit/`).
-- Review de fin de versión: agente global `project-reviewer` (ver
+- Code review: `/silweb-review [slice|rama|version]`, solo cuando la pide el
+  usuario. Corre en el agente global `project-reviewer` (ver
   `docs/agent-tooling.md`).
