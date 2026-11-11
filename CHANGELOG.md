@@ -12,6 +12,22 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
 
 ## [Sin publicar]
 
+### Cambiado
+
+- `AGENTS.md` deja explícito el orden de cierre de un slice (TDD →
+  validaciones → commit) y que las lecturas de los services también pasan por
+  el `Search` del dominio.
+- Las skills de terceros (frontend-design, accessibility, seo-audit,
+  tailwind-animations) pasan a ser globales, instaladas desde el repo
+  `agent-dotfiles`; `.agents/` y `skills-lock.json` vuelven a `.gitignore`.
+
+### Añadido
+
+- Skill `/silweb-review`: la review del proyecto, adaptada de la que se usa en
+  los proyectos Rails del trabajo (tres pasadas: reglas, lógica y seguridad,
+  frontend e i18n; comprobación entre capas; script de reglas y de i18n). Solo
+  se ejecuta cuando la lanza el usuario.
+
 ## [0.4.0] - 2026-11-10
 
 ### Añadido

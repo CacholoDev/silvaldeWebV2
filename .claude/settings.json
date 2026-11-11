@@ -16,7 +16,12 @@
       "Bash(git diff:*)",
       "Bash(git log:*)",
       "Bash(git branch:*)",
-      "Bash(git show:*)"
+      "Bash(git show:*)",
+      "Bash(git describe:*)",
+      "Bash(git merge-base:*)",
+      "Bash(git rev-parse:*)",
+      "Bash(.claude/skills/silweb-review/scripts/validate_rules.sh:*)",
+      "Bash(ruby .claude/skills/silweb-review/scripts/check_i18n.rb:*)"
     ],
     "ask": [
       "Bash(git commit:*)",
