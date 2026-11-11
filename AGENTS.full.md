@@ -61,7 +61,7 @@ consultar al usuario y actualizar esta sección y el changelog.
 - **RSpec + FactoryBot**: framework de tests del proyecto (los specs viven en
   `spec/` y las factories en `spec/factories/`). No Minitest.
 - **Web HTML con Hotwire**: no hay API pública; por tanto nada de Grape,
-  Swagger ni JWT. Si algún día se necesita una API, se especifica aparte
+  Swagger, JWT ni Jbuilder (se quitó del Gemfile el 2026-11-10). Si algún día se necesita una API, se especifica aparte
   (sección «Cambios y documentación»).
 - **AASM para la máquina de estados de los pedidos** (`Order`): estados
   `pending → confirmed → shipped → delivered` (o `cancelled`), con transiciones
@@ -109,20 +109,36 @@ consultar al usuario y actualizar esta sección y el changelog.
   sumando cantidades de las variantes comunes; nunca sobreescribiendo.
 - **Caducidad a los 6 meses de inactividad** (tope de retención por
   seguridad): `Carts::Cart::MAX_INACTIVITY`. Las consultas viven en
-  `Carts::Search` y el purge será un job recurrente silencioso (sin avisos a
-  la clienta). El carrito de invitada vive en la sesión (cookie) y no necesita
+  `Carts::Search` y el purge es un job recurrente silencioso
+  (`Carts::PurgeExpiredJob`, diario en `config/recurring.yml`; sin avisos a la
+  clienta). El carrito de invitada vive en la sesión (cookie) y no necesita
   tope.
 - **La pertenencia se decide al resolver el carrito** (review de v0.4.0): el
   carrito de la sesión solo se muestra y se escribe si es de invitada o de la
   cuenta activa; un carrito de otra cuenta se olvida, no se toca.
   `terminate_session` borra el `cart_id` de la sesión y signup y login
   reclaman/fusionan el carrito de invitada igual (`merge_current_cart_into`).
-- **Riesgos aceptados (review de v0.4.0)**: la validación de unicidad
-  `cart_id + variant_id` no es segura ante carreras (dos pestañas añadiendo la
-  misma variante pueden disparar `RecordNotUnique` → error 500; sin corrupción
-  gracias a la transacción); el purge no usa batching (volumen diario bajo);
-  y el contador del header suma cantidades en cada petición (una consulta
-  indexada por página).
+- **Carreras al añadir (resuelto, 2026-11-10)**: la validación de unicidad
+  `cart_id + variant_id` no es segura ante carreras, pero el índice único sí:
+  si dos pestañas añaden la misma variante a la vez, `Carts::AddItem`
+  recibe `RecordNotUnique`, deshace el intento y reintenta una vez (el
+  reintento encuentra la línea y suma). Un segundo fallo se propaga.
+- **`current_cart` memoizado por petición (2026-11-10)**, con clave
+  `[session[:cart_id], current_user.id]`: si cambia la sesión o el usuario en
+  la misma petición, se resuelve de nuevo.
+- **Cantidades en el borde (review de v0.4.0)**: `Carts::AddItem` rechaza
+  cantidades menores que 1 antes de sumar (antes `-3` sobre una línea de 10 la
+  dejaba en 7) y el controller convierte el parámetro con `.to_s.to_i`, así
+  que un valor raro (`quantity[]=1`) es un 0 inválido, no un 500.
+- **Riesgos aceptados (review de v0.4.0)**: el purge no usa batching (volumen
+  diario bajo; sin índice en `carts.updated_at`, hace un scan diario
+  asumible) y el contador del header suma cantidades en cada petición (una
+  consulta indexada por página). **Carrera del primer añadido**: si una
+  visitante sin carrito hace doble clic o añade desde dos pestañas a la vez,
+  cada petición puede crear su propio carrito (no hay unicidad posible por
+  usuario); la sesión se queda con uno y el otro queda huérfano hasta que el
+  purge lo borra a los 6 meses. No da error ni mezcla datos de otras cuentas;
+  se revisará si aparece en la práctica.
 
 **Política de generadores:**
 
@@ -130,8 +146,8 @@ consultar al usuario y actualizar esta sección y el changelog.
   arquitectura de servicios y decorators.
 - Generadores pequeños (`model`, `migration`) están permitidos como punto de
   partida; controllers, servicios, decorators y vistas se escriben a mano.
-- La autenticación se escribe a mano, slice a slice (ver `AGENTS.md`, «Ritmo
-  de trabajo y modelo mental»); no se usa el generador oficial para hacerlo
+- La autenticación se escribe a mano, slice a slice (ver `AGENTS.md`, «Cómo
+  trabajamos»); no se usa el generador oficial para hacerlo
   todo de una vez.
 
 **Candidatos futuros (decidir cuando toque, no instalar ahora):**
@@ -157,7 +173,8 @@ dominio agrupa sus controllers, models y services en
   `Model.find`, `Model.all`, `Model.where`, `Model.create`, `Model.update`,
   ni `authenticate_by` directamente. Las consultas se delegan en services de
   búsqueda (`search.rb`). La única excepción es la infraestructura transversal
-  (la concern `Authentication` para la sesión por cookie).
+  (la concern `Authentication` para la sesión por cookie). El cop
+  `Silvalde/NoActiveRecordInControllers` lo comprueba en `bin/rubocop`.
 - No uses callbacks de controller para esconder reglas de negocio.
 - Devuelve estados HTTP correctos y errores de validación comprensibles.
 
@@ -187,8 +204,10 @@ dominio agrupa sus controllers, models y services en
   scopes (`scope :x`, `default_scope`), ni métodos `find_by_xxx`. Las consultas
   de lectura viven en el service `search.rb` del dominio
   (`app/services/<contexto>/search.rb`, p. ej. `Carts::Search`); las escrituras
-  en services de caso de uso. Ejemplo real: los scopes `active`/`expired` que
-  nacieron en `Carts::Cart` se movieron a `Carts::Search`.
+  en services de caso de uso. Ejemplos reales: los scopes `active`/`expired`
+  que nacieron en `Carts::Cart` se movieron a `Carts::Search`, y los de
+  `Auth::Session` y `Auth::PasswordResetToken` a `Auth::Search`. El cop
+  `Silvalde/NoQueriesInModels` lo comprueba en `bin/rubocop`.
 - El nombre corto del modelo para i18n y formularios (`product`, no
   `catalog_product`) lo define `ApplicationRecord.model_name` (demoduliza el
   nombre). Es infraestructura de nombres: los modelos individuales **no**
@@ -254,7 +273,10 @@ dominio agrupa sus controllers, models y services en
   `spec/factories/`. Escribe primero el spec que fija el comportamiento y luego
   el código de producción (skill `test-driven-development`).
 - Cubre casos de éxito, validación, autorización y límites relevantes.
-- Para cambios de UI o flujos completos, considera system tests con Capybara.
+- Para cambios de UI o flujos completos, añade un system spec en
+  `spec/system/` (Capybara + Chrome headless, configurado en
+  `spec/support/system.rb`); es lo único que prueba Turbo/Stimulus de verdad.
+  Ejemplo: `spec/system/shopping_cart_spec.rb`.
 - Ejecuta el conjunto mínimo relevante y después las comprobaciones de seguridad
   cuando el cambio afecte a autenticación, autorización, entradas o datos.
 - No cambies un test existente solo porque contradice una implementación nueva;
@@ -304,7 +326,8 @@ Una tarea está terminada cuando:
 - los tests y linters relevantes pasan, o se informa claramente de la limitación;
 - el README, `CHANGELOG.md` o la documentación relacionada refleja cualquier
   cambio operativo o visible;
-- una versión que se cierra (p. ej. `0.3.0`) ha pasado el code review de
-  superpowers (`requesting-code-review` / `receiving-code-review`) antes de
-  abrir su PR. No se revisa cada slice: solo la versión completa, al final.
+- una versión que se cierra (p. ej. `0.3.0`) ha pasado el code review con el
+  agente `project-reviewer` (o las skills de superpowers
+  `requesting-code-review` / `receiving-code-review`) antes de abrir su PR. No
+  se revisa cada slice: solo la versión completa, al final.
 

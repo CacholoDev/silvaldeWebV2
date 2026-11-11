@@ -1,12 +1,26 @@
 version: 2
 updates:
-- package-ecosystem: bundler
-  directory: "/"
-  schedule:
-    interval: weekly
-  open-pull-requests-limit: 10
-- package-ecosystem: github-actions
-  directory: "/"
-  schedule:
-    interval: weekly
-  open-pull-requests-limit: 10
+  # Gems: minor and patch bumps arrive together in a single weekly PR (one
+  # review and one CI run instead of one branch per gem). Major bumps can
+  # break things, so they keep their own PR each.
+  - package-ecosystem: bundler
+    directory: "/"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 10
+    groups:
+      gems-minor-and-patch:
+        update-types:
+          - minor
+          - patch
+
+  # GitHub Actions used by CI: every update in one weekly PR.
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 10
+    groups:
+      github-actions:
+        patterns:
+          - "*"

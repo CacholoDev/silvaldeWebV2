@@ -11,7 +11,7 @@ RSpec.describe Auth::RequestReset do
         described_class.call(email: user.email)
 
         expect(previous.reload).to be_used
-        expect(Auth::PasswordResetToken.active.where(user: user).count).to eq(1)
+        expect(Auth::Search.active_password_reset_tokens.where(user: user).count).to eq(1)
       end
     end
 

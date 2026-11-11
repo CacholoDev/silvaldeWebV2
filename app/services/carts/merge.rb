@@ -32,7 +32,7 @@ module Carts
         # cache; without this reset, destroying the cart would destroy the
         # moved lines too (dependent: :destroy walks the cached children).
         cart.cart_items.reset
-        cart.destroy
+        cart.destroy!
       end
 
       target

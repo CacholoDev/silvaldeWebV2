@@ -9,7 +9,7 @@ module Auth
       user = Search.find_user_by_email(email)
       return unless user
 
-      PasswordResetToken.active.where(user: user).update_all(used_at: Time.current)
+      Search.active_password_reset_tokens.where(user: user).update_all(used_at: Time.current)
 
       token, plaintext = PasswordResetToken.build_for(user)
       token.save!

@@ -11,6 +11,11 @@ RSpec.describe CurrentCart, type: :controller do
       render plain: "cart-#{current_cart&.id || "none"}"
     end
 
+    def show_twice
+      2.times { current_cart }
+      render plain: "cart-#{current_cart&.id || "none"}"
+    end
+
     def attach
       self.current_cart = Carts::Search.find_active_cart(params[:cart_id])
       render plain: "attached"
@@ -25,6 +30,7 @@ RSpec.describe CurrentCart, type: :controller do
   before do
     routes.draw do
       get "show" => "anonymous#show"
+      get "show_twice" => "anonymous#show_twice"
       get "attach" => "anonymous#attach"
       get "detach" => "anonymous#detach"
     end
@@ -111,6 +117,19 @@ RSpec.describe CurrentCart, type: :controller do
       get :detach
 
       expect(session[:cart_id]).to be_nil
+    end
+  end
+
+  describe "memoization" do
+    it "looks the cart up once per request" do
+      cart = create(:cart)
+      get :attach, params: { cart_id: cart.id }
+      allow(Carts::Search).to receive(:find_active_cart).and_call_original
+
+      get :show_twice
+
+      expect(response.body).to eq("cart-#{cart.id}")
+      expect(Carts::Search).to have_received(:find_active_cart).once
     end
   end
 end

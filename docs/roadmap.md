@@ -69,24 +69,27 @@ por stock de la variante), imágenes con Active Storage, `Catalog::Search`,
 vistas públicas con Tailwind, accesibilidad WCAG 2.2 AA y base de SEO en
 página. Publicada el 2026-11-01 con el tag `v0.3.0`.
 
-### 🚧 v0.4.0 — Carrito
+### ✅ v0.4.0 — Carrito
 
-**Qué se hace:** carrito para visitantes y clientas registradas; cantidades y
-variantes; el carrito sobrevive al iniciar sesión.
-
-**Cómo se hará:** modelos `Carts::Cart` y `Carts::CartItem` (precio congelado
-al añadir) con las consultas en `Carts::Search` y caducidad a los 6 meses de
-inactividad; services `Carts::*` con el carrito de invitada en la sesión, UI
-con Turbo Frames (ficha de producto y página `/cart`) y fusión al login
-sumando cantidades. Un job recurrente purga los carritos caducados en
-silencio. **Código terminado** (slices 19-24 de
-[`backend-plan.md`](./backend-plan.md)); pendiente el cierre de la versión
-(code review, CHANGELOG, PR y publicación).
+Carrito para visitantes y clientas registradas, con cantidades y variantes,
+que sobrevive al iniciar sesión. Modelos `Carts::Cart` y `Carts::CartItem`
+(precio congelado al añadir), consultas en `Carts::Search` y caducidad a los
+6 meses de inactividad con purge recurrente silencioso. Carrito de invitada
+en la sesión, UI con Turbo Frames (ficha de producto, contador del header y
+página `/cart`) y fusión al login sumando cantidades. Endurecida antes de
+publicar: reintento ante carreras, validación de cantidades, memoización de
+`current_cart`, system spec, cops de arquitectura y Rails 8.1.4.1. Publicada
+el 2026-11-10 con el tag `v0.4.0`.
 
 ### ⬜ v0.5.0 — Pedidos
 
 **Qué se hace:** checkout (sin pasarela de pago de momento), pedidos con
 estados, detalle visible para la clienta y email de confirmación.
+
+**A tener en cuenta:** la FK `cart_items.variant_id` impide borrar una
+variante o un producto que esté en algún carrito (`InvalidForeignKey`).
+Decidir aquí o en el panel admin (v0.6.0) si se archiva en lugar de borrar o
+se limpian antes las líneas.
 
 **Cómo se hará:** modelos `Order` y `OrderItem` con los precios congelados en
 el momento de la compra; máquina de estados del pedido con **AASM** —estados

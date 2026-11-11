@@ -13,7 +13,7 @@ Al abrir una sesión de trabajo:
 2. Lee este documento para saber en qué **slice** exacto vamos.
 3. Antes de empezar un slice, el agente lo explica en profundidad (qué entra,
    qué queda fuera y cómo se prueba a mano) y espera tu OK (regla de
-   `AGENTS.md`, «Ritmo de trabajo y modelo mental»).
+   `AGENTS.md`, «Cómo trabajamos»).
 
 Leyenda: ✅ hecho · 🚧 en curso · ⬜ pendiente
 
@@ -37,12 +37,12 @@ versión la define el roadmap.
   (modelos, login/logout, signup, recuperación de contraseña, roles, perfil,
   consentimiento, imágenes, seed, búsqueda, vistas públicas con accesibilidad
   y SEO, tema claro/oscuro e i18n). Publicado como `v0.2.0` y `v0.3.0`.
-- **En curso** (v0.4.0, rama `feat/shopping-cart`): carrito. Los slices 19-24
-  están **terminados** (modelos, services, añadir desde la ficha con contador,
-  página `/cart`, fusión al login y purge de caducados). El código de la
-  versión está completo.
-- **Siguiente**: cierre de v0.4.0 — code review de la versión, CHANGELOG,
-  `bin/ci` en verde, PR #14 y publicación.
+- **Hecho y publicado** (`v0.4.0`, 2026-11-10): carrito. Los slices 19-24 están
+  terminados e integrados en `main` (PRs #14 y #15): modelos, services, añadir
+  desde la ficha con contador, página `/cart`, fusión al login y purge de
+  caducados. Endurecido después en `chore/project-health` (reintento ante
+  carreras, memoización de `current_cart` y system spec).
+- **Siguiente**: v0.5.0 (pedidos).
 
 ---
 

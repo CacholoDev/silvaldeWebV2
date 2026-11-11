@@ -34,6 +34,17 @@ RSpec.describe Carts::Search do
       expect(described_class.find_active_cart(0)).to be_nil
     end
 
+    it "returns nil for a blank id without querying the database" do
+      queries = []
+      callback = ->(*, payload) { queries << payload[:sql] unless payload[:name] == "SCHEMA" }
+
+      ActiveSupport::Notifications.subscribed(callback, "sql.active_record") do
+        expect(described_class.find_active_cart(nil)).to be_nil
+      end
+
+      expect(queries).to be_empty
+    end
+
     it "returns nil when the cart is expired" do
       cart = create(:cart)
       cart.update_column(:updated_at, 7.months.ago)

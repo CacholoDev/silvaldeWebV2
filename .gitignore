@@ -11,10 +11,13 @@
 /.env*
 !/.env.example
 
-# Local agent skills and editor tooling (not part of the repo).
-/.agents/
+# Editor tooling (not part of the repo). Agent skills (.agents/,
+# skills-lock.json and .claude/skills/) ARE versioned so every PC gets them;
+# see docs/agent-tooling.md.
 /.ruby-lsp/
-/skills-lock.json
+
+# Personal Claude Code overrides (the shared .claude/settings.json is versioned).
+/.claude/settings.local.json
 
 # Node dependencies (Tailwind plugins and other frontend tooling).
 /node_modules/

@@ -9,10 +9,6 @@ module Auth
     validates :token_digest, presence: true, uniqueness: true
     validates :expires_at, presence: true
 
-    scope :active, -> { where(used_at: nil).where("expires_at > ?", Time.current) }
-    scope :expired, -> { where("expires_at <= ?", Time.current) }
-    scope :used, -> { where.not(used_at: nil) }
-
     # Hashes a plaintext token with SHA256 and returns the hex digest.
     # SHA256 is fast and sufficient for opaque reset tokens (256 bits of
     # entropy); we don't need BCrypt's brute-force resistance here.

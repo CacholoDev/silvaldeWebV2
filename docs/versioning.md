@@ -24,17 +24,19 @@ lanzamiento público de la tienda.
 ## Cómo publicar una nueva versión
 
 1. Al terminar la versión y antes de abrir su pull request — **no al final de
-   cada slice** — pasar el code review de superpowers (skills
-   `requesting-code-review` y `receiving-code-review`) sobre el trabajo de la
-   versión, usando las reglas de `AGENTS.md` y las skills y plugins
-   disponibles; corregir o documentar los hallazgos antes de seguir.
+   cada slice** — pasar el code review con el agente `project-reviewer` (ver
+   [agent-tooling.md](./agent-tooling.md)) o, si no está disponible, con las
+   skills de superpowers `requesting-code-review` y `receiving-code-review`,
+   usando las reglas de `AGENTS.md`; corregir o documentar los hallazgos
+   antes de seguir.
 2. Asegurarse de que `main` está verde: `bin/ci` (o, como mínimo,
    `bundle exec rspec`, `bin/rubocop`, `bin/brakeman` y `bin/bundler-audit`).
 3. Actualizar `CHANGELOG.md`: mover lo acumulado en «Sin publicar» a la nueva
    versión con su fecha.
 4. Actualizar el archivo `VERSION` (solo eso: la app lo lee sola).
-5. Commit en `main`: `chore: publica vX.Y.Z`.
-6. Crear el tag y subirlo junto con la rama:
+5. Commit `chore: publica vX.Y.Z`: directamente en `main` o, mejor, como
+   último commit del PR que cierra la versión (así pasa por el CI de GitHub).
+6. Con ese commit ya en `main`, crear el tag y subirlo junto con la rama:
 
    ```bash
    git tag -a vX.Y.Z -m "vX.Y.Z"

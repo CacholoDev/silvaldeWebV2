@@ -1,6 +1,21 @@
 # Omakase Ruby styling for Rails
 inherit_gem: { rubocop-rails-omakase: rubocop.yml }
 
+# Project cops (lib/rubocop/cop/silvalde): the architecture rules of
+# AGENTS.md checked by bin/rubocop, bin/ci and GitHub Actions.
+require:
+  - ./lib/rubocop/cop/silvalde
+
+Silvalde/NoActiveRecordInControllers:
+  Enabled: true
+  Include:
+    - "app/controllers/**/*.rb"
+
+Silvalde/NoQueriesInModels:
+  Enabled: true
+  Include:
+    - "app/models/**/*.rb"
+
 # Overwrite or add rules to create your own house style
 #
 # # Use `[a, [b, c]]` not `[ a, [ b, c ] ]`

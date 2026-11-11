@@ -12,6 +12,8 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
 
 ## [Sin publicar]
 
+## [0.4.0] - 2026-11-10
+
 ### Añadido
 
 - **Carrito de compra** para invitadas y clientas: añadir variantes desde la
@@ -26,6 +28,51 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
   catálogo no la reescriben) y el carrito caduca a los 6 meses de inactividad.
 - Job recurrente `Carts::PurgeExpiredJob` (Solid Queue, diario) que purga en
   silencio los carritos caducados con sus líneas.
+- System spec del carrito (`spec/system/shopping_cart_spec.rb`, Chrome
+  headless): añadir desde la ficha, contador del header vía Turbo y página
+  `/cart`.
+- Cops de RuboCop propios (`Silvalde/NoActiveRecordInControllers` y
+  `Silvalde/NoQueriesInModels`) que hacen cumplir en `bin/rubocop` y en el CI
+  las reglas de arquitectura de `AGENTS.md`.
+- Herramientas de agentes versionadas: `CLAUDE.md` (carga `AGENTS.md` en
+  Claude Code), permisos en `.claude/settings.json` y `opencode.json`
+  (commit, push, merge y tag siempre piden confirmación) y skill `commit`
+  (ver `docs/agent-tooling.md`).
+
+### Cambiado
+
+- `current_cart` se memoiza por petición (antes consultaba la base de datos
+  en cada llamada: layout, contador y controller).
+- Las consultas de autenticación salen de los modelos a `Auth::Search`
+  (`Auth::Session.active` → `active_sessions` y
+  `Auth::PasswordResetToken.active` → `active_password_reset_tokens`),
+  coherente con la regla «los modelos no consultan». Los scopes `expired` y
+  `used`, que no se usaban, se eliminan.
+- Dependabot agrupa las subidas minor/patch de gemas y las de GitHub Actions
+  en un PR semanal cada una.
+- `AGENTS.md` reorganizado: sin reglas duplicadas ni contradictorias, el
+  estado del proyecto se consulta en el roadmap y la confirmación de commits
+  acepta cualquier OK natural.
+- `.agents/` y `skills-lock.json` dejan de ignorarse en git para que las
+  skills del proyecto lleguen a cualquier PC.
+- `docker-compose.yml` monta el init de MySQL con `:z` (SELinux en Fedora).
+
+### Eliminado
+
+- Gema `jbuilder`: no hay API y no se usaba.
+
+### Corregido
+
+- Añadir la misma variante a la vez desde dos pestañas a un carrito que ya
+  existe ya no da un error 500: `Carts::AddItem` reintenta una vez ante
+  `RecordNotUnique` y suma la cantidad a la línea existente.
+- Añadir una cantidad negativa o cero a una línea existente ya no la reduce
+  en silencio con el mensaje «Añadido al carrito»: se rechaza.
+- Una cantidad malformada (`quantity[]=1`) ya no provoca un error 500.
+- Una visitante sin carrito ya no lanza una consulta inútil
+  (`carts.id IS NULL`) en cada página.
+- `Carts::Merge` destruye el carrito de invitada con `destroy!`: un fallo ya
+  no pasa en silencio.
 
 ### Seguridad
 
@@ -239,6 +286,8 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
 - Flujo de trabajo por ramas y Conventional Commits en
   `docs/git-workflow.md`, y plan de fases en `docs/roadmap.md`.
 
-[Sin publicar]: https://github.com/CacholoDev/silvaldeWebV2/compare/v0.2.0...HEAD
+[Sin publicar]: https://github.com/CacholoDev/silvaldeWebV2/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/CacholoDev/silvaldeWebV2/compare/v0.3.0...v0.4.0
+[0.3.0]: https://github.com/CacholoDev/silvaldeWebV2/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/CacholoDev/silvaldeWebV2/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/CacholoDev/silvaldeWebV2/releases/tag/v0.1.0

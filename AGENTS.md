@@ -1,289 +1,239 @@
 # Directrices para agentes
 
-Estas reglas son obligatorias para cualquier agente que trabaje en Silvalde Web.
-Lee este archivo antes de explorar o editar el proyecto. La aplicación es una
-tienda online de decoración con catálogo, clientes, pedidos y un panel de
-administración; el alcance puede evolucionar, pero no se debe inventar producto
-o arquitectura fuera de la tarea solicitada.
+Estas reglas son obligatorias para cualquier agente (Claude Code, opencode,
+Codex…) que trabaje en Silvalde Web. Lee este archivo antes de explorar o
+editar el proyecto. La aplicación es una tienda online de decoración con
+catálogo, clientes, pedidos y un panel de administración; el alcance puede
+evolucionar, pero no se debe inventar producto o arquitectura fuera de la
+tarea solicitada.
 
-Para decisiones detalladas de arquitectura, seguridad, datos, pruebas y UX,
-consulta [`AGENTS.full.md`](./AGENTS.full.md). Para el contexto funcional,
-consulta [`README.md`](./README.md). El historial de cambios vive en
-[`CHANGELOG.md`](./CHANGELOG.md).
+| Documento | Para qué |
+| --- | --- |
+| [`AGENTS.full.md`](./AGENTS.full.md) | Decisiones detalladas de arquitectura, stack, seguridad, datos, pruebas y UX (con fecha y riesgos aceptados). |
+| [`README.md`](./README.md) | Contexto funcional y puesta en marcha en un PC nuevo. |
+| [`docs/roadmap.md`](./docs/roadmap.md) | Fases del proyecto y **estado actual**. |
+| [`CHANGELOG.md`](./CHANGELOG.md) | Historial de cambios; «Sin publicar» es lo que va en la próxima versión. |
+| [`docs/git-workflow.md`](./docs/git-workflow.md) · [`docs/versioning.md`](./docs/versioning.md) | Ramas, commits y publicación de versiones. |
+| [`docs/agent-tooling.md`](./docs/agent-tooling.md) | Skills, reviewer, permisos, cops y cómo tener todo igual en varios PCs. |
 
 ## Estado del proyecto
 
-Publicadas v0.1.0, v0.2.0 (autenticación y usuarios) y v0.3.0 (catálogo:
-modelos, imágenes, seed, búsqueda y vistas públicas con accesibilidad y SEO).
-En curso, v0.4.0 (carrito) en la rama `feat/shopping-cart`: el código está
-**completo** — modelos `Carts::Cart` y `Carts::CartItem` (precio congelado al
-añadir; el carrito caduca a los 6 meses de inactividad) con las lecturas en
-`Carts::Search`, services `Carts::*` (añadir, actualizar y borrar líneas,
-fusión al login sumando cantidades y purge de caducados con un job recurrente
-de Solid Queue), carrito de invitada en la sesión (concern `CurrentCart`) y UI
-con Turbo Frames (ficha de producto, contador en el header y página `/cart`).
-Pendiente solo el cierre de la versión: code review, CHANGELOG, PR #14 y
-publicación.
-`app/decorators` existe desde v0.3.0 (`ApplicationDecorator` y decorators
-del catálogo): añade ahí la presentación cuando haga falta. No añadas
-estructura por adelantado.
+El estado vive en [`docs/roadmap.md`](./docs/roadmap.md) (fase en curso) y en
+la sección «Sin publicar» de [`CHANGELOG.md`](./CHANGELOG.md); no se duplica
+aquí para que no se quede desactualizado. Al empezar una sesión, léelos junto
+con `git log --oneline -10` y `git status`.
+
+Estructura que ya existe y debe reutilizarse: namespaces por dominio
+(`Auth::`, `Users::`, `Catalog::`, `Carts::`), services en `app/services/`
+(con un `search.rb` por dominio), decorators en `app/decorators/`
+(`ApplicationDecorator` y los del catálogo y el carrito) y cops propios en
+`lib/rubocop/cop/silvalde/`. No añadas estructura por adelantado.
+
+## Cómo trabajamos (el usuario es junior y está aprendiendo)
+
+Las explicaciones forman parte del trabajo. Estas reglas evitan implementar
+demasiada superficie en una sesión y dejar al usuario sin contexto.
+
+- **Mapa mental al inicio de cada sesión.** Muestra un mapa breve del estado:
+  tablas, controllers, URLs, tests, rama actual y commits sin pushear. Si la
+  sesión anterior dejó cambios sin commitear o sin pushear, avísalo al
+  principio.
+- **Explica el plan antes de implementar.** Resume en lenguaje sencillo qué vas
+  a crear, qué herramientas de Rails usarás (generadores, migraciones, gemas…)
+  y por qué.
+- **Explica conceptos antes de preguntar opciones.** Si el usuario no puede
+  evaluar una opción porque no conoce el concepto, explica primero y pregunta
+  después. Si responde «no sé», propón la opción más sensata con su
+  razonamiento y aplícala, avisando de lo que has elegido.
+- **Vertical slices, no capas horizontales.** Una sesión de trabajo es una
+  unidad pequeña y verificable a mano (p. ej. «modelo User con validaciones» o
+  «signup end-to-end»); nada de modelo + controller + vista + mailer + jobs +
+  tests de todo a la vez. Antes de cada slice: (a) explica en una frase qué
+  entra y qué queda fuera, (b) di cómo se prueba a mano y (c) espera a que el
+  usuario lo valide antes de continuar.
+- **Sub-slices dentro del slice.** Un slice puede tener pasos internos (en
+  `feat/user-model`: migración, modelo, validaciones, factory, test). Son
+  unidades para mantener el orden; por defecto todos se commitean juntos al
+  cerrar el slice, salvo que el usuario pida separarlos.
+
+## Git, ramas, commits y versiones
+
+Flujo completo en [`docs/git-workflow.md`](./docs/git-workflow.md) y
+[`docs/versioning.md`](./docs/versioning.md). Las reglas que no se negocian:
+
+- **Ramas.** `main` es estable: siempre arranca y pasa las validaciones, y
+  nunca se empieza una feature o un fix en ella. Al iniciar una tarea de
+  código, comprueba la rama (`git branch --show-current`). Si estás en `main`
+  o la tarea no encaja con la rama actual, **propón un nombre** (`feat/…`,
+  `fix/…`, `chore/…`, `docs/…`; minúsculas, guiones, en inglés) y espera su
+  OK antes de `git switch -c`; después confirma el nombre definitivo. Si el
+  usuario dice que no sabe, aplica la regla de «no sé» de arriba.
+- **Una rama por feature o fix, no por slice.** Los slices son commits dentro
+  de la misma rama. Una rama = una responsabilidad.
+- **Commits al cerrar un slice, no antes.** Con el slice terminado y
+  verificado, propón el mensaje (Conventional Commits, `type`/`scope` y
+  resumen en inglés e imperativo: `feat:`, `fix:`, `docs:`, `test:`,
+  `refactor:`, `chore:`) y una lista corta de los archivos que entran. **No
+  pegues el diff**: el usuario lo revisa en el panel Source Control de VS
+  Code. Cualquier respuesta afirmativa vale como OK («dale», «ok», «venga»,
+  «vamos», «sí», «perfecto», 👍…); interprétala por la intención, no por la
+  palabra exacta. Si la respuesta es ambigua o pide cambios, pregunta o
+  ajusta antes de commitear. Por defecto, un slice = un commit. Atajo: la
+  skill `commit` (`/commit`).
+- **Tests en el mismo commit que el código que prueban.** Nada de commits
+  `test:` sueltos salvo para arreglar regresiones o cubrir código viejo.
+- **Push, merge, tags y PRs.** El agente no hace commit, push, merge ni tags
+  sin confirmación explícita. El push es una acción aparte: aunque el usuario
+  haya aprobado el commit, espera un OK específico para el push. Un merge en
+  `main` necesita su propia confirmación dedicada. El agente puede abrir una
+  pull request cuando el usuario se lo pida, nunca por su cuenta. (Claude
+  Code y opencode lo refuerzan: piden confirmación para esos comandos, ver
+  `docs/agent-tooling.md`.)
+- **Versiones.** La versión vigente vive en [`VERSION`](./VERSION) (fuente
+  única; la app la expone como `SilvaldeWebV2::APP_VERSION`) y el historial
+  en `CHANGELOG.md`. SemVer en `0.x.y` hasta el lanzamiento público
+  (`1.0.0`). No se sube la versión dentro de una rama `feat/*`.
+- **Code review al final de cada versión, no por slice.** Antes de abrir el
+  PR de una versión completa (p. ej. `0.4.0`) se pasa una única review con el
+  agente `project-reviewer` (o, si no está disponible, las skills de
+  superpowers `requesting-code-review` / `receiving-code-review`), apoyada en
+  las reglas de este documento. Los hallazgos se corrigen o se documentan
+  (como riesgo aceptado en `AGENTS.full.md`) antes del PR.
+- Al completar una fase, actualiza [`docs/roadmap.md`](./docs/roadmap.md).
 
 ## Reglas de trabajo
 
 - Inspecciona el código existente antes de crear archivos o abstracciones.
 - Haz cambios pequeños, explícitos y coherentes con Rails.
-- **Commits al cerrar un slice, no antes.** Cuando un slice está
-  terminado y verificado a mano, el agente propone un mensaje de commit
-  en inglés (Conventional Commits) y espera a que el usuario confirme.
-  El usuario puede confirmar con una afirmación clara ("dale", "sí",
-  "haz commit", "vamos"…), pedir cambios al mensaje, o pedir partir el
-  slice en dos commits. Por defecto, un slice = un commit. Antes de
-  ejecutar `git commit`, el agente muestra el `git diff --staged` o
-  `git status` para que el usuario vea exactamente qué entra. Si la
-  instrucción es ambigua, el agente confirma antes de ejecutar el
-  commit.
-- **Tests en el mismo commit que el código.** Los tests del slice se
-  commitean junto con el código que prueban, en el mismo commit, para
-  que el historial refleje qué se probó junto con qué. No se hacen
-  commits `test:` sueltos salvo para arreglar regresiones o cubrir
-  código viejo. En este proyecto los tests son specs de RSpec y viven
-  en `spec/`.
-- **Internacionalización (i18n) obligatoria desde el inicio.** La app
-  debe estar preparada para español e inglés, y el idioma lo elige la
-  usuaria desde la UI (un selector visible). Nada de cadenas
-  hardcodeadas en vistas, mailers ni controladores: todo va en
-  `config/locales/{es,en}.yml`. La detección inicial se delega a la
-  UI; no se deduce automáticamente de la URL ni de `Accept-Language`
-  hasta que se defina explícitamente.
-- **Services obligatorios para lógica que cruza modelos o casos de uso.**
-  Cualquier operación que toque varios modelos o tenga reglas de
-  negocio va en `app/services/<contexto>/<caso_de_uso>.rb`. Los
-  controllers orquestan (`authorize → service → respond`): **no consultan
-  ni escriben en la base de datos directamente** (nada de `Model.find`,
-  `Model.create`, `Model.where`, `authenticate_by`, …); toda interacción
-  con ActiveRecord vive en services (las consultas en `search.rb`). Cada
-  service hace una única cosa (una sola responsabilidad). Consultar
-  `AGENTS.full.md` para detalles de la arquitectura services/decorators.
-- **Reset de BD permitido fuera de producción.** Mientras el entorno
-  no sea el de producción, está permitido borrar y recrear la base de
-  datos para alinearla con los cambios del slice (por ejemplo, cuando
-  rehacer desde cero es más limpio que migrar incrementalmente). En
-  desarrollo local: `docker compose down -v db && docker compose up -d
-  db && bin/rails db:create db:schema:load` (o `db:migrate` si se
-  prefiere). En staging y producción queda prohibido hasta que se
-  defina un proceso de migraciones explícito y aprobado.
-- **Explica el plan antes de implementar**: al empezar una feature o fix,
-  resume al usuario en lenguaje sencillo qué vas a crear, qué herramientas de
-  Rails usarás (generadores, migraciones, gemas…) y por qué. El usuario es
-  junior y está aprendiendo: las explicaciones forman parte del trabajo.
-- **Crea la rama antes de codificar**: al iniciar cualquier tarea de código,
-  comprueba la rama actual (`git branch --show-current`). Si es `main`, crea
-  primero la rama `feat/…`, `fix/…`, `chore/…` o `docs/…` que corresponda
-  y avisa al usuario de la rama creada. Nunca empieces una feature o fix en
-  `main` (ver «Git, ramas y versiones»). El nombre de la rama va en inglés.
-- **Código y ramas en inglés**: los nombres de ramas, los identificadores de
-  código (clases, métodos, variables), los mensajes de commit (type, scope y
-  resumen) y el contenido de los PRs se escriben **en inglés**. La
-  documentación, los comentarios extensos, los mensajes al usuario y los
-  commits narrativos en español se mantienen en español. Mantén el español
-  para explicar al usuario junior, no para el código.
-- No modifiques ni elimines tests existentes para ocultar un fallo; corrige el
-  código de producción o añade cobertura cuando corresponda.
+- **Inglés en el código, español con el usuario.** En inglés: ramas,
+  identificadores (clases, métodos, variables, columnas), migraciones,
+  mensajes de commit y contenido de los PRs. En español: documentación,
+  comentarios extensos y la conversación con el usuario. Detalle en
+  `AGENTS.full.md`, «Idioma de código y documentación».
+- **i18n obligatoria desde el inicio.** Español e inglés; el idioma lo elige
+  la usuaria con un selector visible en la UI. Nada de cadenas hardcodeadas en
+  vistas, mailers ni controllers: todo va en `config/locales/{es,en}.yml`. No
+  se deduce el idioma de la URL ni de `Accept-Language` hasta que se defina.
+- **No toques tests existentes para ocultar un fallo.** Corrige el código de
+  producción o añade cobertura. Si un contrato cambia de verdad (p. ej. una
+  consulta que se mueve a un `Search`), las aserciones se mueven con él sin
+  perder cobertura, y se explica en el resumen.
 - No añadas gemas, servicios externos o patrones nuevos sin justificar su
   necesidad y actualizar la documentación relacionada.
 - No pongas secretos ni datos de clientes en el repositorio.
 - No uses `rescue` amplio ni devuelvas falsos éxitos: los errores inesperados
-  deben propagarse y quedar visibles en logs.
-- Actualiza el README o la documentación ampliada si cambia el comportamiento,
-  el contrato de una API o el flujo de desarrollo.
+  se propagan y quedan visibles en logs.
+- **Reset de BD permitido fuera de producción.** En local se puede borrar y
+  recrear la base de datos cuando rehacer es más limpio que migrar
+  (`docker compose down -v db && docker compose up -d db && bin/rails
+  db:prepare`). En staging y producción está prohibido hasta que exista un
+  proceso de migraciones aprobado.
+- La documentación es parte del producto: `AGENTS.md`, `AGENTS.full.md`,
+  `README.md`, `CHANGELOG.md` y `docs/` se actualizan en la misma rama que el
+  cambio que los motiva (comportamiento, contrato o flujo de desarrollo).
 
 ## Stack y límites
 
-- Ruby 4.0.7, Rails 8.1 y MySQL 8.0 (Docker Compose en desarrollo).
+- Ruby 4.0.7, Rails 8.1 y MySQL 8.0 (Docker Compose o Podman en desarrollo).
 - Tailwind CSS para estilos; Turbo/Stimulus e Importmap para interacción.
-  Usa JavaScript adicional solo cuando sea necesario.
-- RSpec + FactoryBot (con Capybara/Selenium para system tests). El
-  proyecto usa RSpec como framework de tests y FactoryBot para generar
-  datos de prueba. Los specs viven en `spec/`; los factories en
-  `spec/factories/`. Si necesitas Minitest, abre una excepción y
-  justifícala.
+  JavaScript adicional solo cuando Hotwire no baste.
+- RSpec + FactoryBot: specs en `spec/`, factories en `spec/factories/`. Los
+  system specs (`spec/system/`) usan Capybara con Chrome headless. Minitest
+  solo con una excepción justificada.
 - Autenticación nativa de Rails 8 y sesiones con cookie firmada (no Devise ni
-  JWT). Solid Queue/Cache sobre MySQL (no Redis ni Sidekiq); jobs vía
-  `Active Job`.
-- Web HTML con Hotwire: no hay API pública, así que nada de Grape, Swagger ni
-  JWT. Si aparece la necesidad de una API, se especifica aparte.
+  JWT). Solid Queue/Cache sobre MySQL (no Redis ni Sidekiq); jobs vía Active
+  Job.
+- Web HTML con Hotwire: no hay API pública, así que nada de Grape, Swagger,
+  JWT ni Jbuilder. Si aparece la necesidad de una API, se especifica aparte.
 - Nunca `rails generate scaffold`. Generadores pequeños (`model`,
-  `migration`) como punto de partida; controllers, servicios, decorators y
-  vistas se escriben a mano. Detalle y excepciones en `AGENTS.full.md`,
-  sección «Decisiones de stack».
+  `migration`) como punto de partida; controllers, services, decorators y
+  vistas se escriben a mano. Detalle en `AGENTS.full.md`, «Decisiones de
+  stack».
 
 ## Comandos
 
 ```bash
-docker compose up -d db   # MySQL 8.0; obligatorio antes de test/dev
+docker compose up -d db   # MySQL 8.0; obligatorio antes de test/dev (o podman-compose up -d db)
 bin/setup                 # dependencias + db:prepare
 bin/dev                   # Puma + tailwindcss:watch (no uses `rails s` a secas)
-bundle exec rspec         # RSpec (requiere MySQL arrancado); incluye system specs
-bin/ci                    # CI local completo: setup, rubocop, audits, brakeman, test, seeds
+bundle exec rspec         # todos los specs, incluidos system specs y los de los cops
+bin/ci                    # CI local completo: setup, rubocop, audits, brakeman, tests, seeds
 ```
 
-Validaciones individuales: `bin/rubocop`, `bin/brakeman`, `bin/bundler-audit`,
-`bin/importmap audit`. GitHub Actions ejecuta todo eso en cada PR; corre
-`bin/ci`, o como mínimo rubocop y los tests afectados, antes de dar una tarea
-por terminada. Si una herramienta no está disponible, infórmalo y ejecuta el
-resto. No marques una tarea como verificada sin indicar qué se ejecutó.
+Validaciones individuales: `bin/rubocop` (incluye los cops `Silvalde/*`),
+`bin/brakeman`, `bin/bundler-audit` y `bin/importmap audit`. GitHub Actions
+ejecuta todo eso en cada PR. Antes de dar una tarea por terminada corre
+`bin/ci`, o como mínimo rubocop y los specs afectados. Si una herramienta no
+está disponible, dilo y ejecuta el resto. No marques nada como verificado sin
+indicar qué se ejecutó y su resultado.
 
-La app lee las credenciales de base de datos de `.env` (`DB_HOST`, `DB_PORT`,
-`MYSQL_USER`, `MYSQL_PASSWORD`; contrato en `.env.example`). Sin `.env` fallan
-el arranque y los tests.
+La app lee la base de datos de `.env` (`DB_HOST`, `DB_PORT`, `MYSQL_USER`,
+`MYSQL_PASSWORD`; contrato en `.env.example`). Sin `.env` fallan el arranque y
+los tests. Si el puerto 3306 está ocupado (otro MySQL), usa `DB_PORT=3307`.
 
 ## Arquitectura obligatoria
 
-Usa MVC con **servicios** y **decorators**:
+MVC con **services** y **decorators**. Las dos primeras reglas las vigila
+RuboCop (`Silvalde/NoActiveRecordInControllers` y
+`Silvalde/NoQueriesInModels`), así que `bin/rubocop` falla si se rompen.
 
-- **Controllers**: orquestan la petición, autorización, servicio y respuesta.
-  No contienen reglas de negocio ni acceso directo a la base de datos: no usan
-  `Model.find`, `Model.create`, `Model.where` ni `authenticate_by`. Toda
-  interacción con ActiveRecord vive en services: las lecturas en `search.rb`
-  y las escrituras en los services de caso de uso.
-- **Models**: contienen asociaciones, validaciones, invariantes y comportamiento
-  propio de la entidad (**métodos sin parámetros**, sobre su propio estado).
-  **Nunca consultas** (`where`, `find_by`, `lookup`, scopes…): las lecturas
-  viven en `app/services/<contexto>/search.rb` y las escrituras en los
-  services de caso de uso. El nombre para i18n y formularios lo resuelve
-  `ApplicationRecord` (infraestructura), no el modelo. Deben mantenerse
-  delgados.
-- **Services**: encapsulan casos de uso y operaciones con varios modelos. Cada
-  servicio tiene una responsabilidad clara y debe fallar explícitamente ante
-  errores inesperados.
-- **Decorators**: preparan presentación y formato para las vistas; no deben
-  ejecutar mutaciones ni esconder consultas.
-- **Views/components**: presentan datos y usan helpers/componentes reutilizables;
-  no implementan reglas de negocio.
+- **Controllers**: orquestan `authorize → service → respond`. Sin reglas de
+  negocio ni acceso directo a la base de datos: nada de `Model.find`,
+  `Model.create`, `Model.where`, `authenticate_by`… Las lecturas van a
+  `app/services/<contexto>/search.rb` y las escrituras a services de caso de
+  uso. Construir un objeto vacío para un formulario (`Users::User.new`) sí
+  está permitido. Excepción: la infraestructura de sesión (concern
+  `Authentication`).
+- **Models**: asociaciones, validaciones, invariantes y comportamiento propio
+  de la entidad (**métodos sin parámetros** sobre su propio estado:
+  `available?`, `expired?`). **Nunca consultas**: ni `where`, ni `find_by`, ni
+  scopes ni `default_scope`. El nombre para i18n y formularios lo resuelve
+  `ApplicationRecord`, no cada modelo. Delgados.
+- **Services**: un caso de uso por service, una sola responsabilidad
+  (`app/services/<contexto>/<caso_de_uso>.rb`). Toda operación que toque
+  varios modelos o tenga reglas de negocio va aquí, con transacción cuando
+  modifique varias tablas, y falla explícitamente ante errores inesperados.
+- **Decorators**: presentación y formato para las vistas; no mutan ni
+  esconden consultas.
+- **Views/partials**: presentan datos; sin reglas de negocio.
 
-Prioriza transacciones para operaciones que afecten a varias entidades. Usa
-`has_many :through` con modelo intermedio cuando una relación tenga datos o
-reglas propias. No introduzcas una máquina de estados sin definir estados,
+Usa `has_many :through` con modelo intermedio cuando una relación tenga datos
+o reglas propias. No introduzcas una máquina de estados sin definir estados,
 transiciones válidas y cómo se muestran al usuario.
 
-## Flujo obligatorio
+## Flujo obligatorio de una tarea
 
 1. Lee `README.md`, este archivo y, si aplica, `AGENTS.full.md`.
-2. Identifica rutas, modelos, servicios, vistas y tests afectados.
-3. Implementa la solución mínima completa, manteniendo las convenciones Rails.
-4. Añade o actualiza tests de comportamiento sin alterar tests existentes.
-5. Ejecuta las validaciones relevantes y revisa el diff antes de terminar.
+2. Identifica rutas, modelos, services, vistas y tests afectados.
+3. Implementa la solución mínima completa siguiendo las convenciones Rails
+   (con TDD: primero el spec que fija el comportamiento).
+4. Añade o actualiza tests de comportamiento sin alterar los existentes.
+5. Ejecuta las validaciones relevantes y repasa el diff antes de terminar.
 
-## Git, ramas y versiones
+## Skills y herramientas
 
-- `main` es la rama estable: siempre debe arrancar y pasar las validaciones.
-  El trabajo se hace en ramas (`feat/<name>`, `fix/<name>`, `chore/<name>`,
-  `docs/<name>`; minúsculas, guiones, **en inglés**) que se integran en
-  `main` con `bin/ci` en verde. Una rama = una responsabilidad. Flujo
-  completo: [`docs/git-workflow.md`](./docs/git-workflow.md).
-- Los commits siguen Conventional Commits con `type` y `scope` en inglés
-  (resumen en imperativo, en inglés): `feat:`, `fix:`, `docs:`, `test:`,
-  `refactor:`, `chore:`.
-- La versión vigente vive en el archivo [`VERSION`](./VERSION) (fuente única
-  de verdad; la app la expone como `SilvaldeWebV2::APP_VERSION`) y su
-  historial en [`CHANGELOG.md`](./CHANGELOG.md). SemVer: estamos en `0.x.y`
-  hasta el lanzamiento público, que será `1.0.0`. No subas la versión dentro
-  de una rama `feat/*`. Proceso de publicación:
-  [`docs/versioning.md`](./docs/versioning.md).
-- **Code review al final de cada versión, antes de su PR.** Los reviews **no
-  se hacen por slice** (ralentizan el flujo): se pasan una sola vez, al
-  terminar la versión completa (p. ej. `0.3.0`) y antes de abrir su pull
-  request, usando las skills de superpowers `requesting-code-review` y
-  `receiving-code-review`, apoyadas en las reglas de este documento y en las
-  skills y plugins disponibles. Los hallazgos se corrigen o se documentan
-  antes del PR.
-- Las fases del proyecto y su estado están en
-  [`docs/roadmap.md`](./docs/roadmap.md); actualízalo al completar una fase.
-- Los agentes no hacen commits, push ni tags sin confirmación
-  explícita del usuario. El push es una **acción aparte** que nunca se
-  agrupa con un commit: aunque el usuario haya aprobado el commit, hay
-  que esperar a su "sí, haz push" específico en el mismo turno. Los
-  merges en `main` requieren una confirmación adicional y dedicada
-  (ver "Reglas de merge"). **Las pull requests sí pueden ser abiertas
-  por el agente** cuando el usuario lo pida explícitamente; el agente
-  no debe abrirlas por su cuenta sin instrucción directa del usuario.
-- **Confirma el nombre de la rama antes de crearla.** Al iniciar una
-  tarea de código, además de comprobar la rama actual, el agente debe
-  proponer un nombre de rama y esperar la confirmación explícita del
-  usuario antes de ejecutar `git checkout -b`. Si el usuario no puede
-  evaluar la propuesta, el agente explica primero las opciones y luego
-  aplica la más sensata. Una vez creada, el agente avisa del nombre
-  definitivo antes de seguir.
-- **Una rama por feature o fix, no por slice.** Las ramas se crean
-  únicamente para delimitar una feature (`feat/`) o un fix
-  (`fix/`). Los slices son unidades de commit dentro de la misma rama,
-  no ramas nuevas. Antes de empezar cada slice el agente confirma con
-  el usuario si va a trabajar sobre la rama actual o si necesita abrir
-  una rama nueva (en este último caso, aplica la regla anterior de
-  confirmación del nombre).
+Detalle, instalación y sincronización entre PCs en
+[`docs/agent-tooling.md`](./docs/agent-tooling.md).
 
-## Documentación
+- **Skills del proyecto** (versionadas en git):
+  - `.claude/skills/`: las propias del proyecto, como `commit`. Las leen
+    tanto Claude Code como opencode.
+  - `.agents/skills/` + `skills-lock.json`: las instaladas con
+    `npx skills`, como frontend, accesibilidad o SEO.
 
-La documentación extensa vive en [`AGENTS.full.md`](./AGENTS.full.md). Si ese
-archivo crece demasiado, divide los temas en `docs/` y enlázalos desde ambos
-archivos de directrices. Mantén siempre estas reglas críticas en este archivo
-para que sean visibles en la primera carga del agente.
+  Antes de empezar una tarea, revisa las skills disponibles y carga las que
+  apliquen.
+- **Superpowers** (plugin global): el propio plugin indica al agente cuándo
+  cargar cada skill de proceso. En este proyecto se usan sobre todo
+  `brainstorming` (antes de una feature o cambio de comportamiento),
+  `systematic-debugging` (ante un bug o test en rojo), `test-driven-development`,
+  `writing-plans`/`executing-plans` (tareas multi-paso) y
+  `verification-before-completion` (antes de afirmar que algo está en verde).
+  La excepción del proyecto: el code review no se hace por slice, solo al
+  cerrar la versión (ver arriba).
+- **`project-reviewer`** (agente global, en tu repo de dotfiles): hace la
+  review de fin de versión aplicando este archivo y `AGENTS.full.md`.
 
-`AGENTS.md`, `AGENTS.full.md`, `README.md`, `CHANGELOG.md` y `docs/` están
-versionados en git junto al código: la documentación es parte del producto y
-debe actualizarse en la misma rama que el cambio que la motiva.
-
-## Ritmo de trabajo y modelo mental
-
-El usuario es junior y está aprendiendo. Las siguientes reglas evitan que
-el agente implemente demasiada superficie en una sola sesión y deje al
-usuario sin contexto.
-
-- **Vertical slices, no capas horizontales.** Una sesión de trabajo es
-  una unidad pequeña y verificable a mano (por ejemplo: "modelo User con
-  validaciones" o "signup end-to-end"). No se implementa modelo +
-  controller + vista + mailer + jobs + tests de todo en la misma sesión.
-  Antes de empezar cada slice el agente debe: (a) explicar en una frase
-  qué entra y qué queda fuera, (b) decir cómo se prueba a mano, (c)
-  esperar a que el usuario lo valide antes de continuar.
-- **Sub-slices dentro del slice.** Un slice puede contener varias
-  features internas (por ejemplo: en `feat/user-model`, primero
-  migración, luego modelo, luego validaciones, luego fixture/factory,
-  luego test). Los sub-slices son unidades conceptuales para mantener
-  el orden y el foco del trabajo; por defecto, todos los sub-slices
-  de un mismo slice se commitean juntos en un único commit al cerrar
-  el slice. Si el usuario lo pide, se pueden separar en commits
-  individuales por sub-slice. El agente propone el mensaje de commit
-  al final y espera la confirmación explícita antes de ejecutar
-  `git commit`.
-- **Mapa mental al inicio de cada sesión.** Al abrir una sesión de
-  trabajo, el agente muestra un mapa breve del estado actual: tablas,
-  controllers, URLs, tests, rama y commits sin pushear. Eso le da al
-  usuario el contexto para decidir. Si la sesión anterior terminó con
-  cambios sin comitear o sin pushear, se avisa al principio.
-- **Explicar conceptos antes de preguntar opciones.** Si el usuario no
-  puede evaluar una opción porque no conoce el concepto, el agente
-  explica primero y pregunta después. Si el usuario dice "no sé", el
-  agente propone la opción más sensata con su razonamiento y la aplica,
-  sin esperar confirmación sobre algo que el usuario no puede juzgar.
-
-## Skills locales
-
-El proyecto puede definir skills propias en `.agents/skills/` (gestionado por
-`skills-lock.json`). Antes de empezar una tarea, los agentes deben **revisar
-las skills disponibles** y cargar las que apliquen al trabajo (frontend,
-accesibilidad, SEO, etc.). Las skills globales del agente siguen disponibles;
-esta regla añade una capa local al proyecto.
-
-**Skills de superpowers (globales, obligatorias según el caso).** El agente
-usa el plugin `superpowers`, que aporta skills de proceso. Debe cargarlas
-antes de actuar siempre que apliquen, en orden proceso → implementación:
-
-- `brainstorming` antes de cualquier trabajo creativo (feature nueva, cambio de comportamiento).
-- `systematic-debugging` ante cualquier bug, test en rojo o comportamiento inesperado (antes de proponer fixes).
-- `test-driven-development` al implementar feature o fix, antes de escribir código.
-- `writing-plans` y `executing-plans` cuando hay una tarea multi-paso con spec.
-- `verification-before-completion` antes de afirmar que algo está terminado o en verde.
-- `requesting-code-review` / `receiving-code-review` al cerrar una tarea o recibir feedback.
-
-La lista completa se consulta con el tool nativo `skill`.
+Si el archivo de directrices crece demasiado, mueve temas a `docs/` y
+enlázalos desde aquí, pero mantén en este archivo las reglas críticas para que
+se vean en la primera carga.

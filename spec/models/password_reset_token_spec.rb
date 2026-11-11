@@ -55,21 +55,18 @@ RSpec.describe Auth::PasswordResetToken, type: :model do
     end
   end
 
-  describe "scopes and state" do
+  describe "state" do
     let(:user) { create(:user) }
 
     it "is active by default and remains active until used or expired" do
       token = create(:password_reset_token, user: user)
       expect(token).to be_active
-      expect(described_class.active).to include(token)
     end
 
     it "is not active when expired" do
       token = create(:password_reset_token, user: user, expires_at: 1.minute.ago)
       expect(token).not_to be_active
       expect(token).to be_expired
-      expect(described_class.expired).to include(token)
-      expect(described_class.active).not_to include(token)
     end
 
     it "is not active when used" do
@@ -77,8 +74,6 @@ RSpec.describe Auth::PasswordResetToken, type: :model do
       token.mark_used!
       expect(token).to be_used
       expect(token).not_to be_active
-      expect(described_class.used).to include(token)
-      expect(described_class.active).not_to include(token)
     end
 
     it "mark_used! sets used_at to the current time" do
