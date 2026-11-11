@@ -1,6 +1,7 @@
 <% product = decorate(@product) %>
 <% content_for :title, "#{@product.name} — #{t("app.name")}" %>
-<% content_for :meta_description, @product.description %>
+<%# Search engines show ~160 characters: cut at a word, not mid-word. %>
+<% content_for :meta_description, truncate(@product.description.to_s, length: 160, separator: " ") %>
 <% content_for :og_type, "product" %>
 <% if @product.images.attached? %>
   <% content_for :og_image, polymorphic_url(@product.images.first, host: request.host, protocol: request.protocol) %>
