@@ -11,12 +11,14 @@ perder control sobre la experiencia de compra ni sobre la operación interna.
 - Landing pública como portada (`/`): presentación de la tienda, productos
   destacados, ofertas y galería de fotos. El login es opcional y nunca es la
   portada.
-- Carrito y proceso de compra.
+- Carrito y proceso de compra, con o sin cuenta: recogida en las tiendas de
+  Bertamirans y Noia o envío a domicilio; pago con tarjeta (Stripe), PayPal,
+  transferencia/Bizum o en tienda.
 - Registro, inicio de sesión y gestión del perfil del cliente.
 - Comunicación futura de ofertas y rebajas para usuarios registrados, siempre
   respetando el consentimiento y la normativa aplicable.
-- Panel de administración para gestionar usuarios, productos, pedidos, facturas
-  y métricas.
+- Panel de administración para gestionar usuarios, productos, pedidos
+  (con justificante imprimible) y métricas.
 
 El alcance es evolutivo: cualquier funcionalidad nueva debe documentar su
 motivación, límites y efecto sobre los flujos existentes antes de implementarse.
@@ -81,7 +83,8 @@ arquitectura, seguridad, datos o UX.
 
 El proyecto está en desarrollo temprano. Publicadas: **0.1.0** (base del
 proyecto), **0.2.0** («autenticación y usuarios»), **0.3.0** («catálogo») y
-**0.4.0** («carrito»). La siguiente fase es la **0.5.0** («pedidos»). El
+**0.4.0** («carrito»); la **0.4.1** («endurecimiento») está en revisión. La
+siguiente fase es la **0.5.0** («pedidos»). El
 estado al día de cada fase está en [`docs/roadmap.md`](./docs/roadmap.md) y
 lo que entrará en la próxima versión, en la sección «Sin publicar» de
 [`CHANGELOG.md`](./CHANGELOG.md). La fuente única de verdad de la versión es

@@ -12,6 +12,17 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
 
 ## [Sin publicar]
 
+### Cambiado
+
+- Roadmap rehecho tras la auditoría: pedidos con o sin cuenta, recogida en
+  las tiendas de Bertamirans y Noia, pagos offline en la v0.5.0, panel admin
+  (v0.6.0), envío a domicilio (v0.7.0), puesta en producción con Kamal
+  (v0.8.0), Stripe y PayPal (v0.9.0) y requisitos legales y RGPD en la
+  v1.0.0. Incluye por qué AASM y una guía de despliegue. `backend-plan.md`
+  desglosa los slices 25-48 y `AGENTS.full.md` registra las decisiones de
+  pedidos.
+- `AGENTS.md`: abrir un PR necesita el OK explícito del usuario.
+
 ## [0.4.1] - 2026-11-11
 
 Versión de endurecimiento tras la auditoría completa del código con

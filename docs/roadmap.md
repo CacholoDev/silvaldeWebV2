@@ -4,48 +4,64 @@ Plan de fases del proyecto y referencia de control. Cada fase terminada e
 integrada en `main` publica una versión (ver [versioning.md](./versioning.md)).
 Este documento se actualiza conforme avanza el proyecto.
 
-El desglose fino del backend en **slices** está en
-[`backend-plan.md`](./backend-plan.md).
+El desglose fino en **slices** está en [`backend-plan.md`](./backend-plan.md).
+Las decisiones ya tomadas con su porqué están en `AGENTS.full.md`
+(«Decisiones de stack»).
 
-Leyenda: ✅ hecho · 🚧 en curso · ⬜ pendiente
+Leyenda: ✅ hecho · 🚧 en curso · ⬜ pendiente · ❓ decisión abierta
 
 ---
 
 ## La primera versión de la web (objetivo: v1.0.0)
 
-Cuando publiquemos la `v1.0.0`, esto es lo que existirá:
+Silvalde es una tienda de decoración con **dos tiendas físicas en la
+provincia de A Coruña: Bertamirans y Noia**. La web vende online y aprovecha
+esas tiendas para la recogida.
 
-### Lo que podrá hacer una visitante o clienta
+### Lo que podrá hacer una clienta
 
-- Entrar a la web y **ver el catálogo** de productos de decoración organizado
-  por categorías, con fotos, precios, variantes y disponibilidad.
-- **Buscar** productos y navegar sin necesidad de cuenta.
-- **Registrarse**, iniciar/cerrar sesión y recuperar su contraseña.
-- Tener un **carrito** (con o sin cuenta) y **hacer pedidos**.
-- Ver el **detalle y estado de sus pedidos** y recibir email de confirmación.
-- Elegir si quiere recibir **ofertas y rebajas** (consentimiento explícito,
-  revocable).
+- Ver el **catálogo** por categorías, con fotos, precios (IVA incluido),
+  variantes y disponibilidad, y **buscar** productos. ✅
+- **Registrarse**, iniciar/cerrar sesión y recuperar la contraseña. ✅
+- Tener un **carrito**, con o sin cuenta. ✅
+- **Hacer un pedido con o sin cuenta** (como invitada, con su email).
+- Elegir la **entrega**: **recogida en tienda** (Bertamirans o Noia, gratis)
+  o **envío a domicilio** (con coste de envío).
+- Elegir cómo **pagar**: **tarjeta** (Stripe), **PayPal**,
+  **transferencia o Bizum** (la tienda confirma el cobro) o **en la tienda al
+  recoger**.
+- Ver el **estado de sus pedidos** (en «Mis pedidos» o, sin cuenta, con el
+  enlace del email) y recibir emails de confirmación y de cambio de estado.
+- Elegir si quiere recibir **ofertas** (consentimiento explícito y
+  revocable). ✅
+- **Borrar su cuenta** y sus datos personales (RGPD).
 
-### Lo que podrá hacer la tienda (administración)
+### Lo que podrá hacer la tienda
 
-- Entrar a un **panel `/admin` protegido por rol** (solo usuarias admin).
-- Gestionar **usuarios, productos, pedidos y facturas**.
-- Ver **métricas básicas** y la versión de la app en el footer.
+- Entrar a un **panel `/admin` protegido por rol**.
+- Gestionar **productos, pedidos y usuarias**: confirmar pagos por
+  transferencia/Bizum, preparar, enviar o marcar como recogido, cancelar.
+- Imprimir el **justificante del pedido** (no es una factura fiscal).
+- Ver **métricas básicas** y la versión de la app.
 
-### Lo que NO entra en la primera versión
+### Lo que NO entra en la v1.0.0
 
-Sin una especificación aprobada aparte (regla de `AGENTS.full.md`):
+Cada punto necesita su propia especificación antes de implementarse:
 
-- **Pasarela de pago real** (tarjeta, Bizum, PayPal…): los pedidos se registran
-  y el pago se acuerda como en la tienda física hasta que se especifique.
-- **Facturación fiscal** automatizada.
-- **Campañas de marketing** (el consentimiento se guarda desde el principio,
-  pero los envíos llegarán más adelante).
-- Integraciones externas (envíos, ERP, redes sociales…).
+- **Facturación fiscal** (facturas con numeración legal, Verifactu…):
+  consultar antes con la gestoría qué exige.
+- **Bizum integrado** en el pago online (requiere el TPV del banco, Redsys).
+  En la v1.0.0, Bizum funciona como la transferencia: la clienta lo envía y
+  la tienda confirma el cobro.
+- **Campañas de marketing** (el consentimiento ya se guarda).
+- Integración con transportistas (etiquetas y seguimiento automáticos), ERP
+  o redes sociales.
+- **Stock por tienda** (Bertamirans y Noia por separado): de momento hay un
+  único stock por variante.
 
 ---
 
-## Fases
+## Fases publicadas
 
 ### ✅ v0.1.0 — Base del proyecto
 
@@ -81,63 +97,261 @@ publicar: reintento ante carreras, validación de cantidades, memoización de
 `current_cart`, system spec, cops de arquitectura y Rails 8.1.4.1. Publicada
 el 2026-11-10 con el tag `v0.4.0`.
 
-### ✅ v0.4.1 — Endurecimiento
+### 🚧 v0.4.1 — Endurecimiento
 
 Arreglos de la auditoría completa con `/project-review full`: reset de
 contraseña en blanco, límite de intentos en login/registro/reset, contraseña
 para cambiar el email, HTTPS y dominio en producción, fusión de carritos,
 ofertas, mensajes de validación en los dos idiomas, purga de sesiones y
-otros detalles (ver `CHANGELOG.md`). Publicada el 2026-11-11 con el tag
-`v0.4.1`.
+otros detalles (ver `CHANGELOG.md`). PR #25; se publica con el tag
+`v0.4.1` al mergearlo.
 
-### ⬜ v0.5.0 — Pedidos
+---
 
-**Qué se hace:** checkout (sin pasarela de pago de momento), pedidos con
-estados, detalle visible para la clienta y email de confirmación.
+## Fases pendientes
+
+El orden importa: cada fase deja algo usable y no depende de las
+siguientes. Los pagos online van después de la puesta en producción porque
+necesitan una URL pública real (los avisos de pago de Stripe y PayPal llegan
+por webhook).
+
+### ⬜ v0.5.0 — Pedidos (checkout con recogida en tienda y pago offline)
+
+**Qué se hace:** la clienta, con o sin cuenta, convierte su carrito en un
+pedido para **recoger en Bertamirans o Noia**, pagando **por
+transferencia/Bizum** o **al recoger**. Ve su pedido y recibe el email de
+confirmación.
+
+**Cómo se hará:**
+
+- **Modelos `Orders::Order` y `Orders::OrderItem`**, con los precios
+  congelados al comprar (como en el carrito) y los datos de contacto
+  (nombre, email, teléfono). Una invitada compra con su email; si tiene
+  cuenta, el pedido queda en su cuenta.
+- **Número de pedido público** (p. ej. `SV-7K3Q9P`), no el id de la base de
+  datos: el id es consecutivo y dejaría adivinar cuántos pedidos hay o
+  probar los de otras.
+- **Máquina de estados con AASM** (decisión tomada; ver «Por qué AASM» más
+  abajo). Estados del pedido (lo que pasa con el paquete):
+  `pending` (recibido) → `confirmed` (pago confirmado o pago al recoger) →
+  `ready_for_pickup` → `picked_up`; desde `pending` o `confirmed` se puede
+  ir a `cancelled`. La v0.7.0 añade la rama de envío (`shipped` →
+  `delivered`). Cada transición queda registrada (quién y cuándo).
+- **Pago separado del pedido:** un atributo `payment_method`
+  (`bank_transfer`, `pay_in_store` y, desde la v0.9.0, `card`, `paypal`) y un
+  `payment_status` (`pending`, `paid`, `refunded`). Así, un pedido puede
+  estar «listo para recoger» y «pendiente de pago» a la vez (pago al
+  recoger) sin inventar estados mezclados.
+- **Servicio de checkout en una transacción:** valida el carrito, bloquea
+  las filas de las variantes (`with_lock`), comprueba y descuenta el stock,
+  crea el pedido y vacía el carrito; si algo falla, no se guarda nada. Dos
+  personas no pueden comprar la última unidad a la vez. Si no hay stock
+  suficiente, la clienta vuelve al carrito con un mensaje claro de qué línea
+  falla.
+- **Restricciones en la base de datos** (CHECK): `stock >= 0`, cantidades
+  entre 1 y 999 y precios `>= 0`. Las validaciones de Ruby no bastan ante
+  carreras.
+- **Cancelar devuelve el stock** (en la misma transacción).
+- **IVA incluido**: los precios del catálogo ya incluyen el IVA. El
+  checkout y el email lo indican («IVA incluido»).
+- **Condiciones de venta**: la clienta las acepta en el checkout (casilla
+  obligatoria) y se guarda qué versión aceptó y cuándo. El texto legal llega
+  en la v1.0.0; aquí va el mecanismo con un texto provisional.
+- **Ver el pedido:** con cuenta, en «Mis pedidos»; sin cuenta, con un
+  enlace firmado que llega en el email (sin login).
+- **Emails** con Action Mailer: confirmación del pedido y cambios de
+  estado. En desarrollo se ven con las previews de Rails; el envío real
+  necesita el SMTP de la v0.8.0.
+- **Datos de la transferencia/Bizum** (IBAN, número de Bizum) en la
+  configuración, no en el código.
 
 **A tener en cuenta:** la FK `cart_items.variant_id` impide borrar una
-variante o un producto que esté en algún carrito (`InvalidForeignKey`).
-Decidir aquí o en el panel admin (v0.6.0) si se archiva en lugar de borrar o
-se limpian antes las líneas.
-
-**Cómo se hará:** modelos `Order` y `OrderItem` con los precios congelados en
-el momento de la compra; máquina de estados del pedido con **AASM** —estados
-`pending → confirmed → shipped → delivered`, o `cancelled` (en la UI:
-pendiente → confirmado → enviado → entregado, o cancelado)—; servicio de
-checkout con transacción (crea pedido + vacía carrito o falla todo) y
-descuento de stock con bloqueo de fila, para que dos pedidos simultáneos no
-vendan la misma unidad; emails con Action Mailer.
+variante que esté en algún carrito, y ahora también en pedidos. Se resuelve
+en la v0.6.0 archivando productos en vez de borrarlos.
 
 ### ⬜ v0.6.0 — Panel de administración
 
-**Qué se hace:** autorización por rol aplicada en servidor; gestión de
-usuarios, productos, pedidos y facturas; métricas básicas y versión de la app
-visible en el footer del admin (`SilvaldeWebV2::APP_VERSION`).
+**Qué se hace:** la tienda gestiona el día a día sin consola: pedidos,
+productos y usuarias.
 
-**Cómo se hará:** rutas bajo el namespace `/admin`; un `before_action` que
-exige rol `admin` en servidor (nunca basta con ocultar botones); Pundit como
-candidato si los permisos se vuelven más finos (decidir en esta fase); CRUDs
-con las mismas vistas parciales y formato del storefront para coherencia.
+**Cómo se hará:**
+
+- Rutas bajo `/admin` con un `before_action` que exige rol `admin` **en
+  servidor** (ocultar botones nunca es autorizar). Pundit solo si los
+  permisos se vuelven más finos (decidir aquí).
+- **Primer admin** con una tarea `bin/rails admin:create` que pide el email
+  (nunca con contraseñas en los seeds).
+- **Pedidos:** listado con filtros por estado y tienda; acciones según el
+  estado (confirmar pago, listo para recoger, recogido, cancelar), cada una
+  con su transición de AASM. **Justificante del pedido** imprimible.
+- **Productos:** crear, editar, fotos, variantes y stock. **Archivar** en
+  lugar de borrar (`archived_at`): un producto archivado desaparece de la
+  tienda, pero los pedidos antiguos lo siguen mostrando.
+- **Usuarias:** listado, rol y bloqueo.
+- **Métricas básicas:** ventas por periodo, pedidos por estado y productos
+  más vendidos. La versión de la app en el pie del panel.
+
+### ⬜ v0.7.0 — Envío a domicilio
+
+**Qué se hace:** además de recoger en tienda, la clienta puede pedir que se
+lo envíen a casa.
+
+**Cómo se hará:**
+
+- **Dirección de envío** en el checkout (y libreta de direcciones para quien
+  tiene cuenta).
+- **Coste de envío** según una tabla sencilla (p. ej. por zona y tramo de
+  importe, con envío gratis a partir de cierta cantidad), editable desde el
+  admin.
+- La rama de estados `confirmed → shipped → delivered`, con el número de
+  seguimiento del transportista escrito a mano en el admin y enviado por
+  email.
+- ❓ **Decidir:** zonas a las que se envía (solo España peninsular, islas…),
+  tarifas y transportista.
+
+### ⬜ v0.8.0 — Puesta en producción
+
+**Qué se hace:** la web funciona en internet con su dominio, aunque todavía
+solo con pagos offline. Ver «Guía de despliegue» abajo.
+
+**Cómo se hará:**
+
+- **Servidor:** un VPS (servidor virtual) con **Kamal**, que Rails 8 ya trae
+  configurado (`config/deploy.yml`).
+- **Dominio y HTTPS:** el dominio apunta al VPS y `kamal-proxy` pide y
+  renueva el certificado gratis (Let's Encrypt). La app ya fuerza HTTPS desde
+  la v0.4.1.
+- **Base de datos MySQL** en el VPS (como accessory de Kamal) con **copias de
+  seguridad automáticas diarias fuera del servidor y una restauración
+  probada**.
+- **Fotos de producto** en un almacenamiento externo compatible con S3 (o en
+  disco con copia de seguridad), y **tamaños de imagen** optimizados
+  (`ruby-vips` + variantes de Active Storage) en lugar de servir originales
+  de hasta 5 MB.
+- **Email transaccional** con un proveedor (SMTP), dominio verificado
+  (SPF, DKIM y DMARC) para que no acabe en spam. La app ya lee `SMTP_*`
+  desde la v0.4.1.
+- **Monitorización:** aviso de errores (un servicio de seguimiento de
+  errores), aviso si la web cae (monitor de `/up`) y aviso de jobs fallidos
+  (emails que no salen).
+- **Migraciones en producción:** proceso escrito (copia antes de migrar,
+  migración, comprobación y cómo volver atrás). Hasta tenerlo, sigue
+  prohibido tocar la base de producción a mano.
+- **Despliegue desde GitHub Actions** cuando el CI pasa en `main`, y un
+  **entorno de staging** para probar antes.
+- ❓ **Decidir:** proveedor del VPS, dominio, proveedor de email y de copias.
+
+### ⬜ v0.9.0 — Pagos online
+
+**Qué se hace:** pagar con **tarjeta (Stripe)** y **PayPal** al hacer el
+pedido.
+
+**Cómo se hará:**
+
+- **Stripe Checkout:** la clienta paga en una página de Stripe; los datos de
+  la tarjeta **nunca pasan por nuestro servidor**, así que no hay que cumplir
+  la normativa de tarjetas (PCI) por nuestra cuenta. Stripe acepta también
+  Apple Pay y Google Pay.
+- **PayPal:** igual, con su botón y su página.
+- **Webhooks:** el pago se da por bueno cuando Stripe o PayPal **avisan a
+  nuestro servidor** (no cuando la clienta vuelve a la web, que se puede
+  falsificar). El aviso se verifica con su firma y se procesa una sola vez
+  aunque llegue repetido (idempotencia).
+- El stock se reserva al crear el pedido y se libera si el pago no se
+  completa en un tiempo (job que cancela pedidos `pending` caducados).
+- **Reembolsos** desde el admin al cancelar un pedido pagado.
+- Modo de pruebas de Stripe y PayPal en desarrollo y staging; claves en
+  variables de entorno.
+- ❓ **Decidir:** si se cobra comisión distinta por método y qué pasa con
+  devoluciones parciales.
 
 ### ⬜ v1.0.0 — Lanzamiento público
 
-Endurecimiento de seguridad, rendimiento y contenidos legales (aviso legal,
-privacidad, cookies). Pasarela de pago y facturación fiscal: requieren su
-propia especificación antes de implementarse.
+**Qué se hace:** todo lo necesario para abrir al público con garantías.
+
+- **Legal:** aviso legal, política de privacidad, política de cookies,
+  **condiciones de venta** definitivas y **derecho de desistimiento de 14
+  días** (obligatorio en la venta online en la UE), con un formulario para
+  ejercerlo. Revisado por quien lleve lo legal.
+- **RGPD:** borrar la cuenta y los datos personales a petición, y
+  exportarlos; los pedidos se conservan anonimizados el tiempo que exija la
+  ley.
+- **Cookies:** hoy solo hay cookies técnicas (sesión, carrito e idioma), que
+  no necesitan banner. Si se añade analítica, entra el banner de
+  consentimiento.
+- **Seguridad:** Content Security Policy (primero en modo informe),
+  revisión de cabeceras y review de versión completa.
+- **Rendimiento y SEO:** paginación del catálogo y del sitemap, caché de las
+  páginas públicas, imágenes optimizadas y comprobación en móvil.
+- **Accesibilidad:** pasada completa WCAG 2.2 AA, también en el checkout y
+  el admin.
+
+---
+
+## Por qué AASM para los pedidos
+
+Un pedido pasa por estados (recibido, confirmado, listo, recogido,
+cancelado…) y **no todos los saltos son válidos**: no se puede marcar como
+recogido un pedido cancelado. AASM es una gema que define esos estados y
+las transiciones permitidas en un solo sitio, y da métodos como
+`order.confirm!` que fallan si el salto no está permitido.
+
+- **Alternativa descartada: un `enum` de Rails a mano.** Sirve para
+  guardar el estado, pero las reglas de qué salto vale acabarían repartidas
+  por services y controllers, y es fácil que alguna se olvide.
+- **Por qué encaja:** la decisión ya se tomó en la v0.2.0, es la gema más
+  usada para esto en Rails y la conoces del trabajo.
+- **Cómo se usa aquí:** AASM **solo valida y cambia el estado**. Los efectos
+  (devolver stock, enviar el email, registrar quién lo hizo) van en los
+  services de caso de uso (`Orders::Cancel`, `Orders::MarkReady`…), como el
+  resto del proyecto, y no en callbacks de AASM, para que se puedan leer y
+  probar.
+
+## Guía de despliegue (para la v0.8.0)
+
+Conceptos, en orden:
+
+1. **VPS:** un ordenador en un centro de datos que alquilas por meses. Es
+   tuyo: instalas lo que quieras. Para una tienda pequeña basta uno modesto.
+2. **Docker:** empaqueta la app con todo lo que necesita (Ruby, gemas) en
+   una **imagen**, que funciona igual en tu PC y en el servidor. El proyecto
+   ya tiene `Dockerfile`.
+3. **Kamal:** la herramienta de Rails 8 para desplegar esa imagen en el VPS
+   con un comando (`kamal deploy`). Se encarga de arrancar la versión nueva,
+   comprobar que responde en `/up` y apagar la vieja sin cortar el servicio.
+4. **kamal-proxy:** el portero que recibe las visitas, gestiona el HTTPS y
+   las pasa a la app.
+5. **Accessories:** servicios que Kamal arranca junto a la app, como MySQL.
+6. **Secretos:** contraseñas y claves que nunca van al repo; Kamal las lee
+   de `.kamal/secrets` (que a su vez las toma de variables de entorno o de
+   un gestor de contraseñas).
+
+Cuando lleguemos a la v0.8.0, el agente lo hace contigo paso a paso: primero
+en un VPS de pruebas, después el real.
 
 ---
 
 ## Cómo se trabaja cada fase (resumen del flujo)
 
-1. Crear la rama desde `main`: `git switch -c feat/<name>`.
-2. El agente explica el plan antes de tocar código (qué se crea y por qué).
-3. Implementar en commits pequeños con Conventional Commits.
-4. Validar con `bin/ci` (tests + rubocop + brakeman + audits).
-5. Integrar en `main`, publicar la versión según
-   [versioning.md](./versioning.md) y marcar la fase como ✅ aquí.
+1. Leer esta fase y su desglose en `backend-plan.md`; resolver las ❓.
+2. El agente **propone el nombre de la rama** y espera el OK
+   (`feat/<nombre>` desde `main`).
+3. Antes de cada slice, el agente explica qué entra, qué no y cómo se prueba
+   a mano, y espera el OK.
+4. Cada slice: **TDD** (test en rojo, código, verde) → validaciones →
+   propuesta de commit (Conventional Commits).
+5. La review la lanza el usuario cuando quiere (`/project-review slice`); al
+   cerrar la versión, el agente **recuerda** la review de versión
+   (`/project-review version`).
+6. `bin/ci` en verde, commit de publicación (`VERSION`, `CHANGELOG.md`,
+   esta página) y **PR solo con el OK del usuario**.
+7. Merge con su confirmación propia y, después, el **tag** `vX.Y.Z` sobre
+   `main` (ver [versioning.md](./versioning.md)).
 
 ## Notas
 
 - Las fases pueden solaparse, pero no se integra nada a medias en `main`.
-- Cualquier funcionalidad fuera de esta lista necesita antes su especificación
-  (ver `AGENTS.full.md`, sección «Cambios y documentación»).
+- Los arreglos sin funcionalidad nueva salen como versión de parche
+  (`0.4.1`); cada fase nueva sube el número del medio (`0.5.0`).
+- Cualquier funcionalidad fuera de esta lista necesita antes su
+  especificación (ver `AGENTS.full.md`, sección «Cambios y documentación»).

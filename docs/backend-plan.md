@@ -27,9 +27,14 @@ versión la define el roadmap.
   **Clientes** (roles, perfil, consentimiento) → **v0.2.0**.
 - **Catálogo** (categorías, variantes e imágenes, búsqueda) → **v0.3.0**.
 - **Carrito** (invitado y registrado) → **v0.4.0**.
-- **Pedidos** (checkout, estados, email, detalle) → **v0.5.0**.
-- **Métricas** y **panel de administración** → **v0.6.0**.
-- **Lanzamiento** → **v1.0.0**.
+- **Endurecimiento** (auditoría completa) → **v0.4.1**.
+- **Pedidos** (checkout con recogida y pago offline, estados, email,
+  detalle) → **v0.5.0**.
+- **Panel de administración** y **métricas** → **v0.6.0**.
+- **Envío a domicilio** → **v0.7.0**.
+- **Puesta en producción** → **v0.8.0**.
+- **Pagos online** (Stripe y PayPal) → **v0.9.0**.
+- **Lanzamiento** (legal, RGPD, rendimiento) → **v1.0.0**.
 
 ## Estado actual
 
@@ -42,6 +47,8 @@ versión la define el roadmap.
   desde la ficha con contador, página `/cart`, fusión al login y purge de
   caducados. Endurecido después en `chore/project-health` (reintento ante
   carreras, memoización de `current_cart` y system spec).
+- **En curso** (`v0.4.1`): endurecimiento tras la auditoría completa
+  (PR #25).
 - **Siguiente**: v0.5.0 (pedidos).
 
 ---
@@ -49,7 +56,8 @@ versión la define el roadmap.
 ## Autenticación: modelos ✅
 
 1. ✅ **User** — migración, validaciones, `has_secure_password`, factory y spec.
-2. ✅ **PasswordResetToken** — migración, expiración y scopes, factory y spec.
+2. ✅ **PasswordResetToken** — migración, expiración, factory y spec (las
+   consultas viven en `Auth::Search`).
 3. ✅ **Session + Current + concern Authentication** — sesión por cookie, usuario actual y specs.
 
 ## Autenticación: registro, login y logout ✅
@@ -130,33 +138,68 @@ versión la define el roadmap.
 24. ✅ **Purge de carritos caducados** (`Carts::PurgeExpired` + job recurrente
     de Solid Queue, silencioso, diario a las 3am en producción) + specs.
 
-## Pedidos: checkout y estados
+## Pedidos: modelos y estados (v0.5.0)
 
-25. ⬜ **Modelos `Order` y `OrderItem`** + máquina de estados del pedido con
-    **AASM** (`pending → confirmed → shipped → delivered`, o `cancelled`) +
-    migración + factories + specs. Al conectar pedidos con variantes, revisar
-    el `dependent: :destroy` de `Product` → `Variant`: no se podrá borrar un
-    producto cuyas variantes aparezcan en pedidos confirmados.
-26. ⬜ **Servicio de checkout** con transacción + spec. El descuento de stock
-    se hace con bloqueo de fila (transacción + `with_lock`) y rollback
-    completo si falla: dos pedidos simultáneos no pueden vender la misma
-    unidad.
+25. ⬜ **Gema AASM + modelos `Orders::Order` y `Orders::OrderItem`** +
+    migraciones (CHECK de stock, cantidades y precios) + factories + specs.
+    Número de pedido público, datos de contacto, tienda de recogida,
+    `payment_method` y `payment_status`, precios congelados. Estados con
+    AASM y registro de transiciones (quién y cuándo).
+26. ⬜ **`Orders::Search`** (pedidos de una cuenta, pedido por número y
+    token del enlace) + specs.
 
-## Pedidos: email y detalle
+## Pedidos: checkout (v0.5.0)
 
-27. ⬜ **Mailer de confirmación de pedido** + job.
-28. ⬜ **Detalle y listado de pedidos** del cliente + vistas.
+27. ⬜ **Servicio `Orders::Checkout`** en una transacción: valida el carrito,
+    bloquea las variantes (`with_lock`), descuenta stock, crea el pedido y
+    vacía el carrito; rollback completo si falla. Specs de éxito, falta de
+    stock y concurrencia.
+28. ⬜ **Pantalla de checkout** (contacto, tienda de recogida, método de
+    pago, condiciones de venta) con o sin cuenta + request y system specs.
+29. ⬜ **`Orders::Cancel`** (devuelve el stock) y las demás transiciones como
+    services + specs.
 
-## Métricas
+## Pedidos: email y detalle (v0.5.0)
 
-29. ⬜ **Consultas/servicio de métricas** (ventas, productos, clientes) + specs.
-30. ⬜ **Vista de métricas** para el panel.
+30. ⬜ **Mailer de pedido** (confirmación con datos de transferencia/Bizum o
+    de recogida; cambios de estado) + job + previews.
+31. ⬜ **«Mis pedidos»** (con cuenta) y **detalle por enlace firmado** (sin
+    cuenta) + vistas + specs de acceso ajeno (404).
 
-## Panel de administración
+## Panel de administración (v0.6.0)
 
-31. ⬜ **Namespace `/admin`** + autorización por rol.
-32. ⬜ **CRUDs de productos, pedidos y usuarios** en admin.
+32. ⬜ **Namespace `/admin`** + `before_action` de rol admin + tarea
+    `admin:create` + specs de acceso denegado.
+33. ⬜ **Pedidos en admin:** listado con filtros y acciones por estado +
+    justificante imprimible.
+34. ⬜ **Productos en admin:** CRUD, fotos, variantes, stock y archivado
+    (`archived_at`) en lugar de borrado.
+35. ⬜ **Usuarias en admin** y **métricas básicas**.
 
-## Lanzamiento
+## Envío a domicilio (v0.7.0)
 
-33. ⬜ Seguridad, contenidos legales y pasarela de pago (con especificación propia).
+36. ⬜ **Direcciones** (en el pedido y libreta de la cuenta) + specs.
+37. ⬜ **Tarifas de envío** (tabla editable en admin) y coste en el checkout.
+38. ⬜ **Rama de estados de envío** (`shipped`, `delivered`) con número de
+    seguimiento y email.
+
+## Puesta en producción (v0.8.0)
+
+39. ⬜ VPS de pruebas con Kamal, dominio y HTTPS; MySQL como accessory.
+40. ⬜ Copias de seguridad automáticas y restauración probada; fotos en
+    almacenamiento externo y variantes de imagen (`ruby-vips`).
+41. ⬜ Email transaccional (SMTP, SPF/DKIM/DMARC) y monitorización (errores,
+    `/up`, jobs fallidos).
+42. ⬜ Despliegue desde GitHub Actions, staging y proceso de migraciones.
+
+## Pagos online (v0.9.0)
+
+43. ⬜ **Stripe Checkout** + webhook verificado e idempotente + specs.
+44. ⬜ **PayPal** + webhook + specs.
+45. ⬜ Caducidad de pedidos sin pagar (libera stock) y reembolsos desde admin.
+
+## Lanzamiento (v1.0.0)
+
+46. ⬜ Textos legales, condiciones de venta y desistimiento (14 días).
+47. ⬜ RGPD: borrar y exportar la cuenta.
+48. ⬜ CSP, paginación, caché y pasada final de accesibilidad y rendimiento.
