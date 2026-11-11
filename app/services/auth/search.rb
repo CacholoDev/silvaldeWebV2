@@ -13,6 +13,16 @@ module Auth
       PasswordResetToken.where(used_at: nil).where("expires_at > ?", Time.current)
     end
 
+    # Sessions past their expiration date (cleaned up by Auth::PurgeExpired).
+    def self.expired_sessions
+      Session.where(expires_at: ..Time.current)
+    end
+
+    # Reset tokens that can no longer be used: already used or expired.
+    def self.stale_password_reset_tokens
+      PasswordResetToken.where.not(used_at: nil).or(PasswordResetToken.where(expires_at: ..Time.current))
+    end
+
     # Finds an active session by its plaintext token (from the cookie).
     def self.find_session_by_plaintext(plaintext)
       return nil if plaintext.blank?
