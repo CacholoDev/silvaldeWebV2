@@ -7,7 +7,7 @@ es:
     messages:
       accepted: "%{attribute} debe ser aceptado."
       blank: "%{attribute} no puede estar vacío."
-      confirmation: "%{attribute} no coincide con %{attribute} de nuevo."
+      confirmation: "%{attribute} no coincide."
       empty: "%{attribute} no puede estar vacío."
       equal_to: "%{attribute} debe ser igual a %{count}."
       even: "%{attribute} debe ser un número par."
