@@ -134,6 +134,8 @@ en:
       title: "Edit profile"
       name: "Name"
       email: "Email"
+      current_password: "Current password"
+      current_password_hint: "Only needed if you change your email."
       submit: "Save"
   communications_consent:
     label: "I want to receive offers and promotions."
@@ -170,6 +172,7 @@ en:
               invalid: "Email format is invalid."
               taken: "Email has already been taken."
               too_long: "Email is too long (maximum %{count} characters)."
+              current_password_invalid: "To change your email, enter your correct current password."
             name:
               blank: "Name can't be blank."
               too_long: "Name is too long (maximum %{count} characters)."

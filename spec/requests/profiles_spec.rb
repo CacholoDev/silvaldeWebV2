@@ -48,11 +48,20 @@ RSpec.describe "Profiles", type: :request do
 
     it "updates the profile with valid params" do
       sign_in
-      patch profile_path, params: { user: { name: "Nuevo Nombre", email: "nuevo@example.com" } }
+      patch profile_path, params: { user: { name: "Nuevo Nombre", email: "nuevo@example.com",
+                                            current_password: "secret123" } }
 
       expect(response).to redirect_to(profile_path)
       expect(user.reload.name).to eq("Nuevo Nombre")
       expect(user.reload.email).to eq("nuevo@example.com")
+    end
+
+    it "refuses to change the email without the current password" do
+      sign_in
+      patch profile_path, params: { user: { name: user.name, email: "robo@example.com" } }
+
+      expect(response).to have_http_status(:unprocessable_content)
+      expect(user.reload.email).not_to eq("robo@example.com")
     end
 
     it "updates the communications consent" do

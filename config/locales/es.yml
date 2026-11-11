@@ -134,6 +134,8 @@ es:
       title: "Editar perfil"
       name: "Nombre"
       email: "Email"
+      current_password: "Contraseña actual"
+      current_password_hint: "Solo hace falta si cambias el email."
       submit: "Guardar"
   communications_consent:
     label: "Quiero recibir ofertas y rebajas."
@@ -170,6 +172,7 @@ es:
               invalid: "El formato del email no es válido."
               taken: "Ese email ya está registrado."
               too_long: "El email es demasiado largo (máximo %{count} caracteres)."
+              current_password_invalid: "Para cambiar el email, escribe tu contraseña actual correcta."
             name:
               blank: "El nombre no puede estar vacío."
               too_long: "El nombre es demasiado largo (máximo %{count} caracteres)."
