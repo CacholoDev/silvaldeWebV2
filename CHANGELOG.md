@@ -23,10 +23,12 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
 
 ### Añadido
 
-- Skill `/silweb-review`: la review del proyecto, adaptada de la que se usa en
-  los proyectos Rails del trabajo (tres pasadas: reglas, lógica y seguridad,
-  frontend e i18n; comprobación entre capas; script de reglas y de i18n). Solo
-  se ejecuta cuando la lanza el usuario.
+- Code review con `/project-review` (skill global del repo `agent-dotfiles`,
+  adaptada de la review de los proyectos Rails del trabajo: tres pasadas,
+  comprobación entre capas, barrido con script de reglas y de i18n) y el
+  perfil de silWeb en `.claude/review/` (`rules.md`, `examples.md`,
+  `checks.tsv`). Solo se ejecuta cuando la lanza el usuario. Sustituye a la
+  skill de proyecto `/silweb-review`.
 
 ## [0.4.0] - 2026-11-10
 
