@@ -139,6 +139,7 @@ es:
     footer_tagline: "Decoración artesanal elegida para durar."
   locales:
     es: "Español"
+    gl: "Galego"
     en: "English"
   passwords:
     flash:

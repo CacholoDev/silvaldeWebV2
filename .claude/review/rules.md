@@ -108,9 +108,10 @@ checklist **manda sobre el genérico**. Las reglas de fondo están en
 El método general (campo de punta a punta, estrategia de errores, i18n, rutas
 y Turbo) está en `/project-review`. En silWeb, además:
 
-- **Locales**: un único `config/locales/es.yml` y `en.yml` (sin carpeta
-  `models/`). Toda clave nueva va en los dos; el género en español debe
-  concordar («carrito actualizado», «cantidad actualizada»).
+- **Locales**: un único `config/locales/es.yml`, `gl.yml` y `en.yml` (sin
+  carpeta `models/`). Toda clave nueva va en los tres; el género debe
+  concordar en español y en gallego («carrito actualizado», «carriño
+  actualizado»; «cantidad actualizada», «cantidade actualizada»).
 - **Estrategia de errores**: los services de formulario devuelven el objeto
   con `errors` → el controller decide con `errors.any?`/`errors.empty?` y
   responde `:unprocessable_content`, tanto en HTML como en `turbo_stream`.

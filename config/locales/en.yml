@@ -139,6 +139,7 @@ en:
     footer_tagline: "Handmade decor chosen to last."
   locales:
     es: "Español"
+    gl: "Galego"
     en: "English"
   passwords:
     flash:

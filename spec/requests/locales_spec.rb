@@ -19,6 +19,21 @@ RSpec.describe "Locales", type: :request do
       expect(cookie).to match(/samesite=lax/i)
     end
 
+    it "switches the language to Galician" do
+      post locale_path, params: { locale: "gl" }
+
+      get root_path
+      expect(response.body).to include(I18n.t("catalog.landing.title", locale: :gl))
+      expect(response.body).to include('lang="gl"')
+    end
+
+    it "offers Spanish, Galician and English in the language menu" do
+      get root_path
+
+      menu = Nokogiri::HTML(response.body).css('form[action^="/locale"] button').map(&:text).map(&:strip)
+      expect(menu).to eq(%w[Español Galego English])
+    end
+
     it "ignores an unsupported locale" do
       post locale_path, params: { locale: "xx" }
       expect(response).to redirect_to(root_path)

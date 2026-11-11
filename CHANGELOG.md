@@ -12,6 +12,15 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
 
 ## [Sin publicar]
 
+### Añadido
+
+- **Gallego** en la web (`config/locales/gl.yml`, «Galego» en el selector de
+  idioma, entre Español e English): toda la interfaz, los emails, los
+  mensajes de validación y los nombres de modelos y atributos. Los nombres y
+  descripciones de los productos siguen en español (son contenido del
+  catálogo). `spec/i18n` comprueba que los tres idiomas tienen las mismas
+  claves.
+
 ## [0.4.1] - 2026-11-11
 
 Versión de endurecimiento tras la auditoría completa del código con
