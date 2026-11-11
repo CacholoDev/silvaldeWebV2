@@ -20,6 +20,7 @@ esas tiendas para la recogida.
 
 ### Lo que podrá hacer una clienta
 
+- Usar la web en **español, gallego o inglés**. ✅
 - Ver el **catálogo** por categorías, con fotos, precios (IVA incluido),
   variantes y disponibilidad, y **buscar** productos. ✅
 - **Registrarse**, iniciar/cerrar sesión y recuperar la contraseña. ✅
@@ -138,7 +139,7 @@ confirmación.
   ir a `cancelled`. La v0.7.0 añade la rama de envío (`shipped` →
   `delivered`). Cada transición queda registrada (quién y cuándo).
 - **Pago separado del pedido:** un atributo `payment_method`
-  (`bank_transfer`, `pay_in_store` y, desde la v0.9.0, `card`, `paypal`) y un
+  (`bank_transfer`, `pay_in_store` y, desde la v0.9.0 «Pagos», `card`, `paypal`) y un
   `payment_status` (`pending`, `paid`, `refunded`). Así, un pedido puede
   estar «listo para recoger» y «pendiente de pago» a la vez (pago al
   recoger) sin inventar estados mezclados.
@@ -241,29 +242,69 @@ solo con pagos offline. Ver «Guía de despliegue» abajo.
   **entorno de staging** para probar antes.
 - ❓ **Decidir:** proveedor del VPS, dominio, proveedor de email y de copias.
 
-### ⬜ v0.9.0 — Pagos online
+### ⬜ v0.9.0 — Pagos
 
-**Qué se hace:** pagar con **tarjeta (Stripe)** y **PayPal** al hacer el
-pedido.
+**Qué se hace:** pagar el pedido **online** con **tarjeta (Stripe)** o
+**PayPal**, además de los métodos offline de la v0.5.0 (transferencia/Bizum y
+pago en tienda), y devolver el dinero cuando se cancela un pedido pagado.
+
+**Conceptos, para quien no lo ha hecho nunca:**
+
+- **Pasarela de pago:** una empresa que cobra por ti (Stripe, PayPal, el TPV
+  de un banco). Tu web nunca ve ni guarda el número de la tarjeta: lo recoge
+  la pasarela en su página. Por eso no tienes que certificar tu servidor con
+  la normativa de tarjetas (PCI DSS); la pasarela ya lo está.
+- **Stripe:** la pasarela más usada por tiendas online pequeñas y medianas.
+  Cobra una comisión por cada pago (sin cuota fija). Acepta tarjetas, Apple
+  Pay y Google Pay con la misma integración. Tiene un **modo de pruebas** con
+  tarjetas falsas para desarrollar sin dinero real.
+- **Stripe Checkout:** la página de pago que aloja Stripe. Tu web crea una
+  «sesión de pago» con el importe y redirige a la clienta; al terminar,
+  Stripe la devuelve a tu web.
+- **PayPal:** la clienta paga con su cuenta de PayPal (o con tarjeta a
+  través de PayPal). Funciona igual: crear el pago, redirigir y confirmar.
+- **Webhook:** una llamada que la pasarela hace **a tu servidor** para
+  avisar de que un pago se ha completado, ha fallado o se ha devuelto. Es la
+  única confirmación fiable: que la clienta vuelva a la página de «gracias»
+  no prueba nada (se puede cerrar la pestaña antes o falsificar la URL).
+- **Firma del webhook:** cada aviso viene firmado con una clave secreta; se
+  comprueba la firma para saber que viene de verdad de Stripe o PayPal.
+- **Idempotencia:** la pasarela puede repetir el mismo aviso. Procesarlo dos
+  veces no debe cobrar, enviar emails ni cambiar el estado dos veces: se
+  guarda el id del evento y se ignoran los repetidos.
 
 **Cómo se hará:**
 
-- **Stripe Checkout:** la clienta paga en una página de Stripe; los datos de
-  la tarjeta **nunca pasan por nuestro servidor**, así que no hay que cumplir
-  la normativa de tarjetas (PCI) por nuestra cuenta. Stripe acepta también
-  Apple Pay y Google Pay.
-- **PayPal:** igual, con su botón y su página.
-- **Webhooks:** el pago se da por bueno cuando Stripe o PayPal **avisan a
-  nuestro servidor** (no cuando la clienta vuelve a la web, que se puede
-  falsificar). El aviso se verifica con su firma y se procesa una sola vez
-  aunque llegue repetido (idempotencia).
-- El stock se reserva al crear el pedido y se libera si el pago no se
-  completa en un tiempo (job que cancela pedidos `pending` caducados).
-- **Reembolsos** desde el admin al cancelar un pedido pagado.
-- Modo de pruebas de Stripe y PayPal en desarrollo y staging; claves en
-  variables de entorno.
-- ❓ **Decidir:** si se cobra comisión distinta por método y qué pasa con
-  devoluciones parciales.
+- **Modelo `Orders::Payment`** (un pedido puede tener varios intentos):
+  método, importe en céntimos, estado (`pending`, `paid`, `failed`,
+  `refunded`), id del pago en la pasarela y fecha. El `payment_status` del
+  pedido se deriva de sus pagos.
+- **Flujo con tarjeta:** checkout → se crea el pedido `pending` con el
+  stock reservado → sesión de Stripe Checkout → la clienta paga → el webhook
+  `checkout.session.completed` marca el pago como `paid` y el pedido pasa a
+  `confirmed` → email de confirmación. Si vuelve sin pagar, el pedido sigue
+  `pending` y puede reintentar.
+- **Flujo con PayPal:** el mismo, con la API de pedidos de PayPal y su
+  webhook de pago capturado.
+- **Pedidos sin pagar caducan:** un job recurrente cancela los pedidos
+  online `pending` con más de un tiempo (p. ej. 1 hora) y **devuelve el
+  stock**, para que nadie bloquee unidades sin pagar.
+- **Reembolsos** desde el admin: al cancelar un pedido pagado, se pide la
+  devolución a la pasarela y el pago pasa a `refunded` cuando llega su
+  webhook. Devoluciones parciales: ❓ decidir.
+- **Seguridad:** el importe se calcula **siempre en el servidor** a partir
+  del pedido, nunca con lo que mande el navegador; el webhook es la única
+  ruta que da un pago por bueno; claves de las pasarelas en variables de
+  entorno (`STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `PAYPAL_*`); la ruta
+  del webhook no usa CSRF (no viene de un formulario) pero sí la firma.
+- **Pruebas:** specs con las respuestas de la pasarela simuladas (sin red),
+  y pruebas a mano en modo test con la Stripe CLI, que reenvía los webhooks
+  a tu PC antes de tener el servidor público.
+- **Bizum integrado:** no entra (requiere el TPV del banco, Redsys). Bizum
+  sigue como en la v0.5.0: la clienta lo envía y la tienda confirma el cobro.
+- ❓ **Decidir:** cuenta de Stripe y de PayPal a nombre de la tienda (lo hace
+  la dueña: datos fiscales y cuenta bancaria), si algún método tiene
+  recargo y la política de devoluciones parciales.
 
 ### ⬜ v1.0.0 — Lanzamiento público
 

@@ -33,7 +33,7 @@ versión la define el roadmap.
 - **Panel de administración** y **métricas** → **v0.6.0**.
 - **Envío a domicilio** → **v0.7.0**.
 - **Puesta en producción** → **v0.8.0**.
-- **Pagos online** (Stripe y PayPal) → **v0.9.0**.
+- **Pagos** (Stripe y PayPal) → **v0.9.0**.
 - **Lanzamiento** (legal, RGPD, rendimiento) → **v1.0.0**.
 
 ## Estado actual
@@ -192,14 +192,18 @@ versión la define el roadmap.
     `/up`, jobs fallidos).
 42. ⬜ Despliegue desde GitHub Actions, staging y proceso de migraciones.
 
-## Pagos online (v0.9.0)
+## Pagos (v0.9.0)
 
-43. ⬜ **Stripe Checkout** + webhook verificado e idempotente + specs.
-44. ⬜ **PayPal** + webhook + specs.
-45. ⬜ Caducidad de pedidos sin pagar (libera stock) y reembolsos desde admin.
+43. ⬜ **`Orders::Payment`** (intentos de pago por pedido) + webhooks con
+    firma verificada e idempotentes (tabla de eventos procesados) + specs.
+44. ⬜ **Stripe Checkout** (tarjeta, Apple Pay, Google Pay) + specs con la
+    API simulada + prueba a mano con la Stripe CLI.
+45. ⬜ **PayPal** + webhook + specs.
+46. ⬜ Caducidad de pedidos online sin pagar (devuelve el stock) y
+    **reembolsos** desde el admin.
 
 ## Lanzamiento (v1.0.0)
 
-46. ⬜ Textos legales, condiciones de venta y desistimiento (14 días).
-47. ⬜ RGPD: borrar y exportar la cuenta.
-48. ⬜ CSP, paginación, caché y pasada final de accesibilidad y rendimiento.
+47. ⬜ Textos legales, condiciones de venta y desistimiento (14 días).
+48. ⬜ RGPD: borrar y exportar la cuenta.
+49. ⬜ CSP, paginación, caché y pasada final de accesibilidad y rendimiento.
