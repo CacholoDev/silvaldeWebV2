@@ -42,6 +42,24 @@ una responsabilidad.
    publicar la nueva versión y su tag.
 5. Borrar la rama ya integrada.
 
+## PRs por bloque y commits por funcionalidad
+
+Las versiones grandes se dividen en **bloques** en
+[`backend-plan.md`](./backend-plan.md) (p. ej. la v0.5.0 de pedidos: A
+modelos y estados, B checkout, C emails y detalle) y **cada bloque tiene su
+rama y su PR** (en draft hasta cerrarlo): al entrar en la PR se ven los
+commits y se entiende qué hace cada cual.
+
+- **Un commit = una funcionalidad**, no un slice: cada `feat`, cada `fix`,
+  cada documento… va en su propio commit, como en un equipo de trabajo. Un
+  slice puede dar varios commits.
+- **Los cambios se van acumulando durante el slice** y se proponen al
+  cerrarlo: el agente lista los commits pertinentes y espera el OK.
+- **La PR del bloque** se abre al empezar el bloque, o antes si hace falta
+  compartir o respaldar el trabajo (p. ej. cambiar de PC: basta con `git
+  pull` de la rama en la otra máquina). Se marca *ready* cuando el bloque
+  está terminado y `bin/ci` pasa, y la merge lleva su confirmación aparte.
+
 ## Mensajes de commit
 
 Formato [Conventional Commits](https://www.conventionalcommits.org/) con

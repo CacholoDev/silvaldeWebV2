@@ -79,8 +79,10 @@ Flujo completo en [`docs/git-workflow.md`](./docs/git-workflow.md) y
   `fix/…`, `chore/…`, `docs/…`; minúsculas, guiones, en inglés) y espera su
   OK antes de `git switch -c`; después confirma el nombre definitivo. Si el
   usuario dice que no sabe, aplica la regla de «no sé» de arriba.
-- **Una rama por feature o fix, no por slice.** Los slices son commits dentro
-  de la misma rama. Una rama = una responsabilidad.
+- **Una rama y un PR por feature, fix o bloque, no por slice.** Los slices son
+  commits dentro de la misma rama, y las versiones grandes se agrupan en
+  bloques (p. ej. A/B/C en `docs/backend-plan.md`) con **un PR por bloque**
+  (draft hasta cerrarlo). Una rama = una responsabilidad.
 - **Commits al cerrar un slice, no antes.** Con el slice terminado y
   verificado, propón el mensaje (Conventional Commits, `type`/`scope` y
   resumen en inglés e imperativo: `feat:`, `fix:`, `docs:`, `test:`,
@@ -89,8 +91,9 @@ Flujo completo en [`docs/git-workflow.md`](./docs/git-workflow.md) y
   Code. Cualquier respuesta afirmativa vale como OK («dale», «ok», «venga»,
   «vamos», «sí», «perfecto», 👍…); interprétala por la intención, no por la
   palabra exacta. Si la respuesta es ambigua o pide cambios, pregunta o
-  ajusta antes de commitear. Por defecto, un slice = un commit. Atajo: la
-  skill `commit` (`/commit`).
+  ajusta antes de commitear. Por defecto, **un commit = una funcionalidad**
+  (un `feat`, un `fix`, un documento…), no un slice: al cerrar el slice se
+  proponen los commits pertinentes. Atajo: la skill `commit` (`/commit`).
 - **Tests en el mismo commit que el código que prueban.** Nada de commits
   `test:` sueltos salvo para arreglar regresiones o cubrir código viejo.
 - **Push, merge, tags y PRs.** El agente no hace commit, push, merge ni tags
