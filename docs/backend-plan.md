@@ -148,7 +148,7 @@ aquí desde el diseño, no a posteriori.
 
 ### Bloque A — Modelos, estados y búsqueda
 
-- A1. ⬜ **Modelo `Orders::Order`** — gema AASM en el Gemfile + migración
+- A1. ✅ **Modelo `Orders::Order`** — gema AASM en el Gemfile + migración
   `orders` (nombre, email y teléfono de contacto; tienda de recogida
   Bertamirans/Noia; `payment_method` y `payment_status`; `user_id` opcional
   para pedidos de invitada) + modelo con validaciones + factory (invitada y

@@ -20,6 +20,12 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
   descripciones de los productos siguen en español (son contenido del
   catálogo). `spec/i18n` comprueba que los tres idiomas tienen las mismas
   claves.
+- **Pedidos** (slice A1 de v0.5.0): modelo `Orders::Order` con los datos de
+  contacto, la tienda de recogida (Bertamirans o Noia), `payment_method` y
+  `payment_status` separados (un pedido puede estar listo para recoger y
+  pendiente de cobro a la vez) y pedido de invitada sin cuenta. La gema
+  AASM entra en el Gemfile; los estados llegan en el slice A4. Mensajes de
+  validación en los tres idiomas.
 
 ### Cambiado
 

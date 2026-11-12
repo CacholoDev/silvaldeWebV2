@@ -209,6 +209,7 @@ en:
       variant: "Variant"
       cart: "Cart"
       cart_item: "Cart line"
+      order: "Order"
     attributes:
       user:
         name: "Name"
@@ -240,6 +241,14 @@ en:
         variant: "Variant"
         quantity: "Quantity"
         unit_price_cents: "Unit price"
+      order:
+        user: "Account"
+        contact_name: "Contact name"
+        contact_email: "Contact email"
+        contact_phone: "Phone"
+        pickup_store: "Pickup store"
+        payment_method: "Payment method"
+        payment_status: "Payment status"
     errors:
       messages:
         record_invalid: "Validation failed: %{errors}"
@@ -332,3 +341,24 @@ en:
               not_a_number: "Unit price must be a number."
               not_an_integer: "Unit price must be an integer."
               greater_than_or_equal_to: "Unit price can't be negative."
+        order:
+          attributes:
+            contact_name:
+              blank: "Contact name can't be blank."
+              too_long: "Contact name is too long (maximum %{count} characters)."
+            contact_email:
+              blank: "Contact email can't be blank."
+              invalid: "Contact email format is invalid."
+              too_long: "Contact email is too long (maximum %{count} characters)."
+            contact_phone:
+              invalid: "Phone format is invalid."
+              too_long: "Phone is too long (maximum %{count} characters)."
+            pickup_store:
+              blank: "Pickup store can't be blank."
+              inclusion: "Pickup store is invalid."
+            payment_method:
+              blank: "Payment method can't be blank."
+              inclusion: "Payment method is invalid."
+            payment_status:
+              blank: "Payment status can't be blank."
+              inclusion: "Payment status is invalid."
