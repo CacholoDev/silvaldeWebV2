@@ -36,6 +36,13 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
   (español obligatorio, gallego e inglés opcionales con respaldo) y traducción
   automática después de la v1.0.0.
 
+### Corregido
+
+- Los system specs no arrancaban el browser en Ubuntu 23.10+ (AppArmor
+  restringe los user namespaces y Chrome muerde «No usable sandbox!»): el
+  Chrome de pruebas corre ahora con `--no-sandbox`. Solo toca la configuración
+  del driver, ninguna aserción.
+
 ## [0.4.1] - 2026-11-11
 
 Versión de endurecimiento tras la auditoría completa del código con
