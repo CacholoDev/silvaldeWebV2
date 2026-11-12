@@ -49,7 +49,7 @@ versión la define el roadmap.
   carreras, memoización de `current_cart` y system spec).
 - **Hecho y publicado** (`v0.4.1`, 2026-11-11): endurecimiento tras la
   auditoría completa (PR #25).
-- **Siguiente**: v0.5.0 (pedidos).
+- **Siguiente**: v0.5.0 (pedidos), dividida en los slices A1-C4 de abajo.
 
 ---
 
@@ -138,33 +138,56 @@ versión la define el roadmap.
 24. ✅ **Purge de carritos caducados** (`Carts::PurgeExpired` + job recurrente
     de Solid Queue, silencioso, diario a las 3am en producción) + specs.
 
-## Pedidos: modelos y estados (v0.5.0)
+## Pedidos (v0.5.0): bloques A, B y C
 
-25. ⬜ **Gema AASM + modelos `Orders::Order` y `Orders::OrderItem`** +
-    migraciones (CHECK de stock, cantidades y precios) + factories + specs.
-    Número de pedido público, datos de contacto, tienda de recogida,
-    `payment_method` y `payment_status`, precios congelados. Estados con
-    AASM y registro de transiciones (quién y cuándo).
-26. ⬜ **`Orders::Search`** (pedidos de una cuenta, pedido por número y
-    token del enlace) + specs.
+La v0.5.0 se divide en **15 slices** agrupados en tres bloques (A, B y C),
+más finos que el numerado del resto del documento: sustituyen a los antiguos
+slices 25-31. Los errores que más costaron en el carrito (fugas de sesión
+entre cuentas, lecturas ajenas, carreras de stock, inputs raros) se cubren
+aquí desde el diseño, no a posteriori.
 
-## Pedidos: checkout (v0.5.0)
+### Bloque A — Modelos, estados y búsqueda
 
-27. ⬜ **Servicio `Orders::Checkout`** en una transacción: valida el carrito,
-    bloquea las variantes (`with_lock`), descuenta stock, crea el pedido y
-    vacía el carrito; rollback completo si falla. Specs de éxito, falta de
-    stock y concurrencia.
-28. ⬜ **Pantalla de checkout** (contacto, tienda de recogida, método de
-    pago, condiciones de venta) con o sin cuenta + request y system specs.
-29. ⬜ **`Orders::Cancel`** (devuelve el stock) y las demás transiciones como
-    services + specs.
+- A1. ⬜ **Modelo `Orders::Order`** — gema AASM en el Gemfile + migración
+  `orders` (nombre, email y teléfono de contacto; tienda de recogida
+  Bertamirans/Noia; `payment_method` y `payment_status`; `user_id` opcional
+  para pedidos de invitada) + modelo con validaciones + factory (invitada y
+  con cuenta) + spec de validaciones.
+- A2. ⬜ **Modelo `Orders::OrderItem`** — migración + modelo (precio congelado
+  al comprar, cantidad 1..999, CHECK de precio y cantidad en la BD) +
+  factory + spec.
+- A3. ⬜ **Número público `SV-XXXXXX`** — generación aleatoria única (nunca
+  el id secuencial, que delataría cuántos pedidos hay) + spec de formato y
+  unicidad.
+- A4. ⬜ **Máquina de estados AASM** — columna `state`, estados y transiciones
+  válidas/inválidas + spec.
+- A5. ⬜ **`Orders::StatusChange`** — registro de cada transición (quién y
+  cuándo) + spec del modelo.
+- A6. ⬜ **`Orders::Search`** — pedidos de una cuenta, pedido por número y
+  por token firmado + **specs de propiedad** (el pedido ajeno no aparece).
 
-## Pedidos: email y detalle (v0.5.0)
+### Bloque B — Checkout y transiciones
 
-30. ⬜ **Mailer de pedido** (confirmación con datos de transferencia/Bizum o
-    de recogida; cambios de estado) + job + previews.
-31. ⬜ **«Mis pedidos»** (con cuenta) y **detalle por enlace firmado** (sin
-    cuenta) + vistas + specs de acceso ajeno (404).
+- B1. ⬜ **Servicio `Orders::Checkout`** en una transacción: valida el
+  carrito, bloquea las variantes (`with_lock`), comprueba y descuenta el
+  stock, crea el pedido con sus líneas y vacía el carrito; rollback completo
+  si falla. Specs de éxito, falta de stock y **concurrencia**.
+- B2. ⬜ **Checkout back** — rutas + controller + formulario (con y sin
+  cuenta) + request specs.
+- B3. ⬜ **Checkout front** — vista + i18n + system spec.
+- B4. ⬜ **`Orders::Cancel`** — devuelve el stock en la misma transacción +
+  registra la transición + spec.
+- B5. ⬜ **Transiciones restantes** — `Confirm`, `MarkReady` y
+  `MarkPickedUp` como services + specs.
+
+### Bloque C — Email y detalle
+
+- C1. ⬜ **Mailer de confirmación** — datos de transferencia/Bizum o de
+  recogida + job + preview + spec.
+- C2. ⬜ **Mailer de cambio de estado** — + spec.
+- C3. ⬜ **«Mis pedidos» (con cuenta)** — listado + **spec de propiedad**.
+- C4. ⬜ **Detalle por enlace firmado (sin cuenta)** — token firmado en el
+  email + **404 si es ajeno** + spec.
 
 ## Panel de administración (v0.6.0)
 

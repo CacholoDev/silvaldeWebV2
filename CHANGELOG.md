@@ -29,8 +29,8 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
   (v0.8.0), pagos con Stripe y PayPal (v0.9.0 «Pagos», documentada para
   quien no ha integrado pagos nunca) y requisitos legales y RGPD en la
   v1.0.0. Incluye por qué AASM y una guía de despliegue. `backend-plan.md`
-  desglosa los slices 25-49 y `AGENTS.full.md` registra las decisiones de
-  pedidos.
+  desglosa el backend en slices (la v0.5.0 de pedidos en los bloques A1-C4)
+  y `AGENTS.full.md` registra las decisiones de pedidos.
 - `AGENTS.md`: abrir un PR necesita el OK explícito del usuario.
 - Idiomas del contenido: productos y categorías por idioma en la v0.6.0
   (español obligatorio, gallego e inglés opcionales con respaldo) y traducción
