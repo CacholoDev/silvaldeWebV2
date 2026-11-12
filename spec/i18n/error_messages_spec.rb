@@ -30,7 +30,7 @@ RSpec.describe "Validation messages in Spanish and Galician" do
   end
 
   it "has a Spanish, Galician and English name for every attribute of the domain models" do
-    models = [ Users::User, Catalog::Category, Catalog::Product, Catalog::Variant, Carts::Cart, Carts::CartItem ]
+    models = [ Users::User, Catalog::Category, Catalog::Product, Catalog::Variant, Carts::Cart, Carts::CartItem, Orders::Order ]
     skipped = %w[id created_at updated_at password_digest]
 
     missing = models.flat_map do |model|

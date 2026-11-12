@@ -209,6 +209,7 @@ gl:
       variant: "Variante"
       cart: "Carriño"
       cart_item: "Liña do carriño"
+      order: "Pedido"
     attributes:
       user:
         name: "Nome"
@@ -240,6 +241,14 @@ gl:
         variant: "Variante"
         quantity: "Cantidade"
         unit_price_cents: "Prezo unitario"
+      order:
+        user: "Conta"
+        contact_name: "Nome de contacto"
+        contact_email: "Correo de contacto"
+        contact_phone: "Teléfono"
+        pickup_store: "Tenda de recollida"
+        payment_method: "Método de pago"
+        payment_status: "Estado do pago"
     errors:
       messages:
         record_invalid: "A validación fallou: %{errors}"
@@ -332,3 +341,24 @@ gl:
               not_a_number: "O prezo unitario debe ser un número."
               not_an_integer: "O prezo unitario debe ser un número enteiro."
               greater_than_or_equal_to: "O prezo unitario non pode ser negativo."
+        order:
+          attributes:
+            contact_name:
+              blank: "O nome de contacto non pode estar baleiro."
+              too_long: "O nome de contacto é demasiado longo (máximo %{count} caracteres)."
+            contact_email:
+              blank: "O correo de contacto non pode estar baleiro."
+              invalid: "O formato do correo de contacto non é válido."
+              too_long: "O correo de contacto é demasiado longo (máximo %{count} caracteres)."
+            contact_phone:
+              invalid: "O formato do teléfono non é válido."
+              too_long: "O teléfono é demasiado longo (máximo %{count} caracteres)."
+            pickup_store:
+              blank: "A tenda de recollida non pode estar baleira."
+              inclusion: "A tenda de recollida non é válida."
+            payment_method:
+              blank: "O método de pago non pode estar baleiro."
+              inclusion: "O método de pago non é válido."
+            payment_status:
+              blank: "O estado do pago non pode estar baleiro."
+              inclusion: "O estado do pago non é válido."

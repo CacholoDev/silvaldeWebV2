@@ -209,6 +209,7 @@ es:
       variant: "Variante"
       cart: "Carrito"
       cart_item: "Línea del carrito"
+      order: "Pedido"
     attributes:
       user:
         name: "Nombre"
@@ -240,6 +241,14 @@ es:
         variant: "Variante"
         quantity: "Cantidad"
         unit_price_cents: "Precio unitario"
+      order:
+        user: "Cuenta"
+        contact_name: "Nombre de contacto"
+        contact_email: "Email de contacto"
+        contact_phone: "Teléfono"
+        pickup_store: "Tienda de recogida"
+        payment_method: "Método de pago"
+        payment_status: "Estado del pago"
     errors:
       messages:
         record_invalid: "La validación ha fallado: %{errors}"
@@ -332,3 +341,24 @@ es:
               not_a_number: "El precio unitario debe ser un número."
               not_an_integer: "El precio unitario debe ser un número entero."
               greater_than_or_equal_to: "El precio unitario no puede ser negativo."
+        order:
+          attributes:
+            contact_name:
+              blank: "El nombre de contacto no puede estar vacío."
+              too_long: "El nombre de contacto es demasiado largo (máximo %{count} caracteres)."
+            contact_email:
+              blank: "El email de contacto no puede estar vacío."
+              invalid: "El formato del email de contacto no es válido."
+              too_long: "El email de contacto es demasiado largo (máximo %{count} caracteres)."
+            contact_phone:
+              invalid: "El formato del teléfono no es válido."
+              too_long: "El teléfono es demasiado largo (máximo %{count} caracteres)."
+            pickup_store:
+              blank: "La tienda de recogida no puede estar vacía."
+              inclusion: "La tienda de recogida no es válida."
+            payment_method:
+              blank: "El método de pago no puede estar vacío."
+              inclusion: "El método de pago no es válido."
+            payment_status:
+              blank: "El estado del pago no puede estar vacío."
+              inclusion: "El estado del pago no es válido."

@@ -20,6 +20,12 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
   descripciones de los productos siguen en español (son contenido del
   catálogo). `spec/i18n` comprueba que los tres idiomas tienen las mismas
   claves.
+- **Pedidos** (slice A1 de v0.5.0): modelo `Orders::Order` con los datos de
+  contacto, la tienda de recogida (Bertamirans o Noia), `payment_method` y
+  `payment_status` separados (un pedido puede estar listo para recoger y
+  pendiente de cobro a la vez) y pedido de invitada sin cuenta. La gema
+  AASM entra en el Gemfile; los estados llegan en el slice A4. Mensajes de
+  validación en los tres idiomas.
 
 ### Cambiado
 
@@ -29,12 +35,22 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
   (v0.8.0), pagos con Stripe y PayPal (v0.9.0 «Pagos», documentada para
   quien no ha integrado pagos nunca) y requisitos legales y RGPD en la
   v1.0.0. Incluye por qué AASM y una guía de despliegue. `backend-plan.md`
-  desglosa los slices 25-49 y `AGENTS.full.md` registra las decisiones de
-  pedidos.
+  desglosa el backend en slices (la v0.5.0 de pedidos en los bloques A1-C4)
+  y `AGENTS.full.md` registra las decisiones de pedidos.
 - `AGENTS.md`: abrir un PR necesita el OK explícito del usuario.
+- Flujo de git: un PR por bloque de una versión (draft hasta cerrarlo) y un
+  commit por funcionalidad (cada `feat`, cada `fix`, cada documento…),
+  proponiéndolos al cerrar cada slice (`docs/git-workflow.md`).
 - Idiomas del contenido: productos y categorías por idioma en la v0.6.0
   (español obligatorio, gallego e inglés opcionales con respaldo) y traducción
   automática después de la v1.0.0.
+
+### Corregido
+
+- Los system specs no arrancaban el browser en Ubuntu 23.10+ (AppArmor
+  restringe los user namespaces y Chrome muerde «No usable sandbox!»): el
+  Chrome de pruebas corre ahora con `--no-sandbox`. Solo toca la configuración
+  del driver, ninguna aserción.
 
 ## [0.4.1] - 2026-11-11
 
