@@ -30,6 +30,11 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
   un pedido (una variante, una cantidad 1..999 y el precio congelado al
   comprar), con CHECK de precio y cantidad en la BD, índice único de variante
   por pedido y traducciones en los tres idiomas.
+- **Pedidos** (slice A3 de v0.5.0): número público `SV-XXXXXX` del pedido —
+  aleatorio y único (nunca el id secuencial, que delataría cuántos pedidos
+  hay), generado al crear el pedido con un alfabeto de 32 caracteres sin
+  0/O/1/I para poder dictarlo por teléfono sin confusiones, con índice único
+  en la BD y traducciones en los tres idiomas.
 
 ### Cambiado
 

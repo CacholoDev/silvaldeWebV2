@@ -249,6 +249,7 @@ en:
         pickup_store: "Pickup store"
         payment_method: "Payment method"
         payment_status: "Payment status"
+        number: "Order number"
     errors:
       messages:
         record_invalid: "Validation failed: %{errors}"
@@ -362,6 +363,10 @@ en:
             payment_status:
               blank: "Payment status can't be blank."
               inclusion: "Payment status is invalid."
+            number:
+              blank: "Order number can't be blank."
+              invalid: "Order number format is invalid."
+              taken: "That order number is already in use."
         order_item:
           attributes:
             order:

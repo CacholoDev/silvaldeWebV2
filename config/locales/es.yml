@@ -249,6 +249,7 @@ es:
         pickup_store: "Tienda de recogida"
         payment_method: "Método de pago"
         payment_status: "Estado del pago"
+        number: "Número del pedido"
     errors:
       messages:
         record_invalid: "La validación ha fallado: %{errors}"
@@ -362,6 +363,10 @@ es:
             payment_status:
               blank: "El estado del pago no puede estar vacío."
               inclusion: "El estado del pago no es válido."
+            number:
+              blank: "El número del pedido no puede estar vacío."
+              invalid: "El formato del número del pedido no es válido."
+              taken: "Ese número de pedido ya está en uso."
         order_item:
           attributes:
             order:

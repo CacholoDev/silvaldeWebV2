@@ -249,6 +249,7 @@ gl:
         pickup_store: "Tenda de recollida"
         payment_method: "Método de pago"
         payment_status: "Estado do pago"
+        number: "Número do pedido"
     errors:
       messages:
         record_invalid: "A validación fallou: %{errors}"
@@ -362,6 +363,10 @@ gl:
             payment_status:
               blank: "O estado do pago non pode estar baleiro."
               inclusion: "O estado do pago non é válido."
+            number:
+              blank: "O número do pedido non pode estar baleiro."
+              invalid: "O formato do número do pedido non é válido."
+              taken: "Ese número de pedido xa está en uso."
         order_item:
           attributes:
             order:

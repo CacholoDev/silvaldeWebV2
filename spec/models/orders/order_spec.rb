@@ -108,6 +108,72 @@ RSpec.describe Orders::Order, type: :model do
     end
   end
 
+  describe "public number" do
+    it "generates a public number when the order is created" do
+      order = create(:order)
+      expect(order.number).to be_present
+    end
+
+    it "follows the SV-XXXXXX format" do
+      expect(create(:order).number).to match(Orders::Order::NUMBER_FORMAT)
+    end
+
+    it "generates a different number for each order" do
+      first_order = create(:order)
+      second_order = create(:order)
+
+      expect(second_order.number).not_to eq(first_order.number)
+    end
+
+    it "does not derive the number from the sequential id" do
+      order = create(:order)
+      expect(order.number).to be_present
+      expect(order.number).not_to eq("SV-#{order.id}")
+    end
+
+    it "keeps a number that was set explicitly" do
+      order = create(:order, number: "SV-ABCDEF")
+      expect(order.number).to eq("SV-ABCDEF")
+    end
+
+    it "rejects a malformed number" do
+      order = build(:order, number: "SV-12")
+      expect(order).not_to be_valid
+      expect(order.errors[:number]).to include("El formato del número del pedido no es válido.")
+    end
+
+    it "rejects numbers with characters that are ambiguous when dictated" do
+      order = build(:order, number: "SV-OIL012")
+      expect(order).not_to be_valid
+      expect(order.errors[:number]).to include("El formato del número del pedido no es válido.")
+    end
+
+    it "rejects a number already used by another order" do
+      create(:order, number: "SV-ABCDEF")
+
+      duplicate = build(:order, number: "SV-ABCDEF")
+      expect(duplicate).not_to be_valid
+      expect(duplicate.errors[:number]).to include("Ese número de pedido ya está en uso.")
+    end
+  end
+
+  # The unique index and the NOT NULL live in the migration, below the app
+  # validations. #save(validate: false) skips the model rules and hits the
+  # database rules, proving the defence in depth is really there.
+  describe "database constraints" do
+    it "rejects a duplicated number at the database level" do
+      create(:order, number: "SV-ABCDEF")
+
+      duplicate = build(:order, number: "SV-ABCDEF")
+      expect { duplicate.save(validate: false) }.to raise_error(ActiveRecord::RecordNotUnique)
+    end
+
+    it "rejects a missing number at the database level" do
+      order = build(:order, number: nil)
+      expect { order.save(validate: false) }.to raise_error(ActiveRecord::StatementInvalid)
+    end
+  end
+
   describe "#guest?" do
     it "is true without a user behind the order" do
       expect(build(:order, user: nil)).to be_guest
