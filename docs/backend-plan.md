@@ -156,7 +156,7 @@ aquí desde el diseño, no a posteriori.
 - A2. ✅ **Modelo `Orders::OrderItem`** — migración + modelo (precio congelado
   al comprar, cantidad 1..999, CHECK de precio y cantidad en la BD) +
   factory + spec.
-- A3. ⬜ **Número público `SV-XXXXXX`** — generación aleatoria única (nunca
+- A3. ✅ **Número público `SV-XXXXXX`** — generación aleatoria única (nunca
   el id secuencial, que delataría cuántos pedidos hay) + spec de formato y
   unicidad.
 - A4. ⬜ **Máquina de estados AASM** — columna `state`, estados y transiciones
