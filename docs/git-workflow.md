@@ -42,24 +42,25 @@ una responsabilidad.
    publicar la nueva versión y su tag.
 5. Borrar la rama ya integrada.
 
-## PRs por tarea y commits por funcionalidad
+## Ramas y PRs por bloque; commits por subtarea
 
-Las versiones grandes se dividen en **tareas** (bloques o features) en
-[`backend-plan.md`](./backend-plan.md) (p. ej. la v0.5.0 de pedidos: A
-modelos y estados, B checkout, C emails y detalle; o un slice concreto como
-«order items») y **cada tarea tiene su rama y su PR** (en draft hasta
-cerrarlo): al entrar en la PR se ven los commits y se entiende qué hace cada
-cual.
+Las versiones grandes se agrupan en **bloques** (tareas) en
+[`backend-plan.md`](./backend-plan.md) (p. ej. «order items», la línea de
+pedido). La jerarquía es **bloque → slices → subtareas → commits**:
 
-- **Un commit = una funcionalidad**, no un slice: cada `feat`, cada `fix`,
-  cada documento… va en su propio commit, como en un equipo de trabajo. Un
-  slice puede dar varios commits.
-- **Los commits de cada slice van dentro de la PR de su tarea**: se van
-  acumulando durante el slice y se proponen al cerrarlo (el agente lista los
-  commits pertinentes y espera el OK).
-- **La PR de la tarea** se abre al empezarla, o antes si hace falta compartir
-  o respaldar el trabajo (p. ej. cambiar de PC: basta con `git pull` de la
-  rama en la otra máquina). Se marca *ready* cuando la tarea está terminada y
+- **Bloque (tarea)** → **1 rama + 1 PR** (en draft hasta cerrarlo).
+- **Slices** dentro del bloque (unidades de trabajo).
+- **Subtareas** dentro de cada slice (los cambios concretos: un `feat`, un
+  `fix`, un documento…).
+- **Cada subtarea va en su propio commit** (commit por subtarea), como en un
+  equipo de trabajo.
+
+Así, al entrar en la PR del bloque se ven los commits y se entiende qué hace
+cada cual.
+
+- **La PR del bloque** se abre al empezarlo, o antes si hace falta compartir o
+  respaldar el trabajo (p. ej. cambiar de PC: basta con `git pull` de la rama
+  en la otra máquina). Se marca *ready* cuando el bloque está terminado y
   `bin/ci` pasa, y la merge lleva su confirmación aparte.
 
 ## Mensajes de commit
