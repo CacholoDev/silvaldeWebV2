@@ -79,10 +79,11 @@ Flujo completo en [`docs/git-workflow.md`](./docs/git-workflow.md) y
   `fix/…`, `chore/…`, `docs/…`; minúsculas, guiones, en inglés) y espera su
   OK antes de `git switch -c`; después confirma el nombre definitivo. Si el
   usuario dice que no sabe, aplica la regla de «no sé» de arriba.
-- **Una rama y un PR por feature, fix o bloque, no por slice.** Los slices son
-  commits dentro de la misma rama, y las versiones grandes se agrupan en
-  bloques (p. ej. A/B/C en `docs/backend-plan.md`) con **un PR por bloque**
-  (draft hasta cerrarlo). Una rama = una responsabilidad.
+- **Una rama y un PR por tarea (feature, fix o bloque), no por slice.** Los
+  slices son commits dentro de la misma rama, y las versiones grandes se
+  agrupan en tareas o bloques (p. ej. A/B/C en `docs/backend-plan.md`) con
+  **un PR por tarea** (draft hasta cerrarlo). Los commits de cada slice van
+  dentro de la PR de su tarea. Una rama = una responsabilidad.
 - **Commits al cerrar un slice, no antes.** Con el slice terminado y
   verificado, propón el mensaje (Conventional Commits, `type`/`scope` y
   resumen en inglés e imperativo: `feat:`, `fix:`, `docs:`, `test:`,
