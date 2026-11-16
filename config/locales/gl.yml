@@ -362,3 +362,22 @@ gl:
             payment_status:
               blank: "O estado do pago non pode estar baleiro."
               inclusion: "O estado do pago non é válido."
+        order_item:
+          attributes:
+            order:
+              required: "O pedido non pode estar baleiro."
+            variant:
+              required: "A variante non pode estar baleira."
+            variant_id:
+              taken: "Esa variante xa está no pedido."
+            quantity:
+              blank: "A cantidade non pode estar baleira."
+              not_a_number: "A cantidade debe ser un número."
+              not_an_integer: "A cantidade debe ser un número enteiro."
+              greater_than_or_equal_to: "A cantidade debe ser polo menos 1."
+              less_than_or_equal_to: "A cantidade non pode superar %{count} unidades."
+            unit_price_cents:
+              blank: "O prezo unitario non pode estar baleiro."
+              not_a_number: "O prezo unitario debe ser un número."
+              not_an_integer: "O prezo unitario debe ser un número enteiro."
+              greater_than_or_equal_to: "O prezo unitario non pode ser negativo."

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_12_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_12_120001) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -64,6 +64,19 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_12_120000) do
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_categories_on_name", unique: true
     t.index ["slug"], name: "index_categories_on_slug", unique: true
+  end
+
+  create_table "order_items", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "order_id", null: false
+    t.bigint "variant_id", null: false
+    t.integer "quantity", default: 1, null: false
+    t.integer "unit_price_cents", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id", "variant_id"], name: "index_order_items_on_order_id_and_variant_id", unique: true
+    t.index ["variant_id"], name: "fk_rails_476172d337"
+    t.check_constraint "(`quantity` >= 1) and (`quantity` <= 999)", name: "order_items_quantity_range"
+    t.check_constraint "`unit_price_cents` >= 0", name: "order_items_unit_price_cents_non_negative"
   end
 
   create_table "orders", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -142,6 +155,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_12_120000) do
   add_foreign_key "cart_items", "carts"
   add_foreign_key "cart_items", "variants"
   add_foreign_key "carts", "users"
+  add_foreign_key "order_items", "orders"
+  add_foreign_key "order_items", "variants"
   add_foreign_key "orders", "users", on_delete: :nullify
   add_foreign_key "password_reset_tokens", "users"
   add_foreign_key "products", "categories"

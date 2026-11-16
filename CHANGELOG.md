@@ -26,6 +26,10 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
   pendiente de cobro a la vez) y pedido de invitada sin cuenta. La gema
   AASM entra en el Gemfile; los estados llegan en el slice A4. Mensajes de
   validación en los tres idiomas.
+- **Pedidos** (slice A2 de v0.5.0): modelo `Orders::OrderItem`, la línea de
+  un pedido (una variante, una cantidad 1..999 y el precio congelado al
+  comprar), con CHECK de precio y cantidad en la BD, índice único de variante
+  por pedido y traducciones en los tres idiomas.
 
 ### Cambiado
 
