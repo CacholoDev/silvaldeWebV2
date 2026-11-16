@@ -124,9 +124,12 @@ consultar al usuario y actualizar esta sección y el changelog.
 - **Namespace `Carts::`** para models y services del carrito (tablas `carts`
   y `cart_items`), coherente con `Users::` y `Catalog::`. Zeitwerk no admite
   la clase `Cart` junto al directorio `app/services/cart/`.
-- **Precio congelado al añadir** (`unit_price_cents` en `CartItem`, snapshot):
-  un cambio de precio posterior en el catálogo no reescribe los carritos
-  existentes.
+- **Precio vivo del catálogo** (el carrito no guarda precio; lee
+  `variant.effective_price_cents`): un cambio de precio en el catálogo se
+  refleja al instante en el carrito. Solo el pedido congela su precio al
+  comprar (`Orders::OrderItem`). *[Cambiado 2026-11-13: antes el precio se
+  congelaba al añadir, con un snapshot en `CartItem.unit_price_cents`; se
+  quitó esa columna porque el carrito debe seguir al catálogo.]*
 - **El stock no se toca en el carrito**: el carrito es intención de compra; el
   stock se valida y descuenta en el checkout (v0.5.0), con transacción y
   bloqueo de fila.

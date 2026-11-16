@@ -1,6 +1,8 @@
 module Carts
-  # A line of a cart: one variant, a quantity and the unit price frozen at the
-  # moment it was added (a later catalog price change never rewrites it).
+  # A line of a cart: one variant and a quantity. The price is not stored — it
+  # always follows the catalog (Catalog::Variant#effective_price_cents), so a
+  # price change by the admin shows up in the cart right away. Only a purchased
+  # order freezes its price (see Orders::OrderItem).
   class CartItem < ApplicationRecord
     self.table_name = "cart_items"
 
@@ -15,15 +17,12 @@ module Carts
     validates :quantity, numericality: { only_integer: true, greater_than_or_equal_to: 1,
                                          less_than_or_equal_to: MAX_QUANTITY }, allow_nil: true
 
-    validates :unit_price_cents, presence: true
-    validates :unit_price_cents, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, allow_nil: true
-
     # One line per variant per cart (the unique index enforces it too).
     validates :variant_id, uniqueness: { scope: :cart_id }
 
-    # Subtotal of this line: the frozen unit price times the quantity.
+    # Subtotal of this line: the catalog price right now, times the quantity.
     def subtotal_cents
-      quantity * unit_price_cents
+      quantity * variant.effective_price_cents
     end
   end
 end

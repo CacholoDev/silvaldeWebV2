@@ -101,12 +101,18 @@ RSpec.describe Carts::Search do
   end
 
   describe ".total_cents" do
-    it "sums the subtotals of the lines" do
+    it "sums the subtotals of the lines at the current catalog prices" do
       cart = create(:cart)
-      create(:cart_item, cart: cart, quantity: 2, unit_price_cents: 1500)
-      create(:cart_item, cart: cart, quantity: 1, unit_price_cents: 500)
+      variant_a = create(:variant, price_cents: 1500)
+      variant_b = create(:variant, price_cents: 500)
+      create(:cart_item, cart: cart, variant: variant_a, quantity: 2)
+      create(:cart_item, cart: cart, variant: variant_b, quantity: 1)
 
       expect(described_class.total_cents(cart)).to eq(3500)
+
+      variant_a.update!(price_cents: 2000)
+
+      expect(described_class.total_cents(cart)).to eq(4500)
     end
 
     it "is zero when there is no cart" do

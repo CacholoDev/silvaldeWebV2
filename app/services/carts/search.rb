@@ -36,11 +36,12 @@ module Carts
       cart.cart_items.includes(variant: :product).order(:id)
     end
 
-    # Cart total in cents: the sum of the line subtotals, zero without cart.
+    # Cart total in cents: the sum of the line subtotals at the current catalog
+    # prices, zero without cart.
     def self.total_cents(cart)
       return 0 if cart.nil?
 
-      cart.cart_items.sum("quantity * unit_price_cents")
+      items_for(cart).sum { |line| line.quantity * line.variant.effective_price_cents }
     end
 
     # The line with this id inside the given cart (ownership check), or raises

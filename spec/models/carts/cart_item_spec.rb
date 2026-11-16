@@ -50,30 +50,6 @@ RSpec.describe Carts::CartItem, type: :model do
       expect(item.errors[:quantity]).to include("La cantidad debe ser un número entero.")
     end
 
-    it "requires a unit price" do
-      item = build(:cart_item, unit_price_cents: nil)
-      expect(item).not_to be_valid
-      expect(item.errors[:unit_price_cents]).to include("El precio unitario no puede estar vacío.")
-    end
-
-    it "rejects a negative unit price" do
-      item = build(:cart_item, unit_price_cents: -1)
-      expect(item).not_to be_valid
-      expect(item.errors[:unit_price_cents]).to include("El precio unitario no puede ser negativo.")
-    end
-
-    it "rejects a non-numeric unit price" do
-      item = build(:cart_item, unit_price_cents: "abc")
-      expect(item).not_to be_valid
-      expect(item.errors[:unit_price_cents]).to include("El precio unitario debe ser un número.")
-    end
-
-    it "rejects a fractional unit price" do
-      item = build(:cart_item, unit_price_cents: "9900.5")
-      expect(item).not_to be_valid
-      expect(item.errors[:unit_price_cents]).to include("El precio unitario debe ser un número entero.")
-    end
-
     it "rejects the same variant twice in the same cart" do
       cart = create(:cart)
       variant = create(:variant)
@@ -104,10 +80,20 @@ RSpec.describe Carts::CartItem, type: :model do
   end
 
   describe "#subtotal_cents" do
-    it "multiplies the frozen unit price by the quantity" do
-      item = build(:cart_item, quantity: 3, unit_price_cents: 1200)
+    it "multiplies the variant's current price by the quantity" do
+      variant = create(:variant, price_cents: 1200)
+      item = build(:cart_item, variant: variant, quantity: 3)
 
       expect(item.subtotal_cents).to eq(3600)
+    end
+
+    it "follows the catalog when the variant price changes" do
+      variant = create(:variant, price_cents: 1200)
+      item = create(:cart_item, variant: variant, quantity: 3)
+
+      variant.update!(price_cents: 2000)
+
+      expect(item.subtotal_cents).to eq(6000)
     end
   end
 

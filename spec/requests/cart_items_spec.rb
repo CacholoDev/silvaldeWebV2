@@ -10,7 +10,7 @@ RSpec.describe "Cart items", type: :request do
 
       item = Carts::CartItem.sole
       expect(item.quantity).to eq(2)
-      expect(item.unit_price_cents).to eq(1500)
+      expect(item.subtotal_cents).to eq(3000)
       expect(item.cart.user).to be_nil
       expect(response).to redirect_to(product_path(variant.product.slug))
       expect(flash[:notice]).to eq(I18n.t("cart.added"))

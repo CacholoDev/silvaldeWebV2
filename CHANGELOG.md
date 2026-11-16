@@ -33,6 +33,11 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
 
 ### Cambiado
 
+- **El carrito sigue el precio del catálogo**: las líneas del carrito ya no
+  guardan un precio congelado al añadir; el precio de cada línea, el subtotal
+  y el total se leen vivos del catálogo (`variant.effective_price_cents`).
+  Solo el pedido congela su precio al comprar. Se quitó la columna
+  `unit_price_cents` de `cart_items`.
 - Roadmap rehecho tras la auditoría: pedidos con o sin cuenta, recogida en
   las tiendas de Bertamirans y Noia, pagos offline en la v0.5.0, panel admin
   (v0.6.0), envío a domicilio (v0.7.0), puesta en producción con Kamal

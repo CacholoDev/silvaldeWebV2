@@ -8,7 +8,7 @@ RSpec.describe Carts::AddItem do
 
     expect(item).to be_persisted
     expect(item.quantity).to eq(2)
-    expect(item.unit_price_cents).to eq(1500)
+    expect(item.subtotal_cents).to eq(3000)
     expect(item.cart.user).to be_nil
     expect(item.cart.cart_items).to contain_exactly(item)
   end
@@ -41,13 +41,14 @@ RSpec.describe Carts::AddItem do
     expect(cart.cart_items.sole.quantity).to eq(3)
   end
 
-  it "keeps the frozen price when the variant is added again" do
+  it "keeps following the catalog price when the variant is added again" do
     cart = create(:cart)
-    create(:cart_item, cart: cart, variant: variant, quantity: 1, unit_price_cents: 1200)
+    create(:cart_item, cart: cart, variant: variant, quantity: 1)
 
     described_class.call(cart: cart, variant: variant, quantity: 1)
 
-    expect(cart.cart_items.sole.unit_price_cents).to eq(1200)
+    variant.update!(price_cents: 2000)
+    expect(cart.cart_items.sole.subtotal_cents).to eq(2 * 2000)
   end
 
   it "returns a line with errors when the quantity is invalid" do
