@@ -153,7 +153,7 @@ aquí desde el diseño, no a posteriori.
   Bertamirans/Noia; `payment_method` y `payment_status`; `user_id` opcional
   para pedidos de invitada) + modelo con validaciones + factory (invitada y
   con cuenta) + spec de validaciones.
-- A2. ⬜ **Modelo `Orders::OrderItem`** — migración + modelo (precio congelado
+- A2. ✅ **Modelo `Orders::OrderItem`** — migración + modelo (precio congelado
   al comprar, cantidad 1..999, CHECK de precio y cantidad en la BD) +
   factory + spec.
 - A3. ⬜ **Número público `SV-XXXXXX`** — generación aleatoria única (nunca
