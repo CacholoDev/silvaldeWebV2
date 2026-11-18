@@ -98,6 +98,19 @@ consultar al usuario y actualizar esta sección y el changelog.
   v1.0.0.
 - **Número de pedido público** no consecutivo (nunca el id en la URL ni en
   los emails).
+- **Etiquetas de los estados del pedido (2026-11-18):** lo que ve la clienta
+  en cada estado (las claves i18n se crean con las vistas y emails de los
+  bloques B/C):
+
+  | `state` | Español | Galego | English |
+  | --- | --- | --- | --- |
+  | `pending` | Pedido recibido | Pedido recibido | Order received |
+  | `confirmed` | Pago confirmado | Pago confirmado | Payment confirmed |
+  | `ready_for_pickup` | Listo para recoger | Listo para recoller | Ready for pickup |
+  | `picked_up` | Recogido | Recollido | Picked up |
+  | `shipped` | Enviado | Enviado | Shipped |
+  | `delivered` | Entregado | Entregado | Delivered |
+  | `cancelled` | Cancelado | Cancelado | Cancelled |
 - **Precios con IVA incluido**, como hoy en el catálogo.
 - **Despliegue:** VPS con Kamal (v0.8.0); proveedores por decidir.
 - **Idiomas del contenido (2026-11-11):** la interfaz va en español, gallego
