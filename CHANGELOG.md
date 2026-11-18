@@ -45,6 +45,10 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
   cada cambio de estado del pedido (de dónde viene, a dónde va, quién lo
   movió — vacío si lo movió el sistema — y cuándo), con marca de movimiento
   manual para la llave maestra del admin y CHECKs en la BD.
+- **Pedidos** (slice A6 de v0.5.0): `Orders::Search`, la ventanilla de
+  consultas de pedidos — los pedidos de una cuenta, el pedido por número
+  público y el pedido por enlace firmado (invitadas) — con specs de
+  propiedad: el pedido de otra persona nunca aparece en tu lista.
 
 ### Cambiado
 
