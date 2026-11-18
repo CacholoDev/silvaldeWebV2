@@ -135,9 +135,13 @@ confirmación.
 - **Máquina de estados con AASM** (decisión tomada; ver «Por qué AASM» más
   abajo). Estados del pedido (lo que pasa con el paquete):
   `pending` (recibido) → `confirmed` (pago confirmado o pago al recoger) →
-  `ready_for_pickup` → `picked_up`; desde `pending` o `confirmed` se puede
-  ir a `cancelled`. La v0.7.0 añade la rama de envío (`shipped` →
-  `delivered`). Cada transición queda registrada (quién y cuándo).
+  `ready_for_pickup` → `picked_up` (recogida) o `confirmed` → `shipped` →
+  `delivered` (envío; con `delivery_method` desde el slice A4, y el checkout
+  de envío en v0.7.0); desde `pending` o `confirmed` se puede ir a
+  `cancelled`, y nunca después. Cada transición queda registrada (quién y
+  cuándo). **El personal no toca estados**: informa hechos («llegó el pago»,
+  «preparado», «entregado») y el estado se mueve solo, con email automático
+  a la clienta.
 - **Pago separado del pedido:** un atributo `payment_method`
   (`bank_transfer`, `pay_in_store` y, desde la v0.9.0 «Pagos», `card`, `paypal`) y un
   `payment_status` (`pending`, `paid`, `refunded`). Así, un pedido puede

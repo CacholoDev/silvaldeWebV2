@@ -159,8 +159,8 @@ aquí desde el diseño, no a posteriori.
 - A3. ✅ **Número público `SV-XXXXXX`** — generación aleatoria única (nunca
   el id secuencial, que delataría cuántos pedidos hay) + spec de formato y
   unicidad.
-- A4. ⬜ **Máquina de estados AASM** — columna `state`, estados y transiciones
-  válidas/inválidas + spec.
+- A4. ✅ **Máquina de estados AASM** — columna `state` (+ `delivery_method`
+  pickup/shipping), estados y transiciones válidas/inválidas + spec.
 - A5. ⬜ **`Orders::StatusChange`** — registro de cada transición (quién y
   cuándo) + spec del modelo.
 - A6. ⬜ **`Orders::Search`** — pedidos de una cuenta, pedido por número y

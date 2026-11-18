@@ -65,12 +65,19 @@ consultar al usuario y actualizar esta sección y el changelog.
   Swagger, JWT ni Jbuilder (se quitó del Gemfile el 2026-11-10). Si algún día se necesita una API, se especifica aparte
   (sección «Cambios y documentación»).
 - **AASM para la máquina de estados de los pedidos** (`Orders::Order`).
-  Estados del pedido (2026-11-11): `pending` → `confirmed` →
-  `ready_for_pickup` → `picked_up`, o `cancelled` desde `pending` o
-  `confirmed`; la v0.7.0 añade `shipped` → `delivered` para el envío. El
-  pago va aparte (`payment_method` y `payment_status`). AASM solo valida y
-  cambia el estado; los efectos (stock, emails, registro) van en services, no
-  en callbacks. La gema se añade en la v0.5.0. Razonamiento y alternativa
+  Estados del pedido (2026-11-11; máquina completa + `delivery_method` el
+  2026-11-16): `pending` → `confirmed` → `ready_for_pickup` → `picked_up`
+  (recogida) o `confirmed` → `shipped` → `delivered` (envío), y `cancelled`
+  **solo** desde `pending` o `confirmed` (preparado, enviado, recogido y
+  entregado son finales). Los guards de AASM impiden mezclar las ramas según
+  `delivery_method` (`pickup`/`shipping`; el checkout de envío llega en
+  v0.7.0, y `pickup_store` solo es obligatorio para recogida). El pago va
+  aparte (`payment_method` y `payment_status`); un pedido de pago en tienda
+  nace `confirmed`. AASM solo valida y cambia el estado; los efectos (stock,
+  emails, registro) van en services, no en callbacks. **El personal no toca
+  estados**: informa hechos («llegó el pago», «preparado», «entregado») y el
+  estado se mueve solo (objetivo: 2-3 clics por pedido en toda su vida; el
+  tablero con esos botones es el panel de v0.6.0). Razonamiento y alternativa
   descartada en `docs/roadmap.md` («Por qué AASM»).
 
 **Decisiones de pedidos (2026-11-11):**
