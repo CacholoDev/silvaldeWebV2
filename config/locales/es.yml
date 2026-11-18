@@ -210,6 +210,7 @@ es:
       cart: "Carrito"
       cart_item: "Línea del carrito"
       order: "Pedido"
+      status_change: "Cambio de estado"
     attributes:
       user:
         name: "Nombre"
@@ -252,6 +253,12 @@ es:
         number: "Número del pedido"
         delivery_method: "Forma de entrega"
         state: "Estado del pedido"
+      status_change:
+        order: "Pedido"
+        user: "Cuenta"
+        from_state: "Estado de origen"
+        to_state: "Estado de destino"
+        manual: "Manual"
     errors:
       messages:
         record_invalid: "La validación ha fallado: %{errors}"
@@ -376,6 +383,15 @@ es:
             state:
               blank: "El estado del pedido no puede estar vacío."
               inclusion: "El estado del pedido no es válido."
+        status_change:
+          attributes:
+            order:
+              required: "El pedido no puede estar vacío."
+            to_state:
+              blank: "El estado de destino no puede estar vacío."
+              inclusion: "El estado de destino no es válido."
+            from_state:
+              inclusion: "El estado de origen no es válido."
         order_item:
           attributes:
             order:

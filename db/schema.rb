@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_16_120001) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_18_120000) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -76,6 +76,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_16_120001) do
     t.index ["variant_id"], name: "fk_rails_476172d337"
     t.check_constraint "(`quantity` >= 1) and (`quantity` <= 999)", name: "order_items_quantity_range"
     t.check_constraint "`unit_price_cents` >= 0", name: "order_items_unit_price_cents_non_negative"
+  end
+
+  create_table "order_status_changes", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "order_id", null: false
+    t.bigint "user_id"
+    t.string "from_state", limit: 20
+    t.string "to_state", limit: 20, null: false
+    t.boolean "manual", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_order_status_changes_on_order_id"
+    t.index ["user_id"], name: "index_order_status_changes_on_user_id"
+    t.check_constraint "(`from_state` is null) or (`from_state` in (_utf8mb4'pending',_utf8mb4'confirmed',_utf8mb4'ready_for_pickup',_utf8mb4'picked_up',_utf8mb4'shipped',_utf8mb4'delivered',_utf8mb4'cancelled'))", name: "order_status_changes_from_state_values"
+    t.check_constraint "`to_state` in (_utf8mb4'pending',_utf8mb4'confirmed',_utf8mb4'ready_for_pickup',_utf8mb4'picked_up',_utf8mb4'shipped',_utf8mb4'delivered',_utf8mb4'cancelled')", name: "order_status_changes_to_state_values"
   end
 
   create_table "orders", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -163,6 +177,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_16_120001) do
   add_foreign_key "carts", "users"
   add_foreign_key "order_items", "orders"
   add_foreign_key "order_items", "variants"
+  add_foreign_key "order_status_changes", "orders"
+  add_foreign_key "order_status_changes", "users"
   add_foreign_key "orders", "users", on_delete: :nullify
   add_foreign_key "password_reset_tokens", "users"
   add_foreign_key "products", "categories"

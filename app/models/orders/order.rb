@@ -38,6 +38,7 @@ module Orders
     belongs_to :user, class_name: "Users::User", optional: true
 
     has_many :order_items, dependent: :destroy, inverse_of: :order
+    has_many :status_changes, dependent: :destroy, inverse_of: :order
 
     validates :contact_name, presence: true
     validates :contact_name, length: { maximum: MAX_NAME_LENGTH }, allow_nil: true

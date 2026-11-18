@@ -41,6 +41,10 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
   `pending` o `confirmed` — además de `delivery_method` (recogida o envío;
   el checkout de envío llega en v0.7.0). El personal informa hechos
   («llegó el pago», «preparado», «entregado») y el estado se mueve solo.
+- **Pedidos** (slice A5 de v0.5.0): `Orders::StatusChange`, el registro de
+  cada cambio de estado del pedido (de dónde viene, a dónde va, quién lo
+  movió — vacío si lo movió el sistema — y cuándo), con marca de movimiento
+  manual para la llave maestra del admin y CHECKs en la BD.
 
 ### Cambiado
 

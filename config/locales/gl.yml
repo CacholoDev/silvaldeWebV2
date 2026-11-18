@@ -210,6 +210,7 @@ gl:
       cart: "Carriño"
       cart_item: "Liña do carriño"
       order: "Pedido"
+      status_change: "Cambio de estado"
     attributes:
       user:
         name: "Nome"
@@ -252,6 +253,12 @@ gl:
         number: "Número do pedido"
         delivery_method: "Forma de entrega"
         state: "Estado do pedido"
+      status_change:
+        order: "Pedido"
+        user: "Conta"
+        from_state: "Estado de orixe"
+        to_state: "Estado de destino"
+        manual: "Manual"
     errors:
       messages:
         record_invalid: "A validación fallou: %{errors}"
@@ -376,6 +383,15 @@ gl:
             state:
               blank: "O estado do pedido non pode estar baleiro."
               inclusion: "O estado do pedido non é válido."
+        status_change:
+          attributes:
+            order:
+              required: "O pedido non pode estar baleiro."
+            to_state:
+              blank: "O estado de destino non pode estar baleiro."
+              inclusion: "O estado de destino non é válido."
+            from_state:
+              inclusion: "O estado de orixe non é válido."
         order_item:
           attributes:
             order:

@@ -210,6 +210,7 @@ en:
       cart: "Cart"
       cart_item: "Cart line"
       order: "Order"
+      status_change: "State change"
     attributes:
       user:
         name: "Name"
@@ -252,6 +253,12 @@ en:
         number: "Order number"
         delivery_method: "Delivery method"
         state: "Order status"
+      status_change:
+        order: "Order"
+        user: "Account"
+        from_state: "Origin state"
+        to_state: "Destination state"
+        manual: "Manual"
     errors:
       messages:
         record_invalid: "Validation failed: %{errors}"
@@ -376,6 +383,15 @@ en:
             state:
               blank: "Order status can't be blank."
               inclusion: "Order status is invalid."
+        status_change:
+          attributes:
+            order:
+              required: "Order can't be blank."
+            to_state:
+              blank: "The destination state can't be blank."
+              inclusion: "The destination state is invalid."
+            from_state:
+              inclusion: "The origin state is invalid."
         order_item:
           attributes:
             order:
