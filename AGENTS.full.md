@@ -77,7 +77,11 @@ consultar al usuario y actualizar esta sección y el changelog.
   emails, registro) van en services, no en callbacks. **El personal no toca
   estados**: informa hechos («llegó el pago», «preparado», «entregado») y el
   estado se mueve solo (objetivo: 2-3 clics por pedido en toda su vida; el
-  tablero con esos botones es el panel de v0.6.0). Razonamiento y alternativa
+  tablero con esos botones es el panel de v0.6.0). **Llave maestra del
+  admin** (2026-11-18): «cambiar estado a mano» mueve cualquier estado a
+  cualquier estado para excepciones, siempre registrado en
+  `Orders::StatusChange` como movimiento manual (quién y cuándo), pero
+  **nunca** cancela algo ya entregado o recogido. Razonamiento y alternativa
   descartada en `docs/roadmap.md` («Por qué AASM»).
 
 **Decisiones de pedidos (2026-11-11):**

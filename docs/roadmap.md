@@ -141,7 +141,10 @@ confirmación.
   `cancelled`, y nunca después. Cada transición queda registrada (quién y
   cuándo). **El personal no toca estados**: informa hechos («llegó el pago»,
   «preparado», «entregado») y el estado se mueve solo, con email automático
-  a la clienta.
+  a la clienta. El **admin** tiene una llave maestra («cambiar estado a
+  mano», panel de v0.6.0) para excepciones: mueve cualquier estado a
+  cualquier estado, siempre registrado en el histórico como movimiento
+  manual, salvo cancelar algo ya entregado o recogido, que es imposible.
 - **Pago separado del pedido:** un atributo `payment_method`
   (`bank_transfer`, `pay_in_store` y, desde la v0.9.0 «Pagos», `card`, `paypal`) y un
   `payment_status` (`pending`, `paid`, `refunded`). Así, un pedido puede
