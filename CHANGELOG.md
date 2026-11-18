@@ -35,6 +35,12 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
   hay), generado al crear el pedido con un alfabeto de 32 caracteres sin
   0/O/1/I para poder dictarlo por teléfono sin confusiones, con índice único
   en la BD y traducciones en los tres idiomas.
+- **Pedidos** (slice A4 de v0.5.0): máquina de estados del paquete con AASM —
+  `pending → confirmed → ready_for_pickup → picked_up` (recogida) o
+  `confirmed → shipped → delivered` (envío), y `cancelled` solo desde
+  `pending` o `confirmed` — además de `delivery_method` (recogida o envío;
+  el checkout de envío llega en v0.7.0). El personal informa hechos
+  («llegó el pago», «preparado», «entregado») y el estado se mueve solo.
 
 ### Cambiado
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_16_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_16_120001) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -83,14 +83,19 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_16_120000) do
     t.string "contact_name", null: false
     t.string "contact_email", null: false
     t.string "contact_phone"
-    t.string "pickup_store", null: false
+    t.string "pickup_store"
     t.string "payment_method", null: false
     t.string "payment_status", default: "pending", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "number", limit: 16, null: false
+    t.string "state", limit: 20, default: "pending", null: false
+    t.string "delivery_method", limit: 20, default: "pickup", null: false
     t.index ["number"], name: "index_orders_on_number", unique: true
     t.index ["user_id"], name: "index_orders_on_user_id"
+    t.check_constraint "((`delivery_method` = _utf8mb4'pickup') and (`pickup_store` is not null)) or ((`delivery_method` = _utf8mb4'shipping') and (`pickup_store` is null))", name: "orders_pickup_store_matches_delivery"
+    t.check_constraint "`delivery_method` in (_utf8mb4'pickup',_utf8mb4'shipping')", name: "orders_delivery_method_values"
+    t.check_constraint "`state` in (_utf8mb4'pending',_utf8mb4'confirmed',_utf8mb4'ready_for_pickup',_utf8mb4'picked_up',_utf8mb4'shipped',_utf8mb4'delivered',_utf8mb4'cancelled')", name: "orders_state_values"
   end
 
   create_table "password_reset_tokens", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|

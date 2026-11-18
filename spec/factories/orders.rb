@@ -7,5 +7,10 @@ FactoryBot.define do
     contact_phone { "600 123 456" }
     pickup_store { "bertamirans" }
     payment_method { "bank_transfer" }
+
+    trait :shipping do
+      delivery_method { "shipping" }
+      pickup_store { nil }
+    end
   end
 end

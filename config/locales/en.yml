@@ -250,6 +250,8 @@ en:
         payment_method: "Payment method"
         payment_status: "Payment status"
         number: "Order number"
+        delivery_method: "Delivery method"
+        state: "Order status"
     errors:
       messages:
         record_invalid: "Validation failed: %{errors}"
@@ -357,6 +359,7 @@ en:
             pickup_store:
               blank: "Pickup store can't be blank."
               inclusion: "Pickup store is invalid."
+              present: "A home-delivery order has no pickup store."
             payment_method:
               blank: "Payment method can't be blank."
               inclusion: "Payment method is invalid."
@@ -367,6 +370,12 @@ en:
               blank: "Order number can't be blank."
               invalid: "Order number format is invalid."
               taken: "That order number is already in use."
+            delivery_method:
+              blank: "Delivery method can't be blank."
+              inclusion: "Delivery method is invalid."
+            state:
+              blank: "Order status can't be blank."
+              inclusion: "Order status is invalid."
         order_item:
           attributes:
             order:
