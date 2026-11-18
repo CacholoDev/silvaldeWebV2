@@ -163,7 +163,7 @@ aquí desde el diseño, no a posteriori.
   pickup/shipping), estados y transiciones válidas/inválidas + spec.
 - A5. ✅ **`Orders::StatusChange`** — registro de cada transición (quién y
   cuándo) + spec del modelo.
-- A6. ⬜ **`Orders::Search`** — pedidos de una cuenta, pedido por número y
+- A6. ✅ **`Orders::Search`** — pedidos de una cuenta, pedido por número y
   por token firmado + **specs de propiedad** (el pedido ajeno no aparece).
 
 ### Bloque B — Checkout y transiciones
