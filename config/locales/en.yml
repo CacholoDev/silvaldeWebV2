@@ -389,6 +389,9 @@ en:
             state:
               blank: "Order status can't be blank."
               inclusion: "Order status is invalid."
+            base:
+              cart_empty: "Your cart is empty."
+              out_of_stock: "There is not enough stock for \"%{variant}\"."
         status_change:
           attributes:
             order:

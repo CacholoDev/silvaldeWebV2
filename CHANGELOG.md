@@ -49,6 +49,12 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
   consultas de pedidos — los pedidos de una cuenta, el pedido por número
   público y el pedido por enlace firmado (invitadas) — con specs de
   propiedad: el pedido de otra persona nunca aparece en tu lista.
+- **Pedidos** (slice B1 de v0.5.0): servicio `Orders::Checkout`, que
+  convierte el carrito en pedido en una sola transacción — bloquea las
+  variantes, comprueba y descuenta el stock, crea el pedido con precios
+  congelados, registra el nacimiento en el histórico y vacía el carrito —
+  con rollback completo si algo falla (falta de stock, datos inválidos) y
+  specs de concurrencia: la última unidad nunca se vende dos veces.
 
 ### Cambiado
 

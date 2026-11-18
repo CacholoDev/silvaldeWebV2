@@ -389,6 +389,9 @@ es:
             state:
               blank: "El estado del pedido no puede estar vacío."
               inclusion: "El estado del pedido no es válido."
+            base:
+              cart_empty: "El carrito está vacío."
+              out_of_stock: "No hay stock suficiente de «%{variant}»."
         status_change:
           attributes:
             order:

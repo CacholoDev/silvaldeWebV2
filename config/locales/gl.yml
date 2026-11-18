@@ -389,6 +389,9 @@ gl:
             state:
               blank: "O estado do pedido non pode estar baleiro."
               inclusion: "O estado do pedido non é válido."
+            base:
+              cart_empty: "O carriño está baleiro."
+              out_of_stock: "Non hai stock suficiente de «%{variant}»."
         status_change:
           attributes:
             order:
