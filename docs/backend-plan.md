@@ -168,7 +168,7 @@ aquí desde el diseño, no a posteriori.
 
 ### Bloque B — Checkout y transiciones
 
-- B1. ⬜ **Servicio `Orders::Checkout`** en una transacción: valida el
+- B1. ✅ **Servicio `Orders::Checkout`** en una transacción: valida el
   carrito, bloquea las variantes (`with_lock`), comprueba y descuenta el
   stock, crea el pedido con sus líneas y vacía el carrito; rollback completo
   si falla. Specs de éxito, falta de stock y **concurrencia**.
