@@ -1,0 +1,73 @@
+<%# The order form on its own, so Turbo can replace just this piece when
+    the server comes back with errors (see Orders::CheckoutsController). %>
+<div id="checkout_form">
+  <%# Error summary: the messages are always visible, and the summary takes
+      the focus after a failed submit (Stimulus), so keyboard and screen
+      reader users find them. %>
+  <% if @order.errors.any? %>
+    <div id="form_errors" role="alert" data-controller="checkout" data-checkout-target="summary"
+         class="mt-6 rounded-md border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-800">
+      <p class="font-medium"><%= t("checkout.errors_title", count: @order.errors.size) %></p>
+      <ul class="mt-1 list-disc pl-5">
+        <% @order.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= form_with model: @order, url: checkout_path, class: "mt-8 space-y-6" do |form| %>
+    <fieldset class="space-y-4">
+      <legend class="text-lg font-medium"><%= t("checkout.contact_title") %></legend>
+
+      <div>
+        <%= form.label :contact_name, t("checkout.name"), class: "mb-1 block text-sm font-medium" %>
+        <%= form.text_field :contact_name, required: true, autofocus: true, autocomplete: "name",
+              class: "block w-full rounded-md border border-line-strong bg-surface px-3 py-2 text-ink shadow-sm focus:border-sage focus:outline-none focus:ring-2 focus:ring-sage/30" %>
+      </div>
+
+      <div>
+        <%= form.label :contact_email, t("checkout.email"), class: "mb-1 block text-sm font-medium" %>
+        <%= form.email_field :contact_email, required: true, autocomplete: "email",
+              class: "block w-full rounded-md border border-line-strong bg-surface px-3 py-2 text-ink shadow-sm focus:border-sage focus:outline-none focus:ring-2 focus:ring-sage/30" %>
+      </div>
+
+      <div>
+        <%= form.label :contact_phone, t("checkout.phone"), class: "mb-1 block text-sm font-medium" %>
+        <%= form.telephone_field :contact_phone, autocomplete: "tel",
+              class: "block w-full rounded-md border border-line-strong bg-surface px-3 py-2 text-ink shadow-sm focus:border-sage focus:outline-none focus:ring-2 focus:ring-sage/30" %>
+      </div>
+    </fieldset>
+
+    <fieldset class="space-y-4">
+      <legend class="text-lg font-medium"><%= t("checkout.pickup_title") %></legend>
+
+      <div>
+        <%= form.label :pickup_store, t("checkout.pickup_select"), class: "mb-1 block text-sm font-medium" %>
+        <%= form.select :pickup_store,
+              [[t("checkout.stores.bertamirans"), "bertamirans"], [t("checkout.stores.noia"), "noia"]],
+              { prompt: t("checkout.pickup_store") }, required: true,
+              class: "block w-full rounded-md border border-line-strong bg-surface px-3 py-2 text-ink shadow-sm focus:border-sage focus:outline-none focus:ring-2 focus:ring-sage/30" %>
+      </div>
+    </fieldset>
+
+    <%# Two exclusive options, so radio buttons (immediately visible, zero
+        clicks to scan) instead of a select. %>
+    <fieldset class="space-y-2">
+      <legend class="text-lg font-medium"><%= t("checkout.payment_title") %></legend>
+
+      <div class="flex items-center gap-2">
+        <%= form.radio_button :payment_method, "bank_transfer", required: true, class: "accent-sage" %>
+        <%= form.label :payment_method, t("checkout.payment_methods.bank_transfer"), value: "bank_transfer" %>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <%= form.radio_button :payment_method, "pay_in_store", class: "accent-sage" %>
+        <%= form.label :payment_method, t("checkout.payment_methods.pay_in_store"), value: "pay_in_store" %>
+      </div>
+    </fieldset>
+
+    <%= form.submit t("checkout.submit"),
+          class: "w-full rounded-md bg-sage px-4 py-2 font-medium text-white hover:bg-sage-dark focus:outline-none focus:ring-2 focus:ring-sage focus:ring-offset-2" %>
+  <% end %>
+</div>

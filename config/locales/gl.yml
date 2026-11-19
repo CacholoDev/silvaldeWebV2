@@ -209,6 +209,8 @@ gl:
     name: "Nome"
     email: "Correo electrónico"
     phone: "Teléfono (opcional)"
+    summary_title: "O teu pedido"
+    summary_total: "Total"
     pickup_title: "Entrega"
     pickup_store: "Tenda de recollida"
     pickup_select: "Seleccionar método de envío ou recollida na tenda"

@@ -209,6 +209,8 @@ es:
     name: "Nombre"
     email: "Email"
     phone: "Teléfono (opcional)"
+    summary_title: "Tu pedido"
+    summary_total: "Total"
     pickup_title: "Entrega"
     pickup_store: "Tienda de recogida"
     pickup_select: "Seleccionar método de envío o recogida en tienda"

@@ -100,6 +100,17 @@ RSpec.describe "Checkout", type: :request do
       expect(radio).to include("checked")
     end
 
+    it "re-renders the form with the error summary when the data is wrong" do
+      fill_cart
+
+      post checkout_path, params: checkout_params(order: { contact_email: "no-es-un-email" })
+
+      expect(response).to have_http_status(:unprocessable_content)
+      expect(response.body).to include(I18n.t("checkout.errors_title", count: 1))
+      expect(response.body).to include(I18n.t("activerecord.errors.models.order.attributes.contact_email.invalid"))
+      expect(Orders::Order.count).to eq(0)
+    end
+
     it "a pay-in-store order is born confirmed" do
       fill_cart
 

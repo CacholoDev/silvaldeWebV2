@@ -8,6 +8,8 @@ module Orders
       return redirect_to cart_path, notice: t("checkout.empty_cart") if cart_lines.empty?
 
       @order = Order.new(contact_name: current_user&.name, contact_email: current_user&.email)
+      @items = cart_lines
+      @total_cents = Carts::Search.total_cents(current_cart)
     end
 
     def create
@@ -22,7 +24,21 @@ module Orders
         redirect_to cart_path, notice: t("checkout.empty_cart")
       else
         @order = order
-        render :new, status: :unprocessable_content
+        @items = cart_lines
+        @total_cents = Carts::Search.total_cents(current_cart)
+        respond_to do |format|
+          format.html { render :new, status: :unprocessable_content }
+          # Turbo submits the form as a stream request, and it does not render
+          # a 422 body. The form is replaced by the same partial with the
+          # errors, the way the cart refreshes its contents (see
+          # Carts::ItemsController#render_cart_refresh).
+          format.turbo_stream do
+            render status: :unprocessable_content,
+                   turbo_stream: turbo_stream.replace("checkout_form",
+                                                     partial: "orders/checkouts/form",
+                                                     locals: { order: @order })
+          end
+        end
       end
     end
 

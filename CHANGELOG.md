@@ -61,6 +61,10 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
   del pedido que aguanta el F5. Carrito vacío → vuelve al carrito con un
   mensaje claro; datos inválidos → el formulario con sus errores y sin
   crear nada.
+- **Pedidos** (slice B3 de v0.5.0): el checkout enseña el **resumen del
+  pedido** (líneas y total) antes del formulario, los errores vuelven
+  al formulario con el foco en el resumen (lectores de pantalla) y
+  llega un **system spec** que prueba el flujo entero en navegador real.
 
 ### Cambiado
 

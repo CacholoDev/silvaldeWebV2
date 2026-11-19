@@ -209,6 +209,8 @@ en:
     name: "Name"
     email: "Email"
     phone: "Phone (optional)"
+    summary_title: "Your order"
+    summary_total: "Total"
     pickup_title: "Delivery"
     pickup_store: "Pickup store"
     pickup_select: "Select delivery or in-store pickup"

@@ -3,71 +3,44 @@
 <div class="mx-auto w-full max-w-xl">
   <h1 class="font-serif text-3xl font-semibold tracking-tight"><%= t("checkout.page_title") %></h1>
 
-  <%# Error summary: the client-side polish (focus to the first invalid
-      field) comes with B3; server-side the messages are always visible. %>
-  <% if @order.errors.any? %>
-    <div id="form_errors" role="alert" class="mt-6 rounded-md border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-800">
-      <p class="font-medium"><%= t("checkout.errors_title", count: @order.errors.size) %></p>
-      <ul class="mt-1 list-disc pl-5">
-        <% @order.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
+  <%# The summary comes first: the customer reviews what she is buying
+      (and how much it costs) before filling in the form. %>
+  <section class="mt-6" aria-labelledby="checkout_summary_title">
+    <h2 id="checkout_summary_title" class="text-lg font-medium"><%= t("checkout.summary_title") %></h2>
+
+    <div class="mt-3 overflow-x-auto">
+      <table class="w-full text-sm">
+        <caption class="sr-only"><%= t("checkout.summary_title") %></caption>
+        <thead>
+          <tr class="border-y border-line text-left text-muted">
+            <th scope="col" class="py-2 pr-4 font-medium"><%= t("cart.item") %></th>
+            <th scope="col" class="py-2 pr-4 font-medium"><%= t("cart.unit_price") %></th>
+            <th scope="col" class="py-2 pr-4 font-medium"><%= t("cart.quantity") %></th>
+            <th scope="col" class="py-2 font-medium"><%= t("cart.subtotal") %></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-line">
+          <% @items.each do |item| %>
+            <% decorated = decorate(item) %>
+            <tr>
+              <td class="py-3 pr-4 font-medium">
+                <%= item.variant.product.name %>
+                <span class="block text-xs text-muted"><%= item.variant.name %></span>
+              </td>
+              <td class="py-3 pr-4"><%= decorated.formatted_unit_price %></td>
+              <td class="py-3 pr-4"><%= item.quantity %></td>
+              <td class="py-3"><%= decorated.formatted_subtotal %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
     </div>
-  <% end %>
 
-  <%= form_with model: @order, url: checkout_path, class: "mt-8 space-y-6" do |form| %>
-    <fieldset class="space-y-4">
-      <legend class="text-lg font-medium"><%= t("checkout.contact_title") %></legend>
+    <div class="mt-4 flex items-baseline justify-between border-t border-line pt-4">
+      <span class="text-lg font-semibold"><%= t("checkout.summary_total") %></span>
+      <span class="text-lg font-semibold"><%= format_cents(@total_cents) %></span>
+    </div>
+  </section>
 
-      <div>
-        <%= form.label :contact_name, t("checkout.name"), class: "mb-1 block text-sm font-medium" %>
-        <%= form.text_field :contact_name, required: true, autofocus: true, autocomplete: "name",
-              class: "block w-full rounded-md border border-line-strong bg-surface px-3 py-2 text-ink shadow-sm focus:border-sage focus:outline-none focus:ring-2 focus:ring-sage/30" %>
-      </div>
-
-      <div>
-        <%= form.label :contact_email, t("checkout.email"), class: "mb-1 block text-sm font-medium" %>
-        <%= form.email_field :contact_email, required: true, autocomplete: "email",
-              class: "block w-full rounded-md border border-line-strong bg-surface px-3 py-2 text-ink shadow-sm focus:border-sage focus:outline-none focus:ring-2 focus:ring-sage/30" %>
-      </div>
-
-      <div>
-        <%= form.label :contact_phone, t("checkout.phone"), class: "mb-1 block text-sm font-medium" %>
-        <%= form.telephone_field :contact_phone, autocomplete: "tel",
-              class: "block w-full rounded-md border border-line-strong bg-surface px-3 py-2 text-ink shadow-sm focus:border-sage focus:outline-none focus:ring-2 focus:ring-sage/30" %>
-      </div>
-    </fieldset>
-
-    <fieldset class="space-y-4">
-      <legend class="text-lg font-medium"><%= t("checkout.pickup_title") %></legend>
-
-      <div>
-        <%= form.label :pickup_store, t("checkout.pickup_select"), class: "mb-1 block text-sm font-medium" %>
-        <%= form.select :pickup_store,
-              [[t("checkout.stores.bertamirans"), "bertamirans"], [t("checkout.stores.noia"), "noia"]],
-              { prompt: t("checkout.pickup_store") }, required: true,
-              class: "block w-full rounded-md border border-line-strong bg-surface px-3 py-2 text-ink shadow-sm focus:border-sage focus:outline-none focus:ring-2 focus:ring-sage/30" %>
-      </div>
-    </fieldset>
-
-    <%# Two exclusive options, so radio buttons (immediately visible, zero
-        clicks to scan) instead of a select. %>
-    <fieldset class="space-y-2">
-      <legend class="text-lg font-medium"><%= t("checkout.payment_title") %></legend>
-
-      <div class="flex items-center gap-2">
-        <%= form.radio_button :payment_method, "bank_transfer", required: true, class: "accent-sage" %>
-        <%= form.label :payment_method, t("checkout.payment_methods.bank_transfer"), value: "bank_transfer" %>
-      </div>
-
-      <div class="flex items-center gap-2">
-        <%= form.radio_button :payment_method, "pay_in_store", class: "accent-sage" %>
-        <%= form.label :payment_method, t("checkout.payment_methods.pay_in_store"), value: "pay_in_store" %>
-      </div>
-    </fieldset>
-
-    <%= form.submit t("checkout.submit"),
-          class: "w-full rounded-md bg-sage px-4 py-2 font-medium text-white hover:bg-sage-dark focus:outline-none focus:ring-2 focus:ring-sage focus:ring-offset-2" %>
-  <% end %>
+  <%= render "orders/checkouts/form" %>
 </div>
