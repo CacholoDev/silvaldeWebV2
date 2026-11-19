@@ -172,7 +172,7 @@ aquí desde el diseño, no a posteriori.
   carrito, bloquea las variantes (`with_lock`), comprueba y descuenta el
   stock, crea el pedido con sus líneas y vacía el carrito; rollback completo
   si falla. Specs de éxito, falta de stock y **concurrencia**.
-- B2. ⬜ **Checkout back** — rutas + controller + formulario (con y sin
+- B2. ✅ **Checkout back** — rutas + controller + formulario (con y sin
   cuenta) + request specs.
 - B3. ⬜ **Checkout front** — vista + i18n + system spec.
 - B4. ⬜ **`Orders::Cancel`** — devuelve el stock en la misma transacción +
