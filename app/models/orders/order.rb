@@ -72,6 +72,7 @@ module Orders
     validates :number, format: { with: NUMBER_FORMAT }, allow_nil: true
     validates :number, uniqueness: true
 
+    before_validation :normalize_blank_phone
     before_validation :assign_initial_state, on: :create
     before_validation :assign_number, on: :create
 
@@ -145,6 +146,12 @@ module Orders
     end
 
     private
+
+    # The form sends "" for the optional phone; store nil instead so the
+    # allow_nil validations mean what they say and the blank is not kept.
+    def normalize_blank_phone
+      self.contact_phone = nil if contact_phone.blank?
+    end
 
     # A pay-in-store order has nothing to verify (it pays on pickup), so it
     # starts confirmed and ready to prepare; a bank-transfer order waits

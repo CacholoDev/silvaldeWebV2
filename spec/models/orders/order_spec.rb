@@ -43,6 +43,11 @@ RSpec.describe Orders::Order, type: :model do
       expect(order).to be_valid
     end
 
+    it "allows an empty-string phone (the form sends a blank string)" do
+      order = build(:order, contact_phone: "")
+      expect(order).to be_valid
+    end
+
     it "rejects a malformed phone" do
       order = build(:order, contact_phone: "llamame pronto")
       expect(order).not_to be_valid
