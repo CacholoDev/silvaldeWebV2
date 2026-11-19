@@ -174,7 +174,7 @@ aquí desde el diseño, no a posteriori.
   si falla. Specs de éxito, falta de stock y **concurrencia**.
 - B2. ✅ **Checkout back** — rutas + controller + formulario (con y sin
   cuenta) + request specs.
-- B3. ⬜ **Checkout front** — vista + i18n + system spec.
+- B3. ✅ **Checkout front** — vista + i18n + system spec.
 - B4. ⬜ **`Orders::Cancel`** — devuelve el stock en la misma transacción +
   registra la transición + spec.
 - B5. ⬜ **Transiciones restantes** — `Confirm`, `MarkReady` y
