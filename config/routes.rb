@@ -42,6 +42,11 @@ Rails.application.routes.draw do
   patch "cart/items/:id", to: "carts/items#update", as: :cart_item
   delete "cart/items/:id", to: "carts/items#destroy"
 
+  # Checkout
+  get "checkout", to: "orders/checkouts#new", as: :checkout
+  post "checkout", to: "orders/checkouts#create"
+  get "checkout/confirmation", to: "orders/checkouts#confirmation", as: :checkout_confirmation
+
   # Locale switching
   post "locale", to: "locales#update", as: :locale
 end

@@ -201,6 +201,32 @@ en:
     remove: "Remove"
     remove_item: "Remove %{item} from the cart"
     removed: "Item removed"
+    checkout: "Go to checkout"
+  checkout:
+    page_title: "Checkout"
+    empty_cart: "Your cart is empty: add some products to place an order."
+    contact_title: "Contact details"
+    name: "Name"
+    email: "Email"
+    phone: "Phone (optional)"
+    pickup_title: "Delivery"
+    pickup_store: "Pickup store"
+    pickup_select: "Select delivery or in-store pickup"
+    stores:
+      bertamirans: "Bertamirans"
+      noia: "Noia"
+    payment_title: "Payment method"
+    payment_methods:
+      bank_transfer: "Bank transfer or Bizum"
+      pay_in_store: "Pay at the store on pickup"
+    submit: "Place the order"
+    errors_title:
+      one: "There is 1 error in the form:"
+      other: "There are %{count} errors in the form:"
+    confirmation_title: "Thank you for your order!"
+    confirmation_text: "We have received your order. Keep this number for any questions:"
+    continue_shopping: "Continue shopping"
+    nothing_to_confirm: "There is no order to confirm."
   activerecord:
     models:
       user: "Account"

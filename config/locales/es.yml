@@ -201,6 +201,32 @@ es:
     remove: "Eliminar"
     remove_item: "Eliminar %{item} del carrito"
     removed: "Artículo eliminado"
+    checkout: "Finalizar compra"
+  checkout:
+    page_title: "Finalizar tu pedido"
+    empty_cart: "Tu carrito está vacío: añade productos para poder hacer el pedido."
+    contact_title: "Datos de contacto"
+    name: "Nombre"
+    email: "Email"
+    phone: "Teléfono (opcional)"
+    pickup_title: "Entrega"
+    pickup_store: "Tienda de recogida"
+    pickup_select: "Seleccionar método de envío o recogida en tienda"
+    stores:
+      bertamirans: "Bertamirans"
+      noia: "Noia"
+    payment_title: "Forma de pago"
+    payment_methods:
+      bank_transfer: "Transferencia o Bizum"
+      pay_in_store: "Pagar en la tienda al recoger"
+    submit: "Hacer el pedido"
+    errors_title:
+      one: "Hay 1 error en el formulario:"
+      other: "Hay %{count} errores en el formulario:"
+    confirmation_title: "¡Gracias por tu pedido!"
+    confirmation_text: "Hemos recibido tu pedido. Guarda este número para cualquier consulta:"
+    continue_shopping: "Seguir comprando"
+    nothing_to_confirm: "No hay ningún pedido que confirmar."
   activerecord:
     models:
       user: "Cuenta"

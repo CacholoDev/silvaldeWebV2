@@ -55,6 +55,12 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
   congelados, registra el nacimiento en el histórico y vacía el carrito —
   con rollback completo si algo falla (falta de stock, datos inválidos) y
   specs de concurrencia: la última unidad nunca se vende dos veces.
+- **Pedidos** (slice B2 de v0.5.0): checkout usable desde la web —
+  `GET/POST /checkout` con el formulario (con y sin cuenta: el contacto se
+  pre-llena desde la cuenta) y una pantalla de confirmación con el número
+  del pedido que aguanta el F5. Carrito vacío → vuelve al carrito con un
+  mensaje claro; datos inválidos → el formulario con sus errores y sin
+  crear nada.
 
 ### Cambiado
 

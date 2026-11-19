@@ -1,0 +1,23 @@
+<% content_for :title, "#{t("checkout.confirmation_title")} — #{t("app.name")}" %>
+
+<div class="mx-auto w-full max-w-xl">
+  <h1 class="font-serif text-3xl font-semibold tracking-tight"><%= t("checkout.confirmation_title") %></h1>
+
+  <p class="mt-4 text-lg"><%= t("checkout.confirmation_text") %></p>
+
+  <p class="mt-3 font-mono text-3xl font-semibold tracking-wider" role="status"><%= @order.number %></p>
+
+  <dl class="mt-6 space-y-1 text-sm text-muted">
+    <div>
+      <dt class="inline font-medium"><%= t("checkout.pickup_store") %>: </dt>
+      <dd class="inline"><%= t("checkout.stores.#{@order.pickup_store}") %></dd>
+    </div>
+    <div>
+      <dt class="inline font-medium"><%= t("checkout.payment_title") %>: </dt>
+      <dd class="inline"><%= t("checkout.payment_methods.#{@order.payment_method}") %></dd>
+    </div>
+  </dl>
+
+  <%= link_to t("checkout.continue_shopping"), products_path,
+        class: "mt-8 inline-block rounded-md bg-sage px-4 py-2 font-medium text-white hover:bg-sage-dark focus:outline-none focus:ring-2 focus:ring-sage focus:ring-offset-2" %>
+</div>

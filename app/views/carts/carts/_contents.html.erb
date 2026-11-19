@@ -51,6 +51,11 @@
     <span class="text-lg font-semibold"><%= t("cart.total") %></span>
     <span class="text-lg font-semibold"><%= format_cents(total_cents) %></span>
   </div>
+
+  <div class="mt-6 text-right">
+    <%= link_to t("cart.checkout"), checkout_path,
+          class: "inline-block rounded-md bg-sage px-4 py-2 text-sm font-medium text-white hover:bg-sage-dark" %>
+  </div>
 <% else %>
   <div class="mt-10 text-center">
     <p class="text-lg"><%= t("cart.empty_title") %></p>

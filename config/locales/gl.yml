@@ -201,6 +201,32 @@ gl:
     remove: "Eliminar"
     remove_item: "Eliminar %{item} do carriño"
     removed: "Artigo eliminado"
+    checkout: "Finalizar a compra"
+  checkout:
+    page_title: "Finalizar o teu pedido"
+    empty_cart: "O teu carriño está baleiro: engade produtos para poder facer o pedido."
+    contact_title: "Datos de contacto"
+    name: "Nome"
+    email: "Correo electrónico"
+    phone: "Teléfono (opcional)"
+    pickup_title: "Entrega"
+    pickup_store: "Tenda de recollida"
+    pickup_select: "Seleccionar método de envío ou recollida na tenda"
+    stores:
+      bertamirans: "Bertamirans"
+      noia: "Noia"
+    payment_title: "Forma de pago"
+    payment_methods:
+      bank_transfer: "Transferencia ou Bizum"
+      pay_in_store: "Pagar na tenda ao recoller"
+    submit: "Facer o pedido"
+    errors_title:
+      one: "Hai 1 erro no formulario:"
+      other: "Hai %{count} erros no formulario:"
+    confirmation_title: "Grazas polo teu pedido!"
+    confirmation_text: "Recibimos o teu pedido. Garda este número para calquera consulta:"
+    continue_shopping: "Seguir mercando"
+    nothing_to_confirm: "Non hai ningún pedido que confirmar."
   activerecord:
     models:
       user: "Conta"
