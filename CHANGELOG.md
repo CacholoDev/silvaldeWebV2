@@ -65,6 +65,14 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
   pedido** (líneas y total) antes del formulario, los errores vuelven
   al formulario con el foco en el resumen (lectores de pantalla) y
   llega un **system spec** que prueba el flujo entero en navegador real.
+- **Pedidos** (slice B4 de v0.5.0): servicio `Orders::Cancel`, que cancela un
+  pedido antes de prepararlo y **devuelve el stock** de sus líneas en la misma
+  transacción (con bloqueo de fila y en el mismo orden fijo que el checkout,
+  para no provocar interbloqueos), deja el pedido en `cancelled` y lo registra
+  en el histórico con quién lo hizo. Un pedido ya preparado, enviado, recogido,
+  entregado o cancelado **no se puede cancelar**: la máquina de estados lo
+  rechaza con `AASM::InvalidTransition` y no se toca nada (ni stock ni
+  histórico). El botón en la web llega con el panel de v0.6.0.
 
 ### Cambiado
 

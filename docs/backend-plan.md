@@ -175,8 +175,10 @@ aquí desde el diseño, no a posteriori.
 - B2. ✅ **Checkout back** — rutas + controller + formulario (con y sin
   cuenta) + request specs.
 - B3. ✅ **Checkout front** — vista + i18n + system spec.
-- B4. ⬜ **`Orders::Cancel`** — devuelve el stock en la misma transacción +
-  registra la transición + spec.
+- B4. ✅ **`Orders::Cancel`** — devuelve el stock en la misma transacción +
+  registra la transición + spec. Un pedido preparado, enviado, recogido,
+  entregado o ya cancelado no se puede cancelar: la máquina de estados lanza
+  `AASM::InvalidTransition` y no se toca nada.
 - B5. ⬜ **Transiciones restantes** — `Confirm`, `MarkReady` y
   `MarkPickedUp` como services + specs.
 
