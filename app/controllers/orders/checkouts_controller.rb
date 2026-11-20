@@ -13,7 +13,8 @@ module Orders
     end
 
     def create
-      order = Checkout.call(cart: current_cart, user: current_user, **order_attributes)
+      order = Checkout.call(cart: current_cart, user: current_user,
+                            locale: I18n.locale.to_s, **order_attributes)
 
       if order.persisted?
         # The confirmation page reads the order back from the session, so a

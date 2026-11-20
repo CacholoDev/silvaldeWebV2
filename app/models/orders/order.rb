@@ -18,6 +18,7 @@ module Orders
     PAYMENT_METHODS = %w[bank_transfer pay_in_store].freeze
     PAYMENT_STATUSES = %w[pending paid refunded].freeze
     DELIVERY_METHODS = %w[pickup shipping].freeze
+    LOCALES = %w[es gl en].freeze
 
     # What happens to the package (not to the money: payment_status covers
     # that). See docs/roadmap.md for the decision and the transition table.
@@ -67,6 +68,10 @@ module Orders
 
     validates :delivery_method, presence: true
     validates :delivery_method, inclusion: { in: DELIVERY_METHODS }, allow_nil: true
+
+    # The language the customer used at checkout: its emails are sent in it.
+    validates :locale, presence: true
+    validates :locale, inclusion: { in: LOCALES }, allow_nil: true
 
     validates :number, presence: true
     validates :number, format: { with: NUMBER_FORMAT }, allow_nil: true

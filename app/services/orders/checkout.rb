@@ -12,11 +12,11 @@ module Orders
   # failures. Unexpected errors do propagate (house rule: no silent rescues).
   class Checkout
     def self.call(cart:, contact_name:, contact_email:, contact_phone: nil,
-                  pickup_store:, payment_method:, user: nil)
+                  pickup_store:, payment_method:, user: nil, locale: "es")
       order = Order.new(
         contact_name: contact_name, contact_email: contact_email,
         contact_phone: contact_phone, pickup_store: pickup_store,
-        payment_method: payment_method, user: user
+        payment_method: payment_method, user: user, locale: locale
       )
       lines = cart ? Carts::Search.items_for(cart).to_a : []
 
@@ -49,6 +49,10 @@ module Orders
         StatusChange.create!(order: order, from_state: nil, to_state: order.state)
         cart.cart_items.destroy_all
       end
+
+      # The confirmation email goes out only after the transaction commits:
+      # a rolled-back checkout never emails anyone.
+      Orders::ConfirmationMailer.with(order: order).confirmation.deliver_later if order.persisted?
 
       order
     end

@@ -89,9 +89,32 @@ RSpec.describe Orders::Checkout do
 
         expect(order).to be_guest
       end
+
+      it "keeps the language used at checkout for its emails" do
+        cart = create(:cart)
+        create(:cart_item, cart: cart)
+
+        order = checkout(cart, locale: "gl")
+
+        expect(order.locale).to eq("gl")
+      end
+
+      it "sends the confirmation email once the order is placed" do
+        cart = create(:cart)
+        create(:cart_item, cart: cart)
+
+        expect { checkout(cart) }.to change { ActionMailer::Base.deliveries.count }.by(1)
+        expect(ActionMailer::Base.deliveries.last.to).to eq([ "ana@example.com" ])
+      end
     end
 
     describe "failures save nothing" do
+      it "sends no email when the checkout fails" do
+        cart = create(:cart)
+
+        expect { checkout(cart) }.not_to change { ActionMailer::Base.deliveries.count }
+      end
+
       it "rejects an empty cart" do
         cart = create(:cart)
 

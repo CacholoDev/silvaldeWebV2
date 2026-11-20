@@ -1,0 +1,46 @@
+<h1><%= t("orders.mailer.confirmation.title") %></h1>
+<p><%= t("orders.mailer.confirmation.greeting", name: @order.contact_name) %></p>
+<p><%= t("orders.mailer.confirmation.intro", number: @order.number) %></p>
+
+<h2><%= t("orders.mailer.confirmation.summary_title") %></h2>
+<table>
+  <thead>
+    <tr>
+      <th><%= t("orders.mailer.confirmation.item") %></th>
+      <th><%= t("orders.mailer.confirmation.quantity") %></th>
+      <th><%= t("orders.mailer.confirmation.subtotal") %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @order.order_items.each do |item| %>
+      <% decorated = Orders::OrderItemDecorator.new(item) %>
+      <tr>
+        <td><%= item.variant.product.name %> (<%= item.variant.name %>)</td>
+        <td><%= item.quantity %></td>
+        <td><%= decorated.formatted_subtotal %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<p><strong><%= t("orders.mailer.confirmation.total") %>: <%= format_cents(@total_cents) %></strong></p>
+
+<% if @order.pickup? %>
+  <h2><%= t("orders.mailer.confirmation.delivery_title") %></h2>
+  <p><%= t("orders.mailer.confirmation.pickup_in_store", store: t("checkout.stores.#{@order.pickup_store}")) %></p>
+<% end %>
+
+<h2><%= t("orders.mailer.confirmation.payment_title") %></h2>
+<% if @order.payment_method == "bank_transfer" %>
+  <p><%= t("orders.mailer.confirmation.bank_transfer_instructions") %></p>
+  <ul>
+    <li><%= t("orders.mailer.confirmation.bank_holder") %>: <%= @payment_details[:holder] %></li>
+    <li><%= t("orders.mailer.confirmation.bank_iban") %>: <%= @payment_details[:iban] %></li>
+    <li><%= t("orders.mailer.confirmation.bizum_phone") %>: <%= @payment_details[:bizum_phone] %></li>
+    <li><%= t("orders.mailer.confirmation.amount") %>: <%= format_cents(@total_cents) %></li>
+  </ul>
+  <p><%= t("orders.mailer.confirmation.payment_concept", number: @order.number) %></p>
+<% else %>
+  <p><%= t("orders.mailer.confirmation.pay_in_store") %></p>
+<% end %>
+
+<p><%= t("orders.mailer.confirmation.questions") %></p>

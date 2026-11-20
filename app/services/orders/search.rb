@@ -8,6 +8,12 @@ module Orders
       OrderItem.where(order: order)
     end
 
+    # Total of the order in cents, computed from its lines (the prices are
+    # frozen in the lines themselves).
+    def self.total_cents(order)
+      items_for(order).sum { |item| item.subtotal_cents }
+    end
+
     def self.find_order_by_number(number)
       return nil if number.blank?
 

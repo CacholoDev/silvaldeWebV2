@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_18_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_20_120000) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -105,10 +105,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_18_120000) do
     t.string "number", limit: 16, null: false
     t.string "state", limit: 20, default: "pending", null: false
     t.string "delivery_method", limit: 20, default: "pickup", null: false
+    t.string "locale", limit: 5, default: "es", null: false
     t.index ["number"], name: "index_orders_on_number", unique: true
     t.index ["user_id"], name: "index_orders_on_user_id"
     t.check_constraint "((`delivery_method` = _utf8mb4'pickup') and (`pickup_store` is not null)) or ((`delivery_method` = _utf8mb4'shipping') and (`pickup_store` is null))", name: "orders_pickup_store_matches_delivery"
     t.check_constraint "`delivery_method` in (_utf8mb4'pickup',_utf8mb4'shipping')", name: "orders_delivery_method_values"
+    t.check_constraint "`locale` in (_utf8mb4'es',_utf8mb4'gl',_utf8mb4'en')", name: "orders_locale_values"
     t.check_constraint "`state` in (_utf8mb4'pending',_utf8mb4'confirmed',_utf8mb4'ready_for_pickup',_utf8mb4'picked_up',_utf8mb4'shipped',_utf8mb4'delivered',_utf8mb4'cancelled')", name: "orders_state_values"
   end
 
