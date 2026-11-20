@@ -12,3 +12,21 @@ RSpec.configure do |config|
     end
   end
 end
+
+# Chrome 158 (installed by the system auto-updater on 2026-11-20) rejects the
+# wildcard origin that Capybara 3.40 sends when resetting the session:
+# Storage.clearDataForOrigin with origin: '*' fails with "* is not a valid
+# URL", so every system example errored at teardown although its body passed.
+# Capybara 3.40.0 is still the latest release, so we rewrite that single call
+# to clear the origin of the app under test — the only origin these specs
+# ever visit. Drop this patch once a Capybara release fixes the wildcard.
+module ChromeStorageOriginFix
+  def execute_cdp(cmd, params = {})
+    if cmd == "Storage.clearDataForOrigin" && params[:origin] == "*"
+      params = params.merge(origin: Capybara.current_session.server.base_url)
+    end
+    super
+  end
+end
+
+Capybara::Selenium::Driver::ChromeDriver.prepend(ChromeStorageOriginFix)
