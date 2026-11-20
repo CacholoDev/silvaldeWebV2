@@ -42,6 +42,12 @@ según la necesidad operativa.
 Nunca expongas datos administrativos en respuestas públicas ni confíes en
 ocultar botones como mecanismo de autorización.
 
+Las métricas de la tienda (v0.6.1) usan **medición propia**: eventos del
+servidor y enlaces con etiquetas (UTM) para las campañas, sin cookies de
+terceros ni analítica externa (decisión del 2026-11-20 con el usuario). Si
+algún día se integra una analítica externa (p. ej. Google Analytics), entra
+el banner de consentimiento y la política de cookies (v1.0.0).
+
 ## Decisiones de stack (2026-10-11)
 
 Decisiones tomadas con el usuario antes de la v0.2.0. No las cambies sin

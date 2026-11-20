@@ -225,8 +225,11 @@ nueva.
   invitadas vs cuenta y base de ofertas + specs.
 - M5. ⬜ **Tráfico y conversión** — embudo carrito → pedido, carritos
   abandonados, búsquedas sin resultado y productos vistos vs comprados +
-  specs. ❓ decidir proveedor de analítica y cookies.
-- M6. ⬜ **Exportación** — descarga CSV de cada informe para la gestoría.
+  specs. Medición propia con eventos del servidor, sin cookies de terceros.
+- M6. ⬜ **Campañas y origen de las visitas** — enlaces con etiquetas (UTM)
+  para redes, carteles y códigos QR de las tiendas, y visitas y pedidos por
+  campaña y origen + specs.
+- M7. ⬜ **Exportación** — descarga CSV de cada informe para la gestoría.
 
 ## Envío a domicilio (v0.7.0)
 

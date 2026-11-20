@@ -229,17 +229,25 @@ métricas básicas de la v0.6.0 como mini versión sobre el panel (ver
   vs con cuenta y cuántas aceptaron ofertas (base para campañas futuras).
 - **Tráfico y conversión:** embudo carrito → checkout → pedido, carritos
   abandonados, productos vistos vs comprados y búsquedas sin resultado.
-  Medición propia con eventos del servidor (sin cookies de terceros); si se
-  prefiere una analítica externa (p. ej. Google Analytics), entra el banner
-  de consentimiento y la política de cookies de la v1.0.0.
+- **Campañas — de dónde viene la gente:** cada enlace que se comparte lleva
+  sus etiquetas (`utm_source=instagram`, `utm_campaign=rebajas-noviembre`…),
+  con **códigos QR** para los carteles y las tiendas físicas, y el panel
+  muestra visitas y pedidos por campaña y por origen. **Medición propia con
+  eventos del servidor, sin cookies de terceros** (decisión del 2026-11-20:
+  la analítica externa tipo Google Analytics queda descartada; si algún día
+  se pide, entra el banner de consentimiento y la política de cookies de la
+  v1.0.0). Complemento gratuito y sin cookies: Google Search Console, para
+  ver las búsquedas de Google que traen visitas (cuenta aparte, sin tocar
+  la web).
+- **IVA en las ventas:** el desglose usa el tipo general del **21%** (tienda
+  de hogar), configurable por si la gestoría indica otro tipo.
 - **Exportación:** cada informe se descarga en CSV/hoja de cálculo para la
   gestoría.
 - **Rendimiento:** los informes pesados se precalcularán con un job
   recurrente (Solid Queue) para que el panel abra rápido.
-- ❓ **Decidir con el cliente:** qué informes priorizar, proveedor de
-  analítica de tráfico (propia sin cookies vs externa con consentimiento) y
-  cómo desglosar el IVA de las ventas (los precios incluyen IVA; el detalle
-  hay que validarlo con la gestoría).
+- **El orden de los informes lo decide el equipo** (el cliente: «cuantos más
+  datos, mejor»). ❓ Pendiente solo al implementar: validar con la gestoría
+  el desglose de IVA si lo necesita.
 
 ### ⬜ v0.7.0 — Envío a domicilio
 

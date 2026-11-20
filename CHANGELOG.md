@@ -98,8 +98,10 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
   y `AGENTS.full.md` registra las decisiones de pedidos.
 - Roadmap: nueva fase **v0.6.1 — Métricas del panel** (a petición del
   cliente, que quiere un panel de métricas rico): ventas comparadas,
-  productos, clientes, embudo de conversión y exportación para la gestoría,
-  ampliando las métricas básicas de la v0.6.0.
+  productos, clientes, embudo de conversión, campañas con enlaces etiquetados
+  (UTM y códigos QR) y exportación para la gestoría, ampliando las métricas
+  básicas de la v0.6.0. Con **medición propia** (eventos del servidor, sin
+  cookies de terceros); la analítica externa queda descartada.
 - Versiones (`docs/versioning.md`): el tercer número admite **mini
   versiones** con funcionalidad pequeña (p. ej. `0.6.1`), no solo arreglos;
   el del medio sigue reservado para las fases grandes del roadmap.
