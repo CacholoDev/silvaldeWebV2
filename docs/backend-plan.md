@@ -31,6 +31,7 @@ versión la define el roadmap.
 - **Pedidos** (checkout con recogida y pago offline, estados, email,
   detalle) → **v0.5.0**.
 - **Panel de administración** y **métricas** → **v0.6.0**.
+- **Métricas amplias del panel** → **v0.6.1**.
 - **Envío a domicilio** → **v0.7.0**.
 - **Puesta en producción** → **v0.8.0**.
 - **Pagos** (Stripe y PayPal) → **v0.9.0**.
@@ -205,6 +206,27 @@ aquí desde el diseño, no a posteriori.
     (español obligatorio; gallego e inglés opcionales con respaldo al
     español).
 35. ⬜ **Usuarias en admin** y **métricas básicas**.
+
+## Métricas del panel (v0.6.1)
+
+Ampliación del panel de la v0.6.0 a petición del cliente («cuantos más datos
+y más información, mejor»); el detalle y las decisiones abiertas están en
+[`roadmap.md`](./roadmap.md). Los datos de negocio salen de lo que ya
+guardamos (pedidos, líneas e histórico); el tráfico necesita recolección
+nueva.
+
+- M1. ⬜ **Ventas** — KPIs del panel e ingresos por periodo con
+  comparativas, ticket medio y ventas por tienda y método de pago + specs.
+- M2. ⬜ **Pedidos y operación** — pipeline por estado, tiempos medios entre
+  transiciones (del histórico) y tasa de cancelación + specs.
+- M3. ⬜ **Productos** — más vendidos, sin ventas, stock bajo/agotado,
+  rotación y categorías + specs.
+- M4. ⬜ **Clientes** — nuevas vs recurrentes, ticket por cliente,
+  invitadas vs cuenta y base de ofertas + specs.
+- M5. ⬜ **Tráfico y conversión** — embudo carrito → pedido, carritos
+  abandonados, búsquedas sin resultado y productos vistos vs comprados +
+  specs. ❓ decidir proveedor de analítica y cookies.
+- M6. ⬜ **Exportación** — descarga CSV de cada informe para la gestoría.
 
 ## Envío a domicilio (v0.7.0)
 

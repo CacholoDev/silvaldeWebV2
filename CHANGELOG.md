@@ -96,6 +96,10 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
   v1.0.0. Incluye por qué AASM y una guía de despliegue. `backend-plan.md`
   desglosa el backend en slices (la v0.5.0 de pedidos en los bloques A1-C4)
   y `AGENTS.full.md` registra las decisiones de pedidos.
+- Roadmap: nueva fase **v0.6.1 — Métricas del panel** (a petición del
+  cliente, que quiere un panel de métricas rico): ventas comparadas,
+  productos, clientes, embudo de conversión y exportación para la gestoría,
+  ampliando las métricas básicas de la v0.6.0.
 - `AGENTS.md`: abrir un PR necesita el OK explícito del usuario.
 - Flujo de git: un PR por bloque de una versión (draft hasta cerrarlo) y un
   commit por funcionalidad (cada `feat`, cada `fix`, cada documento…),

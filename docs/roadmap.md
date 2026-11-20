@@ -43,7 +43,8 @@ esas tiendas para la recogida.
 - Gestionar **productos, pedidos y usuarias**: confirmar pagos por
   transferencia/Bizum, preparar, enviar o marcar como recogido, cancelar.
 - Imprimir el **justificante del pedido** (no es una factura fiscal).
-- Ver **métricas básicas** y la versión de la app.
+- Ver **métricas de su tienda** (ventas, pedidos, productos, clientes y
+  tráfico) y la versión de la app.
 
 ### Lo que NO entra en la v1.0.0
 
@@ -203,7 +204,42 @@ productos y usuarias.
   tres veces. Las URLs (slugs) siguen en español para todos los idiomas.
 - **Usuarias:** listado, rol y bloqueo.
 - **Métricas básicas:** ventas por periodo, pedidos por estado y productos
-  más vendidos. La versión de la app en el pie del panel.
+  más vendidos (las métricas amplias van en la v0.6.1). La versión de la app
+  en el pie del panel.
+
+### ⬜ v0.6.1 — Métricas del panel
+
+**Qué se hace:** llevar al panel de administración **métricas de verdad** —
+gráficas, comparativas y top-listas de ventas, pedidos, productos, clientes y
+tráfico de la tienda — para que el negocio pueda analizarse a fondo. Nace
+como fase propia porque el cliente quiere darle peso («cuantos más datos y
+más información en el panel, mejor»; petición del 2026-11-20). Amplía las
+métricas básicas de la v0.6.0; la numeración `0.6.1` va como ampliación del
+panel, acordada con el usuario.
+
+**Cómo se hará:**
+
+- **KPIs del panel:** ventas de hoy y del mes, pedidos por estado, ticket
+  medio y comparación con el periodo anterior, a la vista al entrar.
+- **Ventas:** ingresos por día/semana/mes/año con comparativas, pedidos
+  pagados y cancelados, ventas por tienda de recogida y por método de pago.
+- **Productos:** más vendidos (unidades e ingresos), sin ventas, stock bajo
+  o agotado, rotación de stock y categorías que mejor funcionan.
+- **Clientes:** nuevas vs recurrentes, ticket medio por cliente, invitadas
+  vs con cuenta y cuántas aceptaron ofertas (base para campañas futuras).
+- **Tráfico y conversión:** embudo carrito → checkout → pedido, carritos
+  abandonados, productos vistos vs comprados y búsquedas sin resultado.
+  Medición propia con eventos del servidor (sin cookies de terceros); si se
+  prefiere una analítica externa (p. ej. Google Analytics), entra el banner
+  de consentimiento y la política de cookies de la v1.0.0.
+- **Exportación:** cada informe se descarga en CSV/hoja de cálculo para la
+  gestoría.
+- **Rendimiento:** los informes pesados se precalcularán con un job
+  recurrente (Solid Queue) para que el panel abra rápido.
+- ❓ **Decidir con el cliente:** qué informes priorizar, proveedor de
+  analítica de tráfico (propia sin cookies vs externa con consentimiento) y
+  cómo desglosar el IVA de las ventas (los precios incluyen IVA; el detalle
+  hay que validarlo con la gestoría).
 
 ### ⬜ v0.7.0 — Envío a domicilio
 
