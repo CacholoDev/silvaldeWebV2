@@ -80,6 +80,12 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
   máquina de estados y registra el movimiento en el histórico con quién lo
   hizo. Un salto que no vale lanza `AASM::InvalidTransition` y no se toca
   nada. Con esto se cierra el **bloque B** (checkout y transiciones).
+- **Pedidos** (slice C1, back, de v0.5.0): email de confirmación del pedido
+  (`Orders::ConfirmationMailer`), enviado al hacer el pedido con el resumen,
+  la tienda de recogida y los datos de transferencia/Bizum (en configuración,
+  no en el código) o el pago en tienda. El pedido guarda el idioma en que se
+  compró (`orders.locale`) y el email se escribe en él. Queda pendiente el
+  diseño del email (slice C1, front).
 
 ### Cambiado
 
@@ -105,6 +111,9 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
 - Versiones (`docs/versioning.md`): el tercer número admite **mini
   versiones** con funcionalidad pequeña (p. ej. `0.6.1`), no solo arreglos;
   el del medio sigue reservado para las fases grandes del roadmap.
+- Desarrollo: los emails se prueban con **MailPit** (el SMTP catcher del
+  equipo, http://localhost:8025) en vez de letter_opener, y los enlaces de
+  los emails usan `APP_HOST` con su puerto.
 - `AGENTS.md`: abrir un PR necesita el OK explícito del usuario.
 - Flujo de git: un PR por bloque de una versión (draft hasta cerrarlo) y un
   commit por funcionalidad (cada `feat`, cada `fix`, cada documento…),

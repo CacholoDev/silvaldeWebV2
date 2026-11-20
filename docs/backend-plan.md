@@ -188,12 +188,18 @@ aquí desde el diseño, no a posteriori.
 
 ### Bloque C — Email y detalle
 
-- C1. ⬜ **Mailer de confirmación** — datos de transferencia/Bizum o de
-  recogida + job + preview + spec.
+- C1. 🚧 **Mailer de confirmación** — datos de transferencia/Bizum o de
+  recogida + job + preview + spec. *Back hecho (mailer, envío desde el
+  checkout, idioma guardado en el pedido, specs); pendiente el front (diseño
+  del email y textos) — ver `docs/prompt-front-c1.md`.*
 - C2. ⬜ **Mailer de cambio de estado** — + spec.
 - C3. ⬜ **«Mis pedidos» (con cuenta)** — listado + **spec de propiedad**.
 - C4. ⬜ **Detalle por enlace firmado (sin cuenta)** — token firmado en el
   email + **404 si es ajeno** + spec.
+- C5. ⬜ **Condiciones de venta e «IVA incluido»** — casilla obligatoria en
+  el checkout que guarda qué versión aceptó y cuándo, más el aviso de «IVA
+  incluido» en el checkout y los emails + specs. (Requisitos de la v0.5.0 que
+  no cabían en los otros slices; añadido el 2026-11-20.)
 
 ## Panel de administración (v0.6.0)
 
