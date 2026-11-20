@@ -201,6 +201,57 @@ gl:
     remove: "Eliminar"
     remove_item: "Eliminar %{item} do carriño"
     removed: "Artigo eliminado"
+    checkout: "Finalizar a compra"
+  orders:
+    mailer:
+      confirmation:
+        subject: "Recibimos o teu pedido %{number}"
+        title: "Grazas polo teu pedido"
+        greeting: "Ola %{name},"
+        intro: "Recibimos o teu pedido %{number}. Avisarémoste cando estea listo."
+        summary_title: "Resumo do pedido"
+        item: "Produto"
+        quantity: "Cantidade"
+        subtotal: "Subtotal"
+        total: "Total"
+        delivery_title: "Entrega"
+        pickup_in_store: "Recollida na tenda: %{store}"
+        payment_title: "Forma de pago"
+        bank_transfer_instructions: "Para pagar o pedido, fai unha transferencia ou envía un Bizum con estes datos:"
+        bank_holder: "Titular"
+        bank_iban: "IBAN"
+        bizum_phone: "Bizum (teléfono)"
+        amount: "Importe"
+        payment_concept: "Indica como concepto o teu número de pedido: %{number}"
+        pay_in_store: "Pagarás na tenda ao recoller o pedido."
+        questions: "Se tes calquera duda, responde a este email."
+  checkout:
+    page_title: "Finalizar o teu pedido"
+    empty_cart: "O teu carriño está baleiro: engade produtos para poder facer o pedido."
+    contact_title: "Datos de contacto"
+    name: "Nome"
+    email: "Correo electrónico"
+    phone: "Teléfono (opcional)"
+    summary_title: "O teu pedido"
+    summary_total: "Total"
+    pickup_title: "Entrega"
+    pickup_store: "Tenda de recollida"
+    pickup_select: "Seleccionar método de envío ou recollida na tenda"
+    stores:
+      bertamirans: "Bertamirans"
+      noia: "Noia"
+    payment_title: "Forma de pago"
+    payment_methods:
+      bank_transfer: "Transferencia ou Bizum"
+      pay_in_store: "Pagar na tenda ao recoller"
+    submit: "Facer o pedido"
+    errors_title:
+      one: "Hai 1 erro no formulario:"
+      other: "Hai %{count} erros no formulario:"
+    confirmation_title: "Grazas polo teu pedido!"
+    confirmation_text: "Recibimos o teu pedido. Garda este número para calquera consulta:"
+    continue_shopping: "Seguir mercando"
+    nothing_to_confirm: "Non hai ningún pedido que confirmar."
   activerecord:
     models:
       user: "Conta"
@@ -210,6 +261,8 @@ gl:
       cart: "Carriño"
       cart_item: "Liña do carriño"
       order: "Pedido"
+      order_item: "Liña do pedido"
+      status_change: "Cambio de estado"
     attributes:
       user:
         name: "Nome"
@@ -249,6 +302,21 @@ gl:
         pickup_store: "Tenda de recollida"
         payment_method: "Método de pago"
         payment_status: "Estado do pago"
+        locale: "Idioma"
+        number: "Número do pedido"
+        delivery_method: "Forma de entrega"
+        state: "Estado do pedido"
+      order_item:
+        order: "Pedido"
+        variant: "Variante"
+        quantity: "Cantidade"
+        unit_price_cents: "Prezo unitario"
+      status_change:
+        order: "Pedido"
+        user: "Conta"
+        from_state: "Estado de orixe"
+        to_state: "Estado de destino"
+        manual: "Manual"
     errors:
       messages:
         record_invalid: "A validación fallou: %{errors}"
@@ -356,9 +424,51 @@ gl:
             pickup_store:
               blank: "A tenda de recollida non pode estar baleira."
               inclusion: "A tenda de recollida non é válida."
+              present: "Un pedido con envío a domicilio non leva tenda de recollida."
             payment_method:
               blank: "O método de pago non pode estar baleiro."
               inclusion: "O método de pago non é válido."
             payment_status:
               blank: "O estado do pago non pode estar baleiro."
               inclusion: "O estado do pago non é válido."
+            number:
+              blank: "O número do pedido non pode estar baleiro."
+              invalid: "O formato do número do pedido non é válido."
+              taken: "Ese número de pedido xa está en uso."
+            delivery_method:
+              blank: "A forma de entrega non pode estar baleira."
+              inclusion: "A forma de entrega non é válida."
+            state:
+              blank: "O estado do pedido non pode estar baleiro."
+              inclusion: "O estado do pedido non é válido."
+            base:
+              cart_empty: "O carriño está baleiro."
+              out_of_stock: "Non hai stock suficiente de «%{variant}»."
+        status_change:
+          attributes:
+            order:
+              required: "O pedido non pode estar baleiro."
+            to_state:
+              blank: "O estado de destino non pode estar baleiro."
+              inclusion: "O estado de destino non é válido."
+            from_state:
+              inclusion: "O estado de orixe non é válido."
+        order_item:
+          attributes:
+            order:
+              required: "O pedido non pode estar baleiro."
+            variant:
+              required: "A variante non pode estar baleira."
+            variant_id:
+              taken: "Esa variante xa está no pedido."
+            quantity:
+              blank: "A cantidade non pode estar baleira."
+              not_a_number: "A cantidade debe ser un número."
+              not_an_integer: "A cantidade debe ser un número enteiro."
+              greater_than_or_equal_to: "A cantidade debe ser polo menos 1."
+              less_than_or_equal_to: "A cantidade non pode superar %{count} unidades."
+            unit_price_cents:
+              blank: "O prezo unitario non pode estar baleiro."
+              not_a_number: "O prezo unitario debe ser un número."
+              not_an_integer: "O prezo unitario debe ser un número enteiro."
+              greater_than_or_equal_to: "O prezo unitario non pode ser negativo."

@@ -1,8 +1,8 @@
 module Carts
   # Merges a guest cart into the user's cart after login. Variants already in
-  # the user's cart sum their quantities (2 + 1 = 3) keeping the user's frozen
-  # price; the guest-only lines move over with their own frozen price; the
-  # guest cart is destroyed.
+  # the user's cart sum their quantities (2 + 1 = 3); the guest-only lines move
+  # over; the guest cart is destroyed. Lines keep no price of their own — the
+  # price always follows the catalog.
   #
   # A cart owned by ANOTHER user is never touched (shared computers): only
   # guest carts merge. Returns the cart the session must use afterwards (the

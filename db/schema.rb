@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_12_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_20_120000) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -43,7 +43,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_12_120000) do
     t.bigint "cart_id", null: false
     t.bigint "variant_id", null: false
     t.integer "quantity", default: 1, null: false
-    t.integer "unit_price_cents", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["cart_id", "variant_id"], name: "index_cart_items_on_cart_id_and_variant_id", unique: true
@@ -66,17 +65,53 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_12_120000) do
     t.index ["slug"], name: "index_categories_on_slug", unique: true
   end
 
+  create_table "order_items", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "order_id", null: false
+    t.bigint "variant_id", null: false
+    t.integer "quantity", default: 1, null: false
+    t.integer "unit_price_cents", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id", "variant_id"], name: "index_order_items_on_order_id_and_variant_id", unique: true
+    t.index ["variant_id"], name: "fk_rails_476172d337"
+    t.check_constraint "(`quantity` >= 1) and (`quantity` <= 999)", name: "order_items_quantity_range"
+    t.check_constraint "`unit_price_cents` >= 0", name: "order_items_unit_price_cents_non_negative"
+  end
+
+  create_table "order_status_changes", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "order_id", null: false
+    t.bigint "user_id"
+    t.string "from_state", limit: 20
+    t.string "to_state", limit: 20, null: false
+    t.boolean "manual", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_order_status_changes_on_order_id"
+    t.index ["user_id"], name: "index_order_status_changes_on_user_id"
+    t.check_constraint "(`from_state` is null) or (`from_state` in (_utf8mb4'pending',_utf8mb4'confirmed',_utf8mb4'ready_for_pickup',_utf8mb4'picked_up',_utf8mb4'shipped',_utf8mb4'delivered',_utf8mb4'cancelled'))", name: "order_status_changes_from_state_values"
+    t.check_constraint "`to_state` in (_utf8mb4'pending',_utf8mb4'confirmed',_utf8mb4'ready_for_pickup',_utf8mb4'picked_up',_utf8mb4'shipped',_utf8mb4'delivered',_utf8mb4'cancelled')", name: "order_status_changes_to_state_values"
+  end
+
   create_table "orders", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "user_id"
     t.string "contact_name", null: false
     t.string "contact_email", null: false
     t.string "contact_phone"
-    t.string "pickup_store", null: false
+    t.string "pickup_store"
     t.string "payment_method", null: false
     t.string "payment_status", default: "pending", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "number", limit: 16, null: false
+    t.string "state", limit: 20, default: "pending", null: false
+    t.string "delivery_method", limit: 20, default: "pickup", null: false
+    t.string "locale", limit: 5, default: "es", null: false
+    t.index ["number"], name: "index_orders_on_number", unique: true
     t.index ["user_id"], name: "index_orders_on_user_id"
+    t.check_constraint "((`delivery_method` = _utf8mb4'pickup') and (`pickup_store` is not null)) or ((`delivery_method` = _utf8mb4'shipping') and (`pickup_store` is null))", name: "orders_pickup_store_matches_delivery"
+    t.check_constraint "`delivery_method` in (_utf8mb4'pickup',_utf8mb4'shipping')", name: "orders_delivery_method_values"
+    t.check_constraint "`locale` in (_utf8mb4'es',_utf8mb4'gl',_utf8mb4'en')", name: "orders_locale_values"
+    t.check_constraint "`state` in (_utf8mb4'pending',_utf8mb4'confirmed',_utf8mb4'ready_for_pickup',_utf8mb4'picked_up',_utf8mb4'shipped',_utf8mb4'delivered',_utf8mb4'cancelled')", name: "orders_state_values"
   end
 
   create_table "password_reset_tokens", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -142,6 +177,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_12_120000) do
   add_foreign_key "cart_items", "carts"
   add_foreign_key "cart_items", "variants"
   add_foreign_key "carts", "users"
+  add_foreign_key "order_items", "orders"
+  add_foreign_key "order_items", "variants"
+  add_foreign_key "order_status_changes", "orders"
+  add_foreign_key "order_status_changes", "users"
   add_foreign_key "orders", "users", on_delete: :nullify
   add_foreign_key "password_reset_tokens", "users"
   add_foreign_key "products", "categories"

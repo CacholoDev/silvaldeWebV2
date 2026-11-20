@@ -201,6 +201,57 @@ es:
     remove: "Eliminar"
     remove_item: "Eliminar %{item} del carrito"
     removed: "Artículo eliminado"
+    checkout: "Finalizar compra"
+  orders:
+    mailer:
+      confirmation:
+        subject: "Hemos recibido tu pedido %{number}"
+        title: "Gracias por tu pedido"
+        greeting: "Hola %{name},"
+        intro: "Hemos recibido tu pedido %{number}. Te avisaremos cuando esté listo."
+        summary_title: "Resumen del pedido"
+        item: "Producto"
+        quantity: "Cantidad"
+        subtotal: "Subtotal"
+        total: "Total"
+        delivery_title: "Entrega"
+        pickup_in_store: "Recogida en tienda: %{store}"
+        payment_title: "Forma de pago"
+        bank_transfer_instructions: "Para pagar el pedido, haz una transferencia o envía un Bizum con estos datos:"
+        bank_holder: "Titular"
+        bank_iban: "IBAN"
+        bizum_phone: "Bizum (teléfono)"
+        amount: "Importe"
+        payment_concept: "Indica como concepto tu número de pedido: %{number}"
+        pay_in_store: "Pagarás en la tienda al recoger el pedido."
+        questions: "Si tienes cualquier duda, responde a este email."
+  checkout:
+    page_title: "Finalizar tu pedido"
+    empty_cart: "Tu carrito está vacío: añade productos para poder hacer el pedido."
+    contact_title: "Datos de contacto"
+    name: "Nombre"
+    email: "Email"
+    phone: "Teléfono (opcional)"
+    summary_title: "Tu pedido"
+    summary_total: "Total"
+    pickup_title: "Entrega"
+    pickup_store: "Tienda de recogida"
+    pickup_select: "Seleccionar método de envío o recogida en tienda"
+    stores:
+      bertamirans: "Bertamirans"
+      noia: "Noia"
+    payment_title: "Forma de pago"
+    payment_methods:
+      bank_transfer: "Transferencia o Bizum"
+      pay_in_store: "Pagar en la tienda al recoger"
+    submit: "Hacer el pedido"
+    errors_title:
+      one: "Hay 1 error en el formulario:"
+      other: "Hay %{count} errores en el formulario:"
+    confirmation_title: "¡Gracias por tu pedido!"
+    confirmation_text: "Hemos recibido tu pedido. Guarda este número para cualquier consulta:"
+    continue_shopping: "Seguir comprando"
+    nothing_to_confirm: "No hay ningún pedido que confirmar."
   activerecord:
     models:
       user: "Cuenta"
@@ -210,6 +261,8 @@ es:
       cart: "Carrito"
       cart_item: "Línea del carrito"
       order: "Pedido"
+      order_item: "Línea del pedido"
+      status_change: "Cambio de estado"
     attributes:
       user:
         name: "Nombre"
@@ -249,6 +302,21 @@ es:
         pickup_store: "Tienda de recogida"
         payment_method: "Método de pago"
         payment_status: "Estado del pago"
+        locale: "Idioma"
+        number: "Número del pedido"
+        delivery_method: "Forma de entrega"
+        state: "Estado del pedido"
+      order_item:
+        order: "Pedido"
+        variant: "Variante"
+        quantity: "Cantidad"
+        unit_price_cents: "Precio unitario"
+      status_change:
+        order: "Pedido"
+        user: "Cuenta"
+        from_state: "Estado de origen"
+        to_state: "Estado de destino"
+        manual: "Manual"
     errors:
       messages:
         record_invalid: "La validación ha fallado: %{errors}"
@@ -356,9 +424,51 @@ es:
             pickup_store:
               blank: "La tienda de recogida no puede estar vacía."
               inclusion: "La tienda de recogida no es válida."
+              present: "Un pedido con envío a domicilio no lleva tienda de recogida."
             payment_method:
               blank: "El método de pago no puede estar vacío."
               inclusion: "El método de pago no es válido."
             payment_status:
               blank: "El estado del pago no puede estar vacío."
               inclusion: "El estado del pago no es válido."
+            number:
+              blank: "El número del pedido no puede estar vacío."
+              invalid: "El formato del número del pedido no es válido."
+              taken: "Ese número de pedido ya está en uso."
+            delivery_method:
+              blank: "La forma de entrega no puede estar vacía."
+              inclusion: "La forma de entrega no es válida."
+            state:
+              blank: "El estado del pedido no puede estar vacío."
+              inclusion: "El estado del pedido no es válido."
+            base:
+              cart_empty: "El carrito está vacío."
+              out_of_stock: "No hay stock suficiente de «%{variant}»."
+        status_change:
+          attributes:
+            order:
+              required: "El pedido no puede estar vacío."
+            to_state:
+              blank: "El estado de destino no puede estar vacío."
+              inclusion: "El estado de destino no es válido."
+            from_state:
+              inclusion: "El estado de origen no es válido."
+        order_item:
+          attributes:
+            order:
+              required: "El pedido no puede estar vacío."
+            variant:
+              required: "La variante no puede estar vacía."
+            variant_id:
+              taken: "Esa variante ya está en el pedido."
+            quantity:
+              blank: "La cantidad no puede estar vacía."
+              not_a_number: "La cantidad debe ser un número."
+              not_an_integer: "La cantidad debe ser un número entero."
+              greater_than_or_equal_to: "La cantidad debe ser al menos 1."
+              less_than_or_equal_to: "La cantidad no puede superar %{count} unidades."
+            unit_price_cents:
+              blank: "El precio unitario no puede estar vacío."
+              not_a_number: "El precio unitario debe ser un número."
+              not_an_integer: "El precio unitario debe ser un número entero."
+              greater_than_or_equal_to: "El precio unitario no puede ser negativo."

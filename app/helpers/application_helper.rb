@@ -16,6 +16,7 @@ module ApplicationHelper
     when Catalog::Product then Catalog::ProductDecorator.new(record)
     when Catalog::Variant then Catalog::VariantDecorator.new(record)
     when Carts::CartItem then Carts::CartItemDecorator.new(record)
+    when Orders::OrderItem then Orders::OrderItemDecorator.new(record)
     else record
     end
   end

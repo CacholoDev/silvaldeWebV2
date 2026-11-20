@@ -31,6 +31,7 @@ versión la define el roadmap.
 - **Pedidos** (checkout con recogida y pago offline, estados, email,
   detalle) → **v0.5.0**.
 - **Panel de administración** y **métricas** → **v0.6.0**.
+- **Métricas amplias del panel** → **v0.6.1**.
 - **Envío a domicilio** → **v0.7.0**.
 - **Puesta en producción** → **v0.8.0**.
 - **Pagos** (Stripe y PayPal) → **v0.9.0**.
@@ -153,41 +154,52 @@ aquí desde el diseño, no a posteriori.
   Bertamirans/Noia; `payment_method` y `payment_status`; `user_id` opcional
   para pedidos de invitada) + modelo con validaciones + factory (invitada y
   con cuenta) + spec de validaciones.
-- A2. ⬜ **Modelo `Orders::OrderItem`** — migración + modelo (precio congelado
+- A2. ✅ **Modelo `Orders::OrderItem`** — migración + modelo (precio congelado
   al comprar, cantidad 1..999, CHECK de precio y cantidad en la BD) +
   factory + spec.
-- A3. ⬜ **Número público `SV-XXXXXX`** — generación aleatoria única (nunca
+- A3. ✅ **Número público `SV-XXXXXX`** — generación aleatoria única (nunca
   el id secuencial, que delataría cuántos pedidos hay) + spec de formato y
   unicidad.
-- A4. ⬜ **Máquina de estados AASM** — columna `state`, estados y transiciones
-  válidas/inválidas + spec.
-- A5. ⬜ **`Orders::StatusChange`** — registro de cada transición (quién y
+- A4. ✅ **Máquina de estados AASM** — columna `state` (+ `delivery_method`
+  pickup/shipping), estados y transiciones válidas/inválidas + spec.
+- A5. ✅ **`Orders::StatusChange`** — registro de cada transición (quién y
   cuándo) + spec del modelo.
-- A6. ⬜ **`Orders::Search`** — pedidos de una cuenta, pedido por número y
+- A6. ✅ **`Orders::Search`** — pedidos de una cuenta, pedido por número y
   por token firmado + **specs de propiedad** (el pedido ajeno no aparece).
 
 ### Bloque B — Checkout y transiciones
 
-- B1. ⬜ **Servicio `Orders::Checkout`** en una transacción: valida el
+- B1. ✅ **Servicio `Orders::Checkout`** en una transacción: valida el
   carrito, bloquea las variantes (`with_lock`), comprueba y descuenta el
   stock, crea el pedido con sus líneas y vacía el carrito; rollback completo
   si falla. Specs de éxito, falta de stock y **concurrencia**.
-- B2. ⬜ **Checkout back** — rutas + controller + formulario (con y sin
+- B2. ✅ **Checkout back** — rutas + controller + formulario (con y sin
   cuenta) + request specs.
-- B3. ⬜ **Checkout front** — vista + i18n + system spec.
-- B4. ⬜ **`Orders::Cancel`** — devuelve el stock en la misma transacción +
-  registra la transición + spec.
-- B5. ⬜ **Transiciones restantes** — `Confirm`, `MarkReady` y
-  `MarkPickedUp` como services + specs.
+- B3. ✅ **Checkout front** — vista + i18n + system spec.
+- B4. ✅ **`Orders::Cancel`** — devuelve el stock en la misma transacción +
+  registra la transición + spec. Un pedido preparado, enviado, recogido,
+  entregado o ya cancelado no se puede cancelar: la máquina de estados lanza
+  `AASM::InvalidTransition` y no se toca nada.
+- B5. ✅ **Transiciones restantes** — `Confirm`, `MarkReady` y
+  `MarkPickedUp` como services + specs. Cada uno, en una transacción, bloquea
+  el pedido, mueve el estado y registra el histórico con quién lo hizo; un
+  salto que no vale lanza `AASM::InvalidTransition` y no se toca nada. Con
+  esto se cierra el bloque B.
 
 ### Bloque C — Email y detalle
 
-- C1. ⬜ **Mailer de confirmación** — datos de transferencia/Bizum o de
-  recogida + job + preview + spec.
+- C1. 🚧 **Mailer de confirmación** — datos de transferencia/Bizum o de
+  recogida + job + preview + spec. *Back hecho (mailer, envío desde el
+  checkout, idioma guardado en el pedido, specs); pendiente el front (diseño
+  del email y textos) — ver `docs/prompt-front-c1.md`.*
 - C2. ⬜ **Mailer de cambio de estado** — + spec.
 - C3. ⬜ **«Mis pedidos» (con cuenta)** — listado + **spec de propiedad**.
 - C4. ⬜ **Detalle por enlace firmado (sin cuenta)** — token firmado en el
   email + **404 si es ajeno** + spec.
+- C5. ⬜ **Condiciones de venta e «IVA incluido»** — casilla obligatoria en
+  el checkout que guarda qué versión aceptó y cuándo, más el aviso de «IVA
+  incluido» en el checkout y los emails + specs. (Requisitos de la v0.5.0 que
+  no cabían en los otros slices; añadido el 2026-11-20.)
 
 ## Panel de administración (v0.6.0)
 
@@ -200,6 +212,30 @@ aquí desde el diseño, no a posteriori.
     (español obligatorio; gallego e inglés opcionales con respaldo al
     español).
 35. ⬜ **Usuarias en admin** y **métricas básicas**.
+
+## Métricas del panel (v0.6.1)
+
+Ampliación del panel de la v0.6.0 a petición del cliente («cuantos más datos
+y más información, mejor»); el detalle y las decisiones abiertas están en
+[`roadmap.md`](./roadmap.md). Los datos de negocio salen de lo que ya
+guardamos (pedidos, líneas e histórico); el tráfico necesita recolección
+nueva.
+
+- M1. ⬜ **Ventas** — KPIs del panel e ingresos por periodo con
+  comparativas, ticket medio y ventas por tienda y método de pago + specs.
+- M2. ⬜ **Pedidos y operación** — pipeline por estado, tiempos medios entre
+  transiciones (del histórico) y tasa de cancelación + specs.
+- M3. ⬜ **Productos** — más vendidos, sin ventas, stock bajo/agotado,
+  rotación y categorías + specs.
+- M4. ⬜ **Clientes** — nuevas vs recurrentes, ticket por cliente,
+  invitadas vs cuenta y base de ofertas + specs.
+- M5. ⬜ **Tráfico y conversión** — embudo carrito → pedido, carritos
+  abandonados, búsquedas sin resultado y productos vistos vs comprados +
+  specs. Medición propia con eventos del servidor, sin cookies de terceros.
+- M6. ⬜ **Campañas y origen de las visitas** — enlaces con etiquetas (UTM)
+  para redes, carteles y códigos QR de las tiendas, y visitas y pedidos por
+  campaña y origen + specs.
+- M7. ⬜ **Exportación** — descarga CSV de cada informe para la gestoría.
 
 ## Envío a domicilio (v0.7.0)
 

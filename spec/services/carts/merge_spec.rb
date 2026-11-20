@@ -52,28 +52,30 @@ RSpec.describe Carts::Merge do
     expect(guest_item.reload.cart).to eq(user_cart)
   end
 
-  it "keeps the frozen price of the user line when the quantities are summed" do
+  it "keeps the line following the catalog price when the quantities are summed" do
     user_cart = create(:cart, user: user)
-    user_item = create(:cart_item, cart: user_cart, variant: variant, quantity: 1, unit_price_cents: 1200)
+    user_item = create(:cart_item, cart: user_cart, variant: variant, quantity: 1)
     guest_cart = create(:cart)
-    create(:cart_item, cart: guest_cart, variant: variant, quantity: 2, unit_price_cents: 900)
+    create(:cart_item, cart: guest_cart, variant: variant, quantity: 2)
 
     described_class.call(user: user, cart: guest_cart)
 
     expect(user_item.reload.quantity).to eq(3)
-    expect(user_item.reload.unit_price_cents).to eq(1200)
+    variant.update!(price_cents: 2000)
+    expect(user_item.reload.subtotal_cents).to eq(3 * 2000)
   end
 
-  it "keeps the frozen price of the moved lines" do
+  it "keeps the moved line following the catalog price" do
     user_cart = create(:cart, user: user)
     guest_cart = create(:cart)
-    guest_item = create(:cart_item, cart: guest_cart, variant: other_variant, quantity: 2, unit_price_cents: 800)
+    guest_item = create(:cart_item, cart: guest_cart, variant: other_variant, quantity: 2)
 
     result = described_class.call(user: user, cart: guest_cart)
 
     moved = result.cart_items.sole
     expect(moved.id).to eq(guest_item.id)
-    expect(moved.unit_price_cents).to eq(800)
+    other_variant.update!(price_cents: 800)
+    expect(moved.subtotal_cents).to eq(2 * 800)
   end
 
   it "destroys the guest cart after the merge" do

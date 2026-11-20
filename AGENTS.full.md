@@ -42,6 +42,12 @@ según la necesidad operativa.
 Nunca expongas datos administrativos en respuestas públicas ni confíes en
 ocultar botones como mecanismo de autorización.
 
+Las métricas de la tienda (v0.6.1) usan **medición propia**: eventos del
+servidor y enlaces con etiquetas (UTM) para las campañas, sin cookies de
+terceros ni analítica externa (decisión del 2026-11-20 con el usuario). Si
+algún día se integra una analítica externa (p. ej. Google Analytics), entra
+el banner de consentimiento y la política de cookies (v1.0.0).
+
 ## Decisiones de stack (2026-10-11)
 
 Decisiones tomadas con el usuario antes de la v0.2.0. No las cambies sin
@@ -65,12 +71,23 @@ consultar al usuario y actualizar esta sección y el changelog.
   Swagger, JWT ni Jbuilder (se quitó del Gemfile el 2026-11-10). Si algún día se necesita una API, se especifica aparte
   (sección «Cambios y documentación»).
 - **AASM para la máquina de estados de los pedidos** (`Orders::Order`).
-  Estados del pedido (2026-11-11): `pending` → `confirmed` →
-  `ready_for_pickup` → `picked_up`, o `cancelled` desde `pending` o
-  `confirmed`; la v0.7.0 añade `shipped` → `delivered` para el envío. El
-  pago va aparte (`payment_method` y `payment_status`). AASM solo valida y
-  cambia el estado; los efectos (stock, emails, registro) van en services, no
-  en callbacks. La gema se añade en la v0.5.0. Razonamiento y alternativa
+  Estados del pedido (2026-11-11; máquina completa + `delivery_method` el
+  2026-11-16): `pending` → `confirmed` → `ready_for_pickup` → `picked_up`
+  (recogida) o `confirmed` → `shipped` → `delivered` (envío), y `cancelled`
+  **solo** desde `pending` o `confirmed` (preparado, enviado, recogido y
+  entregado son finales). Los guards de AASM impiden mezclar las ramas según
+  `delivery_method` (`pickup`/`shipping`; el checkout de envío llega en
+  v0.7.0, y `pickup_store` solo es obligatorio para recogida). El pago va
+  aparte (`payment_method` y `payment_status`); un pedido de pago en tienda
+  nace `confirmed`. AASM solo valida y cambia el estado; los efectos (stock,
+  emails, registro) van en services, no en callbacks. **El personal no toca
+  estados**: informa hechos («llegó el pago», «preparado», «entregado») y el
+  estado se mueve solo (objetivo: 2-3 clics por pedido en toda su vida; el
+  tablero con esos botones es el panel de v0.6.0). **Llave maestra del
+  admin** (2026-11-18): «cambiar estado a mano» mueve cualquier estado a
+  cualquier estado para excepciones, siempre registrado en
+  `Orders::StatusChange` como movimiento manual (quién y cuándo), pero
+  **nunca** cancela algo ya entregado o recogido. Razonamiento y alternativa
   descartada en `docs/roadmap.md` («Por qué AASM»).
 
 **Decisiones de pedidos (2026-11-11):**
@@ -87,6 +104,19 @@ consultar al usuario y actualizar esta sección y el changelog.
   v1.0.0.
 - **Número de pedido público** no consecutivo (nunca el id en la URL ni en
   los emails).
+- **Etiquetas de los estados del pedido (2026-11-18):** lo que ve la clienta
+  en cada estado (las claves i18n se crean con las vistas y emails de los
+  bloques B/C):
+
+  | `state` | Español | Galego | English |
+  | --- | --- | --- | --- |
+  | `pending` | Pedido recibido | Pedido recibido | Order received |
+  | `confirmed` | Pago confirmado | Pago confirmado | Payment confirmed |
+  | `ready_for_pickup` | Listo para recoger | Listo para recoller | Ready for pickup |
+  | `picked_up` | Recogido | Recollido | Picked up |
+  | `shipped` | Enviado | Enviado | Shipped |
+  | `delivered` | Entregado | Entregado | Delivered |
+  | `cancelled` | Cancelado | Cancelado | Cancelled |
 - **Precios con IVA incluido**, como hoy en el catálogo.
 - **Despliegue:** VPS con Kamal (v0.8.0); proveedores por decidir.
 - **Idiomas del contenido (2026-11-11):** la interfaz va en español, gallego
@@ -124,9 +154,12 @@ consultar al usuario y actualizar esta sección y el changelog.
 - **Namespace `Carts::`** para models y services del carrito (tablas `carts`
   y `cart_items`), coherente con `Users::` y `Catalog::`. Zeitwerk no admite
   la clase `Cart` junto al directorio `app/services/cart/`.
-- **Precio congelado al añadir** (`unit_price_cents` en `CartItem`, snapshot):
-  un cambio de precio posterior en el catálogo no reescribe los carritos
-  existentes.
+- **Precio vivo del catálogo** (el carrito no guarda precio; lee
+  `variant.effective_price_cents`): un cambio de precio en el catálogo se
+  refleja al instante en el carrito. Solo el pedido congela su precio al
+  comprar (`Orders::OrderItem`). *[Cambiado 2026-11-13: antes el precio se
+  congelaba al añadir, con un snapshot en `CartItem.unit_price_cents`; se
+  quitó esa columna porque el carrito debe seguir al catálogo.]*
 - **El stock no se toca en el carrito**: el carrito es intención de compra; el
   stock se valida y descuenta en el checkout (v0.5.0), con transacción y
   bloqueo de fila.

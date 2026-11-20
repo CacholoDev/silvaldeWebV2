@@ -1,0 +1,29 @@
+<%= t("orders.mailer.confirmation.title") %>
+
+<%= t("orders.mailer.confirmation.greeting", name: @order.contact_name) %>
+<%= t("orders.mailer.confirmation.intro", number: @order.number) %>
+
+<%= t("orders.mailer.confirmation.summary_title") %>
+<% @order.order_items.each do |item| %>
+- <%= item.variant.product.name %> (<%= item.variant.name %>) x <%= item.quantity %>: <%= Orders::OrderItemDecorator.new(item).formatted_subtotal %>
+<% end %>
+<%= t("orders.mailer.confirmation.total") %>: <%= format_cents(@total_cents) %>
+
+<% if @order.pickup? %>
+<%= t("orders.mailer.confirmation.delivery_title") %>
+<%= t("orders.mailer.confirmation.pickup_in_store", store: t("checkout.stores.#{@order.pickup_store}")) %>
+
+<% end %>
+<%= t("orders.mailer.confirmation.payment_title") %>
+<% if @order.payment_method == "bank_transfer" %>
+<%= t("orders.mailer.confirmation.bank_transfer_instructions") %>
+- <%= t("orders.mailer.confirmation.bank_holder") %>: <%= @payment_details[:holder] %>
+- <%= t("orders.mailer.confirmation.bank_iban") %>: <%= @payment_details[:iban] %>
+- <%= t("orders.mailer.confirmation.bizum_phone") %>: <%= @payment_details[:bizum_phone] %>
+- <%= t("orders.mailer.confirmation.amount") %>: <%= format_cents(@total_cents) %>
+<%= t("orders.mailer.confirmation.payment_concept", number: @order.number) %>
+<% else %>
+<%= t("orders.mailer.confirmation.pay_in_store") %>
+<% end %>
+
+<%= t("orders.mailer.confirmation.questions") %>

@@ -26,9 +26,74 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
   pendiente de cobro a la vez) y pedido de invitada sin cuenta. La gema
   AASM entra en el Gemfile; los estados llegan en el slice A4. Mensajes de
   validación en los tres idiomas.
+- **Pedidos** (slice A2 de v0.5.0): modelo `Orders::OrderItem`, la línea de
+  un pedido (una variante, una cantidad 1..999 y el precio congelado al
+  comprar), con CHECK de precio y cantidad en la BD, índice único de variante
+  por pedido y traducciones en los tres idiomas.
+- **Pedidos** (slice A3 de v0.5.0): número público `SV-XXXXXX` del pedido —
+  aleatorio y único (nunca el id secuencial, que delataría cuántos pedidos
+  hay), generado al crear el pedido con un alfabeto de 32 caracteres sin
+  0/O/1/I para poder dictarlo por teléfono sin confusiones, con índice único
+  en la BD y traducciones en los tres idiomas.
+- **Pedidos** (slice A4 de v0.5.0): máquina de estados del paquete con AASM —
+  `pending → confirmed → ready_for_pickup → picked_up` (recogida) o
+  `confirmed → shipped → delivered` (envío), y `cancelled` solo desde
+  `pending` o `confirmed` — además de `delivery_method` (recogida o envío;
+  el checkout de envío llega en v0.7.0). El personal informa hechos
+  («llegó el pago», «preparado», «entregado») y el estado se mueve solo.
+- **Pedidos** (slice A5 de v0.5.0): `Orders::StatusChange`, el registro de
+  cada cambio de estado del pedido (de dónde viene, a dónde va, quién lo
+  movió — vacío si lo movió el sistema — y cuándo), con marca de movimiento
+  manual para la llave maestra del admin y CHECKs en la BD.
+- **Pedidos** (slice A6 de v0.5.0): `Orders::Search`, la ventanilla de
+  consultas de pedidos — los pedidos de una cuenta, el pedido por número
+  público y el pedido por enlace firmado (invitadas) — con specs de
+  propiedad: el pedido de otra persona nunca aparece en tu lista.
+- **Pedidos** (slice B1 de v0.5.0): servicio `Orders::Checkout`, que
+  convierte el carrito en pedido en una sola transacción — bloquea las
+  variantes, comprueba y descuenta el stock, crea el pedido con precios
+  congelados, registra el nacimiento en el histórico y vacía el carrito —
+  con rollback completo si algo falla (falta de stock, datos inválidos) y
+  specs de concurrencia: la última unidad nunca se vende dos veces.
+- **Pedidos** (slice B2 de v0.5.0): checkout usable desde la web —
+  `GET/POST /checkout` con el formulario (con y sin cuenta: el contacto se
+  pre-llena desde la cuenta) y una pantalla de confirmación con el número
+  del pedido que aguanta el F5. Carrito vacío → vuelve al carrito con un
+  mensaje claro; datos inválidos → el formulario con sus errores y sin
+  crear nada.
+- **Pedidos** (slice B3 de v0.5.0): el checkout enseña el **resumen del
+  pedido** (líneas y total) antes del formulario, los errores vuelven
+  al formulario con el foco en el resumen (lectores de pantalla) y
+  llega un **system spec** que prueba el flujo entero en navegador real.
+- **Pedidos** (slice B4 de v0.5.0): servicio `Orders::Cancel`, que cancela un
+  pedido antes de prepararlo y **devuelve el stock** de sus líneas en la misma
+  transacción (con bloqueo de fila y en el mismo orden fijo que el checkout,
+  para no provocar interbloqueos), deja el pedido en `cancelled` y lo registra
+  en el histórico con quién lo hizo. Un pedido ya preparado, enviado, recogido,
+  entregado o cancelado **no se puede cancelar**: la máquina de estados lo
+  rechaza con `AASM::InvalidTransition` y no se toca nada (ni stock ni
+  histórico). El botón en la web llega con el panel de v0.6.0.
+- **Pedidos** (slice B5 de v0.5.0): los services que mueven el pedido por su
+  vida — `Orders::Confirm` («llegó el pago»), `Orders::MarkReady`
+  («preparado para recoger») y `Orders::MarkPickedUp` («entregado en
+  tienda») — cada uno en una transacción que bloquea el pedido, mueve la
+  máquina de estados y registra el movimiento en el histórico con quién lo
+  hizo. Un salto que no vale lanza `AASM::InvalidTransition` y no se toca
+  nada. Con esto se cierra el **bloque B** (checkout y transiciones).
+- **Pedidos** (slice C1, back, de v0.5.0): email de confirmación del pedido
+  (`Orders::ConfirmationMailer`), enviado al hacer el pedido con el resumen,
+  la tienda de recogida y los datos de transferencia/Bizum (en configuración,
+  no en el código) o el pago en tienda. El pedido guarda el idioma en que se
+  compró (`orders.locale`) y el email se escribe en él. Queda pendiente el
+  diseño del email (slice C1, front).
 
 ### Cambiado
 
+- **El carrito sigue el precio del catálogo**: las líneas del carrito ya no
+  guardan un precio congelado al añadir; el precio de cada línea, el subtotal
+  y el total se leen vivos del catálogo (`variant.effective_price_cents`).
+  Solo el pedido congela su precio al comprar. Se quitó la columna
+  `unit_price_cents` de `cart_items`.
 - Roadmap rehecho tras la auditoría: pedidos con o sin cuenta, recogida en
   las tiendas de Bertamirans y Noia, pagos offline en la v0.5.0, panel admin
   (v0.6.0), envío a domicilio (v0.7.0), puesta en producción con Kamal
@@ -37,6 +102,18 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
   v1.0.0. Incluye por qué AASM y una guía de despliegue. `backend-plan.md`
   desglosa el backend en slices (la v0.5.0 de pedidos en los bloques A1-C4)
   y `AGENTS.full.md` registra las decisiones de pedidos.
+- Roadmap: nueva fase **v0.6.1 — Métricas del panel** (a petición del
+  cliente, que quiere un panel de métricas rico): ventas comparadas,
+  productos, clientes, embudo de conversión, campañas con enlaces etiquetados
+  (UTM y códigos QR) y exportación para la gestoría, ampliando las métricas
+  básicas de la v0.6.0. Con **medición propia** (eventos del servidor, sin
+  cookies de terceros); la analítica externa queda descartada.
+- Versiones (`docs/versioning.md`): el tercer número admite **mini
+  versiones** con funcionalidad pequeña (p. ej. `0.6.1`), no solo arreglos;
+  el del medio sigue reservado para las fases grandes del roadmap.
+- Desarrollo: los emails se prueban con **MailPit** (el SMTP catcher del
+  equipo, http://localhost:8025) en vez de letter_opener, y los enlaces de
+  los emails usan `APP_HOST` con su puerto.
 - `AGENTS.md`: abrir un PR necesita el OK explícito del usuario.
 - Flujo de git: un PR por bloque de una versión (draft hasta cerrarlo) y un
   commit por funcionalidad (cada `feat`, cada `fix`, cada documento…),
@@ -51,6 +128,12 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
   restringe los user namespaces y Chrome muerde «No usable sandbox!»): el
   Chrome de pruebas corre ahora con `--no-sandbox`. Solo toca la configuración
   del driver, ninguna aserción.
+- Los system specs fallaban al limpiar la sesión con Chrome 158 (actualización
+  automática del sistema): Chrome rechaza el origen comodín `*` que Capybara
+  3.40 manda en `Storage.clearDataForOrigin` («* is not a valid URL») y todos
+  los ejemplos erroraban en el teardown aunque su cuerpo pasaba. Un parche en
+  `spec/support/system.rb` limpia el origen de la app en su lugar; se quita
+  cuando capybara lo arregle (3.40.0 sigue siendo la última versión).
 
 ## [0.4.1] - 2026-11-11
 

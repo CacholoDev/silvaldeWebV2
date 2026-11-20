@@ -43,7 +43,8 @@ esas tiendas para la recogida.
 - Gestionar **productos, pedidos y usuarias**: confirmar pagos por
   transferencia/Bizum, preparar, enviar o marcar como recogido, cancelar.
 - Imprimir el **justificante del pedido** (no es una factura fiscal).
-- Ver **métricas básicas** y la versión de la app.
+- Ver **métricas de su tienda** (ventas, pedidos, productos, clientes y
+  tráfico) y la versión de la app.
 
 ### Lo que NO entra en la v1.0.0
 
@@ -135,9 +136,16 @@ confirmación.
 - **Máquina de estados con AASM** (decisión tomada; ver «Por qué AASM» más
   abajo). Estados del pedido (lo que pasa con el paquete):
   `pending` (recibido) → `confirmed` (pago confirmado o pago al recoger) →
-  `ready_for_pickup` → `picked_up`; desde `pending` o `confirmed` se puede
-  ir a `cancelled`. La v0.7.0 añade la rama de envío (`shipped` →
-  `delivered`). Cada transición queda registrada (quién y cuándo).
+  `ready_for_pickup` → `picked_up` (recogida) o `confirmed` → `shipped` →
+  `delivered` (envío; con `delivery_method` desde el slice A4, y el checkout
+  de envío en v0.7.0); desde `pending` o `confirmed` se puede ir a
+  `cancelled`, y nunca después. Cada transición queda registrada (quién y
+  cuándo). **El personal no toca estados**: informa hechos («llegó el pago»,
+  «preparado», «entregado») y el estado se mueve solo, con email automático
+  a la clienta. El **admin** tiene una llave maestra («cambiar estado a
+  mano», panel de v0.6.0) para excepciones: mueve cualquier estado a
+  cualquier estado, siempre registrado en el histórico como movimiento
+  manual, salvo cancelar algo ya entregado o recogido, que es imposible.
 - **Pago separado del pedido:** un atributo `payment_method`
   (`bank_transfer`, `pay_in_store` y, desde la v0.9.0 «Pagos», `card`, `paypal`) y un
   `payment_status` (`pending`, `paid`, `refunded`). Así, un pedido puede
@@ -196,7 +204,50 @@ productos y usuarias.
   tres veces. Las URLs (slugs) siguen en español para todos los idiomas.
 - **Usuarias:** listado, rol y bloqueo.
 - **Métricas básicas:** ventas por periodo, pedidos por estado y productos
-  más vendidos. La versión de la app en el pie del panel.
+  más vendidos (las métricas amplias van en la v0.6.1). La versión de la app
+  en el pie del panel.
+
+### ⬜ v0.6.1 — Métricas del panel
+
+**Qué se hace:** llevar al panel de administración **métricas de verdad** —
+gráficas, comparativas y top-listas de ventas, pedidos, productos, clientes y
+tráfico de la tienda — para que el negocio pueda analizarse a fondo. Nace
+como fase propia porque el cliente quiere darle peso («cuantos más datos y
+más información en el panel, mejor»; petición del 2026-11-20). Amplía las
+métricas básicas de la v0.6.0 como mini versión sobre el panel (ver
+[versioning.md](./versioning.md)).
+
+**Cómo se hará:**
+
+- **KPIs del panel:** ventas de hoy y del mes, pedidos por estado, ticket
+  medio y comparación con el periodo anterior, a la vista al entrar.
+- **Ventas:** ingresos por día/semana/mes/año con comparativas, pedidos
+  pagados y cancelados, ventas por tienda de recogida y por método de pago.
+- **Productos:** más vendidos (unidades e ingresos), sin ventas, stock bajo
+  o agotado, rotación de stock y categorías que mejor funcionan.
+- **Clientes:** nuevas vs recurrentes, ticket medio por cliente, invitadas
+  vs con cuenta y cuántas aceptaron ofertas (base para campañas futuras).
+- **Tráfico y conversión:** embudo carrito → checkout → pedido, carritos
+  abandonados, productos vistos vs comprados y búsquedas sin resultado.
+- **Campañas — de dónde viene la gente:** cada enlace que se comparte lleva
+  sus etiquetas (`utm_source=instagram`, `utm_campaign=rebajas-noviembre`…),
+  con **códigos QR** para los carteles y las tiendas físicas, y el panel
+  muestra visitas y pedidos por campaña y por origen. **Medición propia con
+  eventos del servidor, sin cookies de terceros** (decisión del 2026-11-20:
+  la analítica externa tipo Google Analytics queda descartada; si algún día
+  se pide, entra el banner de consentimiento y la política de cookies de la
+  v1.0.0). Complemento gratuito y sin cookies: Google Search Console, para
+  ver las búsquedas de Google que traen visitas (cuenta aparte, sin tocar
+  la web).
+- **IVA en las ventas:** el desglose usa el tipo general del **21%** (tienda
+  de hogar), configurable por si la gestoría indica otro tipo.
+- **Exportación:** cada informe se descarga en CSV/hoja de cálculo para la
+  gestoría.
+- **Rendimiento:** los informes pesados se precalcularán con un job
+  recurrente (Solid Queue) para que el panel abra rápido.
+- **El orden de los informes lo decide el equipo** (el cliente: «cuantos más
+  datos, mejor»). ❓ Pendiente solo al implementar: validar con la gestoría
+  el desglose de IVA si lo necesita.
 
 ### ⬜ v0.7.0 — Envío a domicilio
 
@@ -413,7 +464,8 @@ en un VPS de pruebas, después el real.
 ## Notas
 
 - Las fases pueden solaparse, pero no se integra nada a medias en `main`.
-- Los arreglos sin funcionalidad nueva salen como versión de parche
-  (`0.4.1`); cada fase nueva sube el número del medio (`0.5.0`).
+- El tercer número de versión son **mini versiones**: mejoras y
+  funcionalidad pequeña dentro de una fase (p. ej. `0.6.1`); cada fase nueva
+  sube el número del medio (`0.5.0`). Ver [versioning.md](./versioning.md).
 - Cualquier funcionalidad fuera de esta lista necesita antes su
   especificación (ver `AGENTS.full.md`, sección «Cambios y documentación»).
