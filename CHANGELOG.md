@@ -100,6 +100,9 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
   cliente, que quiere un panel de métricas rico): ventas comparadas,
   productos, clientes, embudo de conversión y exportación para la gestoría,
   ampliando las métricas básicas de la v0.6.0.
+- Versiones (`docs/versioning.md`): el tercer número admite **mini
+  versiones** con funcionalidad pequeña (p. ej. `0.6.1`), no solo arreglos;
+  el del medio sigue reservado para las fases grandes del roadmap.
 - `AGENTS.md`: abrir un PR necesita el OK explícito del usuario.
 - Flujo de git: un PR por bloque de una versión (draft hasta cerrarlo) y un
   commit por funcionalidad (cada `feat`, cada `fix`, cada documento…),

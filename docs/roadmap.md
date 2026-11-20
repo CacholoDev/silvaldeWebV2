@@ -214,8 +214,8 @@ gráficas, comparativas y top-listas de ventas, pedidos, productos, clientes y
 tráfico de la tienda — para que el negocio pueda analizarse a fondo. Nace
 como fase propia porque el cliente quiere darle peso («cuantos más datos y
 más información en el panel, mejor»; petición del 2026-11-20). Amplía las
-métricas básicas de la v0.6.0; la numeración `0.6.1` va como ampliación del
-panel, acordada con el usuario.
+métricas básicas de la v0.6.0 como mini versión sobre el panel (ver
+[versioning.md](./versioning.md)).
 
 **Cómo se hará:**
 
@@ -456,7 +456,8 @@ en un VPS de pruebas, después el real.
 ## Notas
 
 - Las fases pueden solaparse, pero no se integra nada a medias en `main`.
-- Los arreglos sin funcionalidad nueva salen como versión de parche
-  (`0.4.1`); cada fase nueva sube el número del medio (`0.5.0`).
+- El tercer número de versión son **mini versiones**: mejoras y
+  funcionalidad pequeña dentro de una fase (p. ej. `0.6.1`); cada fase nueva
+  sube el número del medio (`0.5.0`). Ver [versioning.md](./versioning.md).
 - Cualquier funcionalidad fuera de esta lista necesita antes su
   especificación (ver `AGENTS.full.md`, sección «Cambios y documentación»).

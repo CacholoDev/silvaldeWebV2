@@ -1,16 +1,21 @@
 # Versionado de Silvalde Web
 
-La web se mantiene con [Semantic Versioning](https://semver.org/lang/es/):
+La web se mantiene con un esquema tipo [Semantic Versioning](https://semver.org/lang/es/):
 `MAYOR.MENOR.PARCHE`.
 
 - **MAYOR**: cambios incompatibles o reestructuraciones grandes.
-- **MENOR**: funcionalidades nuevas compatibles (una feature completada suele
-  ser un menor).
-- **PARCHE**: correcciones de errores.
+- **MENOR**: fases grandes del [roadmap](./roadmap.md) (p. ej. pedidos,
+  panel de administración, envío a domicilio).
+- **PARCHE**: **mini versiones** — mejoras pequeñas y funcionalidad a escala
+  de la fase en curso (p. ej. `0.6.1`, `0.6.5`), no solo arreglos de errores.
+  Acordado con el usuario el 2026-11-20 para entregar valor poco a poco sin
+  esperar a la fase grande (ejemplo real: la `0.6.1`, métricas amplias sobre
+  el panel de la `0.6.0`).
 
-Mientras la tienda no esté en producción se trabaja en `0.x`: cada fase del
-[roadmap](./roadmap.md) completada sube la versión menor. La `1.0.0` será el
-lanzamiento público de la tienda.
+Mientras la tienda no esté en producción se trabaja en `0.x`: cada fase
+completada sube el número del medio y las mini versiones suman en el tercero.
+La `1.0.0` será el lanzamiento público de la tienda; a partir de ahí se
+respeta SemVer estricto (un parche solo contiene arreglos).
 
 ## Dónde vive la versión
 
