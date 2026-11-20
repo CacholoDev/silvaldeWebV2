@@ -31,18 +31,28 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
-  # Don't care if the mailer can't send.
-  config.action_mailer.raise_delivery_errors = false
+  # Fail loudly when the SMTP catcher is not running: a silently dropped
+  # email is impossible to debug.
+  config.action_mailer.raise_delivery_errors = true
 
   # Make template changes take effect immediately.
   config.action_mailer.perform_caching = false
 
-  # Set localhost to be used by links generated in mailer templates.
-  config.action_mailer.default_url_options = { host: "localhost", port: 3000 }
+  # Host for the links generated in email templates; APP_HOST in .env carries
+  # host and port (here the app runs on 3100).
+  mail_host, mail_port = ENV.fetch("APP_HOST", "localhost:3000").split(":")
+  config.action_mailer.default_url_options = { host: mail_host, port: mail_port.to_i }
 
-  # Intercept outgoing email in development so the team can preview what
-  # would be sent at http://localhost:3000/letter_opener.
-  config.action_mailer.delivery_method = :letter_opener
+  # Outgoing email goes through MailPit, the SMTP catcher the team uses:
+  # nothing leaves the machine and every message is browsable at
+  # http://localhost:8025. Start it with:
+  #   podman run -d --name silvaldeWebV2_mailpit -p 1025:1025 -p 8025:8025 docker.io/axllent/mailpit
+  # SMTP_ADDRESS/SMTP_PORT in .env point at it (MailPit's defaults below).
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address: ENV.fetch("SMTP_ADDRESS", "127.0.0.1"),
+    port: ENV.fetch("SMTP_PORT", 1025).to_i
+  }
   config.action_mailer.perform_deliveries = true
 
   # Print deprecation notices to the Rails logger.
