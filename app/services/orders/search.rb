@@ -4,6 +4,10 @@ module Orders
       Order.where(user: user).order(created_at: :desc)
     end
 
+    def self.items_for(order)
+      OrderItem.where(order: order)
+    end
+
     def self.find_order_by_number(number)
       return nil if number.blank?
 

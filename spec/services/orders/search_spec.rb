@@ -97,4 +97,20 @@ RSpec.describe Orders::Search do
       expect(queries).to be_empty
     end
   end
+
+  describe ".items_for" do
+    it "returns the lines of that order" do
+      order = create(:order)
+      mine = create_list(:order_item, 2, order: order)
+
+      expect(described_class.items_for(order)).to match_array(mine)
+    end
+
+    it "never returns the lines of another order" do
+      order = create(:order)
+      create_list(:order_item, 2, order: create(:order))
+
+      expect(described_class.items_for(order)).to be_empty
+    end
+  end
 end
