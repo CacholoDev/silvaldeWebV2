@@ -179,8 +179,11 @@ aquí desde el diseño, no a posteriori.
   registra la transición + spec. Un pedido preparado, enviado, recogido,
   entregado o ya cancelado no se puede cancelar: la máquina de estados lanza
   `AASM::InvalidTransition` y no se toca nada.
-- B5. ⬜ **Transiciones restantes** — `Confirm`, `MarkReady` y
-  `MarkPickedUp` como services + specs.
+- B5. ✅ **Transiciones restantes** — `Confirm`, `MarkReady` y
+  `MarkPickedUp` como services + specs. Cada uno, en una transacción, bloquea
+  el pedido, mueve el estado y registra el histórico con quién lo hizo; un
+  salto que no vale lanza `AASM::InvalidTransition` y no se toca nada. Con
+  esto se cierra el bloque B.
 
 ### Bloque C — Email y detalle
 

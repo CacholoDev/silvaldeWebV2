@@ -73,6 +73,13 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
   entregado o cancelado **no se puede cancelar**: la máquina de estados lo
   rechaza con `AASM::InvalidTransition` y no se toca nada (ni stock ni
   histórico). El botón en la web llega con el panel de v0.6.0.
+- **Pedidos** (slice B5 de v0.5.0): los services que mueven el pedido por su
+  vida — `Orders::Confirm` («llegó el pago»), `Orders::MarkReady`
+  («preparado para recoger») y `Orders::MarkPickedUp` («entregado en
+  tienda») — cada uno en una transacción que bloquea el pedido, mueve la
+  máquina de estados y registra el movimiento en el histórico con quién lo
+  hizo. Un salto que no vale lanza `AASM::InvalidTransition` y no se toca
+  nada. Con esto se cierra el **bloque B** (checkout y transiciones).
 
 ### Cambiado
 
@@ -103,6 +110,12 @@ Tipos de cambio: `Añadido`, `Cambiado`, `Obsoleto`, `Eliminado`,
   restringe los user namespaces y Chrome muerde «No usable sandbox!»): el
   Chrome de pruebas corre ahora con `--no-sandbox`. Solo toca la configuración
   del driver, ninguna aserción.
+- Los system specs fallaban al limpiar la sesión con Chrome 158 (actualización
+  automática del sistema): Chrome rechaza el origen comodín `*` que Capybara
+  3.40 manda en `Storage.clearDataForOrigin` («* is not a valid URL») y todos
+  los ejemplos erroraban en el teardown aunque su cuerpo pasaba. Un parche en
+  `spec/support/system.rb` limpia el origen de la app en su lugar; se quita
+  cuando capybara lo arregle (3.40.0 sigue siendo la última versión).
 
 ## [0.4.1] - 2026-11-11
 
